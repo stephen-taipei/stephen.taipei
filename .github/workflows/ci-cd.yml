@@ -1,0 +1,132 @@
+name: Stephen.taipei CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    env:
+      SSH_HOST: ${{ secrets.SSH_HOST }}
+      SSH_USER: ${{ secrets.SSH_USER }}
+      PHP_FPM_SERVICE: php8.2-fpm
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set environment variables
+        id: env
+        run: |
+          if [ "${{ github.ref }}" = "refs/heads/main" ]; then
+            echo "ENV_FILE=.env-prod" >> $GITHUB_OUTPUT
+            echo "BRANCH_NAME=main" >> $GITHUB_OUTPUT
+            echo "DEPLOY_PATH=/var/www/stephen.taipei" >> $GITHUB_OUTPUT
+          else
+            echo "ENV_FILE=.env-dev" >> $GITHUB_OUTPUT
+            echo "BRANCH_NAME=dev" >> $GITHUB_OUTPUT
+            echo "DEPLOY_PATH=/var/www/stephen.taipei" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Set up SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/stephen.taipei-cicd.key
+          chmod 600 ~/.ssh/stephen.taipei-cicd.key
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/stephen.taipei-cicd.key $SSH_USER@$SSH_HOST "echo Connection OK" || exit 1
+
+      - name: Prepare remote deploy directory
+        run: |
+          DEPLOY_PATH="${{ steps.env.outputs.DEPLOY_PATH }}"
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/stephen.taipei-cicd.key $SSH_USER@$SSH_HOST "
+            sudo mkdir -p $DEPLOY_PATH
+            sudo chown -R $SSH_USER:www-data $DEPLOY_PATH
+            sudo chmod -R 775 $DEPLOY_PATH
+          "
+
+      - name: Rsync repository to remote
+        run: |
+          DEPLOY_PATH="${{ steps.env.outputs.DEPLOY_PATH }}"
+
+          rsync -az --info=progress2 --delete \
+            --omit-dir-times \
+            --no-perms \
+            --no-owner \
+            --no-group \
+            --exclude='.git' \
+            --exclude='.github' \
+            --exclude='node_modules' \
+            --exclude='vendor' \
+            --exclude='tests' \
+            --exclude='storage' \
+            --exclude='bootstrap/cache' \
+            --exclude='.env' \
+            --exclude='.env.*' \
+            --exclude='.phpunit.cache' \
+            --exclude='.phpunit.result.cache' \
+            --exclude='*.log' \
+            --exclude='.DS_Store' \
+            --exclude='.idea' \
+            --exclude='.vscode' \
+            --exclude='.fleet' \
+            --exclude='.vagrant' \
+            --exclude='Homestead.json' \
+            --exclude='Homestead.yaml' \
+            --exclude='auth.json' \
+            --exclude='builds/' \
+            --exclude='bak/' \
+            --exclude='testfile' \
+            --exclude='public/build' \
+            --exclude='public/hot' \
+            --exclude='public/storage' \
+            --exclude='public/uploads' \
+            --exclude='public/ajax' \
+            --exclude='public/sass' \
+            --exclude='public/css/utility' \
+            --exclude='public/css/vendor' \
+            --exclude='public/vendor' \
+            --exclude='public/img' \
+            --exclude='public/web' \
+            --exclude='public/download/bak_*' \
+            -e "ssh -o StrictHostKeyChecking=no -i ~/.ssh/stephen.taipei-cicd.key" \
+            ./ $SSH_USER@$SSH_HOST:$DEPLOY_PATH/
+
+      - name: Deploy and configure
+        run: |
+          ENV_FILE="${{ steps.env.outputs.ENV_FILE }}"
+          BRANCH_NAME="${{ steps.env.outputs.BRANCH_NAME }}"
+          DEPLOY_PATH="${{ steps.env.outputs.DEPLOY_PATH }}"
+
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/stephen.taipei-cicd.key $SSH_USER@$SSH_HOST bash -lc "
+            set -e
+
+            DEPLOY_PATH=\"$DEPLOY_PATH\"
+            ENV_FILE=\"$ENV_FILE\"
+            BRANCH_NAME=\"$BRANCH_NAME\"
+
+            cd \"\$DEPLOY_PATH\"
+
+            # 5) 設定權限
+            # sudo chown -R $SSH_USER:www-data \"\$DEPLOY_PATH\"
+            # sudo chmod -R 755 \"\$DEPLOY_PATH\"
+
+            # 5) 設定權限（雙階段）
+            # 第一步：給部署帳號（CI 登入帳號）有完整權限，確保下次 rsync 不報 Permission denied
+            sudo chown -R $SSH_USER:www-data \"\$DEPLOY_PATH\"
+            sudo chmod -R 775 \"\$DEPLOY_PATH\"
+
+            # 6) Reload PHP-FPM
+            sudo systemctl reload \$PHP_FPM_SERVICE || true
+          "
+
+      - name: Done
+        run: |
+          echo "Deployment completed for branch: ${{ steps.env.outputs.BRANCH_NAME }}"
+          echo "Deploy path: ${{ steps.env.outputs.DEPLOY_PATH }}"
+          echo "Using environment file: ${{ steps.env.outputs.ENV_FILE }}"
