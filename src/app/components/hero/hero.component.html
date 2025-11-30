@@ -1,0 +1,75 @@
+<section id="hero" class="relative min-h-screen flex items-center justify-center overflow-hidden">
+  <!-- Three.js Canvas Background -->
+  <canvas #canvas class="absolute inset-0 z-0"></canvas>
+
+  <!-- Grid Overlay -->
+  <div class="cyber-grid"></div>
+
+  <!-- Gradient Overlay -->
+  <div class="absolute inset-0 bg-gradient-to-b from-deep-space/50 via-transparent to-deep-space z-10"></div>
+
+  <!-- Content -->
+  <div class="relative z-20 text-center px-4 max-w-4xl mx-auto">
+    <!-- Greeting -->
+    <p class="hero-subtitle text-neon-cyan text-lg md:text-xl mb-4 font-medium tracking-wider">
+      你好，我是
+    </p>
+
+    <!-- Name -->
+    <h1 class="hero-title text-5xl md:text-7xl lg:text-8xl font-bold mb-6">
+      <span class="text-gradient glow-text">莊宗憲</span>
+      <span class="block text-3xl md:text-4xl lg:text-5xl text-gray-300 mt-4 font-light">
+        (Stephen)
+      </span>
+    </h1>
+
+    <!-- Typed Subtitle -->
+    <div class="hero-subtitle h-12 flex items-center justify-center mb-8">
+      <p class="text-xl md:text-2xl text-gray-400 font-display">
+        {{ typedText() }}<span
+          class="inline-block w-0.5 h-6 md:h-8 bg-neon-cyan ml-1 align-middle"
+          [class.opacity-0]="!showCursor()"
+        ></span>
+      </p>
+    </div>
+
+    <!-- Description -->
+    <p class="hero-subtitle text-gray-400 text-lg md:text-xl max-w-2xl mx-auto mb-12 leading-relaxed">
+      專注於 <span class="text-neon-cyan">Angular</span>、<span class="text-neon-pink">Laravel</span> 與
+      <span class="text-neon-cyan">系統架構</span>，致力於打造高性能的全端解決方案
+    </p>
+
+    <!-- CTA Buttons -->
+    <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+      <a
+        href="#portfolio"
+        class="hero-cta btn-primary flex items-center gap-2"
+        (click)="scrollTo('#portfolio', $event)"
+      >
+        <span>探索作品</span>
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+        </svg>
+      </a>
+      <a
+        href="#contact"
+        class="hero-cta btn-outline flex items-center gap-2"
+        (click)="scrollTo('#contact', $event)"
+      >
+        <span>聯絡我</span>
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+        </svg>
+      </a>
+    </div>
+  </div>
+
+  <!-- Scroll Indicator -->
+  <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 animate-bounce">
+    <a href="#about" (click)="scrollTo('#about', $event)" class="block text-gray-400 hover:text-neon-cyan transition-colors">
+      <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+      </svg>
+    </a>
+  </div>
+</section>

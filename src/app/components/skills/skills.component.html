@@ -1,0 +1,155 @@
+<section id="skills" #skillsSection class="py-24 md:py-32 relative">
+  <div class="container mx-auto px-4">
+    <!-- Section Header -->
+    <div class="text-center mb-16">
+      <h2 class="section-title animate-on-scroll">
+        <span class="text-gradient">技能專長</span>
+      </h2>
+      <p class="section-subtitle animate-on-scroll">Skills & Expertise</p>
+    </div>
+
+    <!-- Category Tabs -->
+    <div
+      class="flex flex-wrap justify-center gap-3 md:gap-4 mb-8 md:mb-12 animate-on-scroll"
+    >
+      @for (category of categories; track category.id) {
+      <button
+        class="category-tab flex items-center gap-2 px-4 py-2 md:px-6 md:py-3 text-sm md:text-base rounded-lg transition-all duration-300"
+        [class.active]="activeCategory() === category.id"
+        [class.glass-card]="activeCategory() !== category.id"
+        (click)="setActiveCategory(category.id)"
+      >
+        <svg
+          class="w-4 h-4 md:w-5 md:h-5"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            [attr.d]="category.icon"
+          />
+        </svg>
+        <span>{{ category.title }}</span>
+      </button>
+      }
+    </div>
+
+    <!-- Skills Grid -->
+    <div class="max-w-4xl mx-auto">
+      <div class="grid md:grid-cols-2 gap-6">
+        @for (skill of activeSkills; track skill.name; let i = $index) {
+        <div
+          class="skill-item glass-card rounded-xl p-6 hover-glow"
+          [style.animation-delay]="i * 0.1 + 's'"
+        >
+          <!-- Skill Header -->
+          <div class="flex justify-between items-center mb-3">
+            <h4 class="font-semibold text-white">{{ skill.name }}</h4>
+            <span
+              class="text-sm font-medium"
+              [class.text-neon-cyan]="skill.color === 'cyan'"
+              [class.text-neon-pink]="skill.color === 'pink'"
+              [class.text-purple-400]="skill.color === 'purple'"
+            >
+              {{ skill.level }}%
+            </span>
+          </div>
+
+          <!-- Progress Bar -->
+          <div class="h-2 bg-dark-gray rounded-full overflow-hidden">
+            <div
+              class="skill-bar h-full rounded-full bg-gradient-to-r transition-all duration-1000 ease-out"
+              [class]="getColorClass(skill.color)"
+              [style.width.%]="skill.level"
+            ></div>
+          </div>
+        </div>
+        }
+      </div>
+    </div>
+
+    <!-- Tech Stack Icons -->
+    <div class="mt-16 animate-on-scroll">
+      <p class="text-center text-gray-400 mb-8">常用技術棧</p>
+      <div class="flex flex-wrap justify-center gap-8 opacity-60">
+        <!-- Angular -->
+        <div class="tech-icon group cursor-default">
+          <div
+            class="w-16 h-16 rounded-lg glass-card flex items-center justify-center group-hover:border-neon-cyan transition-colors"
+          >
+            <span class="text-2xl font-bold text-neon-pink">Ng</span>
+          </div>
+          <span class="block text-xs text-center mt-2 text-gray-400"
+            >Angular</span
+          >
+        </div>
+        <!-- Laravel -->
+        <div class="tech-icon group cursor-default">
+          <div
+            class="w-16 h-16 rounded-lg glass-card flex items-center justify-center group-hover:border-neon-pink transition-colors"
+          >
+            <span class="text-2xl font-bold text-neon-pink">La</span>
+          </div>
+          <span class="block text-xs text-center mt-2 text-gray-400"
+            >Laravel</span
+          >
+        </div>
+        <!-- TypeScript -->
+        <div class="tech-icon group cursor-default">
+          <div
+            class="w-16 h-16 rounded-lg glass-card flex items-center justify-center group-hover:border-neon-cyan transition-colors"
+          >
+            <span class="text-2xl font-bold text-neon-cyan">TS</span>
+          </div>
+          <span class="block text-xs text-center mt-2 text-gray-400"
+            >TypeScript</span
+          >
+        </div>
+        <!-- Docker -->
+        <div class="tech-icon group cursor-default">
+          <div
+            class="w-16 h-16 rounded-lg glass-card flex items-center justify-center group-hover:border-neon-cyan transition-colors"
+          >
+            <span class="text-2xl font-bold text-neon-cyan">Dk</span>
+          </div>
+          <span class="block text-xs text-center mt-2 text-gray-400"
+            >Docker</span
+          >
+        </div>
+        <!-- MySQL -->
+        <div class="tech-icon group cursor-default">
+          <div
+            class="w-16 h-16 rounded-lg glass-card flex items-center justify-center group-hover:border-neon-pink transition-colors"
+          >
+            <span class="text-2xl font-bold text-neon-pink">My</span>
+          </div>
+          <span class="block text-xs text-center mt-2 text-gray-400"
+            >MySQL</span
+          >
+        </div>
+        <!-- Redis -->
+        <div class="tech-icon group cursor-default">
+          <div
+            class="w-16 h-16 rounded-lg glass-card flex items-center justify-center group-hover:border-neon-pink transition-colors"
+          >
+            <span class="text-2xl font-bold text-neon-pink">Rd</span>
+          </div>
+          <span class="block text-xs text-center mt-2 text-gray-400"
+            >Redis</span
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Background Decoration -->
+  <div
+    class="absolute top-1/4 right-0 w-80 h-80 bg-neon-pink/5 rounded-full blur-3xl"
+  ></div>
+  <div
+    class="absolute bottom-1/4 left-0 w-64 h-64 bg-neon-cyan/5 rounded-full blur-3xl"
+  ></div>
+</section>

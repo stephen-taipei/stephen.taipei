@@ -1,0 +1,177 @@
+<section id="contact" #contactSection class="py-24 md:py-32 relative">
+  <div class="container mx-auto px-4">
+    <!-- Section Header -->
+    <div class="text-center mb-16">
+      <h2 class="section-title animate-on-scroll">
+        <span class="text-gradient">聯絡我</span>
+      </h2>
+      <p class="section-subtitle animate-on-scroll">Get In Touch</p>
+    </div>
+
+    <div class="max-w-5xl mx-auto grid lg:grid-cols-2 gap-12">
+      <!-- Contact Info -->
+      <div class="animate-on-scroll space-y-8">
+        <div>
+          <h3 class="text-2xl font-bold text-white mb-4">讓我們合作</h3>
+          <p class="text-gray-400 leading-relaxed">
+            無論是專案諮詢、技術合作，或是職涯機會，歡迎與我聯繫。
+            我會盡快回覆您的訊息。
+          </p>
+        </div>
+
+        <!-- Contact Methods -->
+        <div class="space-y-4">
+          <div class="flex items-center gap-4 p-4 glass-card rounded-xl">
+            <div class="w-12 h-12 rounded-lg bg-neon-cyan/20 flex items-center justify-center">
+              <svg class="w-6 h-6 text-neon-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              </svg>
+            </div>
+            <div>
+              <p class="text-sm text-gray-400">Email</p>
+              <a href="mailto:contact@stephen.taipei" class="text-white hover:text-neon-cyan transition-colors">
+                contact&#64;stephen.taipei
+              </a>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-4 p-4 glass-card rounded-xl">
+            <div class="w-12 h-12 rounded-lg bg-neon-pink/20 flex items-center justify-center">
+              <svg class="w-6 h-6 text-neon-pink" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+            </div>
+            <div>
+              <p class="text-sm text-gray-400">Location</p>
+              <span class="text-white">台灣 Taiwan</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Social Links -->
+        <div>
+          <p class="text-gray-400 mb-4">社群連結</p>
+          <div class="flex gap-4">
+            @for (social of socialLinks; track social.name) {
+              <a
+                [href]="social.url"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="w-12 h-12 rounded-lg glass-card flex items-center justify-center text-gray-400 hover:text-neon-cyan hover:border-neon-cyan transition-all group"
+                [attr.aria-label]="social.name"
+              >
+                @if (social.name === 'Email') {
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" [attr.d]="social.icon" />
+                  </svg>
+                } @else {
+                  <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path [attr.d]="social.icon" />
+                  </svg>
+                }
+              </a>
+            }
+          </div>
+        </div>
+      </div>
+
+      <!-- Contact Form -->
+      <div class="animate-on-scroll">
+        <form (ngSubmit)="onSubmit()" class="glass-card rounded-2xl p-8 space-y-6">
+          <!-- Success Message -->
+          @if (isSubmitted()) {
+            <div class="text-center py-8 animate-scale-in">
+              <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-neon-cyan/20 flex items-center justify-center">
+                <svg class="w-8 h-8 text-neon-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <h4 class="text-xl font-bold text-white mb-2">訊息已送出！</h4>
+              <p class="text-gray-400">感謝您的來信，我會盡快回覆。</p>
+            </div>
+          } @else {
+            <!-- Name -->
+            <div>
+              <label for="name" class="block text-sm font-medium text-gray-300 mb-2">姓名 *</label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                [(ngModel)]="form.name"
+                required
+                class="w-full px-4 py-3 rounded-lg bg-deep-space/50 border border-gray-700 text-white placeholder-gray-500 focus:border-neon-cyan focus:ring-1 focus:ring-neon-cyan outline-none transition-colors"
+                placeholder="您的姓名"
+              />
+            </div>
+
+            <!-- Email -->
+            <div>
+              <label for="email" class="block text-sm font-medium text-gray-300 mb-2">Email *</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                [(ngModel)]="form.email"
+                required
+                class="w-full px-4 py-3 rounded-lg bg-deep-space/50 border border-gray-700 text-white placeholder-gray-500 focus:border-neon-cyan focus:ring-1 focus:ring-neon-cyan outline-none transition-colors"
+                placeholder="your@email.com"
+              />
+            </div>
+
+            <!-- Subject -->
+            <div>
+              <label for="subject" class="block text-sm font-medium text-gray-300 mb-2">主旨</label>
+              <input
+                type="text"
+                id="subject"
+                name="subject"
+                [(ngModel)]="form.subject"
+                class="w-full px-4 py-3 rounded-lg bg-deep-space/50 border border-gray-700 text-white placeholder-gray-500 focus:border-neon-cyan focus:ring-1 focus:ring-neon-cyan outline-none transition-colors"
+                placeholder="訊息主旨"
+              />
+            </div>
+
+            <!-- Message -->
+            <div>
+              <label for="message" class="block text-sm font-medium text-gray-300 mb-2">訊息 *</label>
+              <textarea
+                id="message"
+                name="message"
+                [(ngModel)]="form.message"
+                required
+                rows="5"
+                class="w-full px-4 py-3 rounded-lg bg-deep-space/50 border border-gray-700 text-white placeholder-gray-500 focus:border-neon-cyan focus:ring-1 focus:ring-neon-cyan outline-none transition-colors resize-none"
+                placeholder="請輸入您的訊息..."
+              ></textarea>
+            </div>
+
+            <!-- Submit Button -->
+            <button
+              type="submit"
+              [disabled]="isSubmitting()"
+              class="w-full btn-primary flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              @if (isSubmitting()) {
+                <svg class="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <span>送出中...</span>
+              } @else {
+                <span>送出訊息</span>
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                </svg>
+              }
+            </button>
+          }
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Background Decoration -->
+  <div class="absolute top-1/2 left-0 w-96 h-96 bg-deep-purple/10 rounded-full blur-3xl -translate-y-1/2"></div>
+  <div class="absolute bottom-0 right-1/4 w-72 h-72 bg-neon-cyan/5 rounded-full blur-3xl"></div>
+</section>

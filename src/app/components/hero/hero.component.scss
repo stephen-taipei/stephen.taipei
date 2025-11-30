@@ -1,0 +1,50 @@
+#hero {
+  background: radial-gradient(
+    ellipse at center,
+    rgba(45, 27, 105, 0.3) 0%,
+    transparent 70%
+  );
+}
+
+canvas {
+  display: block;
+}
+
+// Hero content improvements
+.hero-content-wrapper {
+  width: 100%;
+  max-width: 64rem;
+  margin: 0 auto;
+  padding: 0 1rem;
+
+  @media (min-width: 640px) {
+    padding: 0 1.5rem;
+  }
+
+  @media (min-width: 768px) {
+    padding: 0 2rem;
+  }
+}
+
+// Ensure buttons are properly centered on mobile
+#hero .flex.flex-col.sm\\:flex-row {
+  width: 100%;
+
+  @media (max-width: 639px) {
+    gap: 1rem; // Add gap for stacked buttons
+
+    a {
+      width: 100%;
+      max-width: 100%; // Allow full width
+      justify-content: center;
+    }
+  }
+}
+
+// Scroll indicator proper sizing
+.animate-bounce {
+  svg {
+    width: 2rem;
+    height: 2rem;
+  }
+}

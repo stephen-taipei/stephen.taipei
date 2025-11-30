@@ -1,0 +1,112 @@
+.category-tab {
+  &.active {
+    background: linear-gradient(
+      135deg,
+      rgba(0, 217, 255, 0.2),
+      rgba(255, 0, 110, 0.2)
+    );
+    border: 1px solid var(--neon-cyan);
+    color: var(--neon-cyan);
+  }
+
+  &:not(.active) {
+    color: var(--light-gray);
+
+    &:hover {
+      border-color: rgba(0, 217, 255, 0.5);
+      color: var(--neon-cyan);
+    }
+  }
+}
+
+.skill-item {
+  animation: fadeInUp 0.5s ease forwards;
+  opacity: 0;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.skill-bar {
+  position: relative;
+  overflow: hidden;
+  border-radius: 9999px;
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.3),
+      transparent
+    );
+    animation: shimmer 2s infinite;
+  }
+}
+
+// Enhanced skill bar gradient colors
+.skill-bar.from-neon-cyan {
+  background: linear-gradient(90deg, var(--neon-cyan), #7c3aed);
+}
+
+.skill-bar.from-neon-pink {
+  background: linear-gradient(90deg, var(--neon-pink), #7c3aed);
+}
+
+.skill-bar.from-purple-400 {
+  background: linear-gradient(90deg, #a855f7, #7c3aed);
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes pulse-glow {
+  0%,
+  100% {
+    opacity: 1;
+    box-shadow: 0 0 10px currentColor;
+  }
+  50% {
+    opacity: 0.8;
+    box-shadow: 0 0 20px currentColor;
+  }
+}
+
+.skill-bar {
+  // ... existing styles ...
+  &.active-pulse {
+    animation: pulse-glow 2s infinite;
+  }
+}
+
+.tech-icon {
+  &:hover {
+    .glass-card {
+      transform: translateY(-5px);
+      box-shadow: 0 0 20px rgba(0, 217, 255, 0.3);
+    }
+  }
+
+  .glass-card {
+    transition: all 0.3s ease;
+  }
+}

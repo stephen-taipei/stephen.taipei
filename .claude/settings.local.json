@@ -1,0 +1,34 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ng version:*)",
+      "Bash(ng new:*)",
+      "Bash(npm install:*)",
+      "Bash(npx tailwindcss:*)",
+      "Bash(./node_modules/.bin/tailwindcss:*)",
+      "Bash(ng build:*)",
+      "Bash(npm ls:*)",
+      "Bash(node --version:*)",
+      "Bash(pnpm --version:*)",
+      "Bash(/Users/stephen/.local/share/pnpm/pnpm --version)",
+      "Bash(/Users/stephen/.local/share/pnpm/pnpm install:*)",
+      "Bash(/Users/stephen/.local/share/pnpm/pnpm add:*)",
+      "Bash(/Users/stephen/.local/share/pnpm/pnpm run build:*)",
+      "Bash(source:*)",
+      "Bash(nvm install:*)",
+      "Bash(nvm use:*)",
+      "Bash(pnpm install:*)",
+      "Bash(pnpm run build:*)",
+      "Bash(pnpm run start)",
+      "Bash(lsof:*)",
+      "Bash(xargs kill:*)",
+      "Bash(npm run build:*)",
+      "Bash(nvm list:*)",
+      "Bash(gh auth status:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

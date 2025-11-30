@@ -1,0 +1,85 @@
+<nav
+  class="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
+  [class.bg-deep-space]="isScrolled()"
+  [class.bg-opacity-90]="isScrolled()"
+  [class.backdrop-blur-lg]="isScrolled()"
+  [class.shadow-lg]="isScrolled()"
+  [class.shadow-neon-cyan/10]="isScrolled()"
+>
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-20">
+      <!-- Logo -->
+      <a href="#" class="flex items-center space-x-2 group" (click)="scrollTo('#hero', $event)">
+        <span class="text-2xl font-bold font-display text-gradient">S.</span>
+        <span class="hidden sm:block text-lg font-medium text-gray-300 group-hover:text-neon-cyan transition-colors">
+          Stephen
+        </span>
+      </a>
+
+      <!-- Desktop Navigation -->
+      <div class="hidden md:flex items-center space-x-8">
+        @for (link of navLinks; track link.href) {
+          <a
+            [href]="link.href"
+            class="nav-link relative text-gray-300 hover:text-neon-cyan transition-colors duration-300 font-medium"
+            (click)="scrollTo(link.href, $event)"
+          >
+            {{ link.label }}
+            <span class="nav-underline absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-neon-cyan to-neon-pink transition-all duration-300"></span>
+          </a>
+        }
+      </div>
+
+      <!-- CTA Button -->
+      <div class="hidden md:block">
+        <a
+          href="#contact"
+          class="btn-primary text-sm"
+          (click)="scrollTo('#contact', $event)"
+        >
+          聯絡我
+        </a>
+      </div>
+
+      <!-- Mobile Menu Button -->
+      <button
+        class="md:hidden p-2 text-gray-300 hover:text-neon-cyan transition-colors"
+        (click)="toggleMobileMenu()"
+        [attr.aria-expanded]="isMobileMenuOpen()"
+        aria-label="Toggle menu"
+      >
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          @if (isMobileMenuOpen()) {
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          } @else {
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          }
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Menu -->
+  @if (isMobileMenuOpen()) {
+    <div class="md:hidden glass-card border-t border-neon-cyan/20 animate-fade-in-up">
+      <div class="container mx-auto px-4 py-4 space-y-4">
+        @for (link of navLinks; track link.href) {
+          <a
+            [href]="link.href"
+            class="block py-2 text-gray-300 hover:text-neon-cyan transition-colors font-medium"
+            (click)="scrollTo(link.href, $event)"
+          >
+            {{ link.label }}
+          </a>
+        }
+        <a
+          href="#contact"
+          class="block btn-primary text-center text-sm mt-4"
+          (click)="scrollTo('#contact', $event)"
+        >
+          聯絡我
+        </a>
+      </div>
+    </div>
+  }
+</nav>

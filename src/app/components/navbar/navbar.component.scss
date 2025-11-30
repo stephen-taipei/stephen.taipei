@@ -1,0 +1,17 @@
+.nav-link {
+  &:hover .nav-underline {
+    width: 100%;
+  }
+}
+
+// Mobile menu improvements
+@media (max-width: 767px) {
+  // Ensure mobile menu button is clearly visible and tappable
+  button[aria-label="Toggle menu"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}

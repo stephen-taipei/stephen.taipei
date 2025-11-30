@@ -1,0 +1,92 @@
+<section id="achievements" #achievementsSection class="py-24 md:py-32 relative overflow-hidden">
+  <div class="container mx-auto px-4">
+    <!-- Section Header -->
+    <div class="text-center mb-16">
+      <h2 class="section-title animate-on-scroll">
+        <span class="text-gradient">成就亮點</span>
+      </h2>
+      <p class="section-subtitle animate-on-scroll">Key Achievements</p>
+    </div>
+
+    <!-- Stats Grid -->
+    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+      @for (achievement of achievements; track achievement.label) {
+        <div class="animate-on-scroll glass-card rounded-xl p-6 hover-glow text-center group">
+          <!-- Icon -->
+          <div class="w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center transition-transform group-hover:scale-110"
+            [class]="getColorClass(achievement.color, 'bg')"
+          >
+            <svg class="w-8 h-8" [class]="getColorClass(achievement.color, 'text')" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" [attr.d]="achievement.icon" />
+            </svg>
+          </div>
+
+          <!-- Value -->
+          <div class="counter-value text-4xl font-bold font-display mb-2" [class]="getColorClass(achievement.color, 'text')">
+            {{ achievement.value }}
+          </div>
+
+          <!-- Label -->
+          <h4 class="text-lg font-semibold text-white mb-2">{{ achievement.label }}</h4>
+
+          <!-- Description -->
+          <p class="text-sm text-gray-400">{{ achievement.description }}</p>
+        </div>
+      }
+    </div>
+
+    <!-- Special Achievements -->
+    <div class="animate-on-scroll max-w-2xl mx-auto">
+      <div class="glass-card rounded-2xl p-8 relative overflow-hidden">
+        <!-- Background Glow -->
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-32 bg-gradient-to-b from-neon-pink/20 to-transparent blur-2xl"></div>
+
+        <!-- Content -->
+        <div class="relative">
+          <h3 class="text-xl font-bold text-center text-white mb-6">
+            <span class="text-neon-pink">特殊榮譽</span> - 街舞成就
+          </h3>
+
+          <div class="grid md:grid-cols-2 gap-6">
+            @for (special of specialAchievements; track special.title) {
+              <div class="flex items-center gap-4 p-4 rounded-xl bg-deep-space/50 border border-neon-pink/20 hover:border-neon-pink/50 transition-colors">
+                <!-- Trophy Icon -->
+                <div class="w-14 h-14 rounded-full bg-gradient-to-br from-neon-pink/20 to-neon-cyan/20 flex items-center justify-center flex-shrink-0">
+                  <svg class="w-7 h-7 text-neon-pink" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" [attr.d]="special.icon" />
+                  </svg>
+                </div>
+
+                <!-- Text -->
+                <div>
+                  <h4 class="text-lg font-bold text-white">{{ special.title }}</h4>
+                  <p class="text-sm text-gray-400">{{ special.subtitle }}</p>
+                </div>
+              </div>
+            }
+          </div>
+
+          <p class="text-center text-gray-400 text-sm mt-6">
+            這份經歷鍛鍊了我面對挑戰時的<span class="text-neon-cyan">專注</span>與<span class="text-neon-pink">毅力</span>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Background Decorations -->
+  <div class="absolute top-0 left-1/4 w-96 h-96 bg-neon-cyan/5 rounded-full blur-3xl"></div>
+  <div class="absolute bottom-0 right-1/4 w-80 h-80 bg-neon-pink/5 rounded-full blur-3xl"></div>
+
+  <!-- Floating particles effect -->
+  <div class="absolute inset-0 overflow-hidden pointer-events-none">
+    @for (i of [1,2,3,4,5]; track i) {
+      <div
+        class="absolute w-2 h-2 bg-neon-cyan/30 rounded-full animate-float"
+        [style.left.%]="i * 20"
+        [style.top.%]="(i * 15) % 100"
+        [style.animation-delay]="(i * 0.5) + 's'"
+      ></div>
+    }
+  </div>
+</section>
