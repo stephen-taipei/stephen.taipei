@@ -2,6 +2,7 @@
  * 工作經歷組件樣式
  * - 時間軸交錯佈局
  * - 響應式設計：移動端單列，桌面端左右交錯
+ * - 性能優化
  */
 
 #experience {
@@ -16,6 +17,9 @@
 
 // 時間軸項目 - 桌面端交錯佈局 (lg 斷點)
 .timeline-item {
+  // GPU 加速
+  transform: translateZ(0);
+
   @media (min-width: 1024px) {
     // 奇數項目（左側）
     &:nth-child(odd) {
@@ -46,12 +50,30 @@
 
   // 內容卡片樣式
   .glass-card {
+    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+                box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translateZ(0);
+    will-change: transform;
+
+    // 觸控反饋
+    &:active {
+      transform: scale(0.98) translateZ(0);
+    }
+
+    @media (hover: hover) {
+      &:hover {
+        transform: translateY(-3px) translateZ(0);
+        box-shadow: 0 8px 25px rgba(0, 217, 255, 0.15);
+      }
+    }
+
     // 確保展開指示器圖標大小正確
     .flex.items-center.gap-1 {
       svg {
         width: 0.875rem;
         height: 0.875rem;
         flex-shrink: 0;
+        transition: transform 0.2s ease;
 
         @media (min-width: 640px) {
           width: 1rem;
@@ -87,18 +109,31 @@
   }
 }
 
-// 展開動畫增強
+// 展開動畫增強 - 更快的動畫
 .animate-fade-in-up {
-  animation: fadeInUp 0.4s ease-out forwards;
+  animation: fadeInUp 0.25s ease-out forwards;
+  transform: translateZ(0);
 }
 
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(8px) translateZ(0);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) translateZ(0);
+  }
+}
+
+// 減少動畫在低性能設備上
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-in-up {
+    animation: none;
+    opacity: 1;
+  }
+
+  .timeline-item .glass-card {
+    transition: none;
   }
 }

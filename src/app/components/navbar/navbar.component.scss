@@ -3,35 +3,45 @@
  * - 響應式導航欄
  * - 移動端選單
  * - 滾動狀態
+ * - 性能優化
  */
 
-// 導航連結下劃線效果
+// 導航連結下劃線效果 - 使用 GPU 加速
 .nav-link {
+  position: relative;
+
+  .nav-underline {
+    will-change: width;
+    transform: translateZ(0);
+  }
+
   &:hover .nav-underline,
   &:focus .nav-underline {
     width: 100%;
   }
 }
 
-// 移動端選單按鈕動畫
+// 移動端選單按鈕動畫 - 優化過渡
 button svg {
-  transition: transform 0.3s ease;
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
 }
 
-// 移動端選單項目入場動畫
+// 移動端選單項目入場動畫 - 更快的動畫
 .glass-card a {
-  animation: menuItemIn 0.3s ease forwards;
+  animation: menuItemIn 0.15s ease-out forwards;
   opacity: 0;
+  transform: translateZ(0);
 }
 
 @keyframes menuItemIn {
   from {
     opacity: 0;
-    transform: translateX(-10px);
+    transform: translateX(-8px) translateZ(0);
   }
   to {
     opacity: 1;
-    transform: translateX(0);
+    transform: translateX(0) translateZ(0);
   }
 }
 
@@ -39,18 +49,30 @@ button svg {
 nav {
   // 添加頂部安全區域
   padding-top: env(safe-area-inset-top);
+  // GPU 加速
+  transform: translateZ(0);
+  will-change: background-color, backdrop-filter;
 }
 
 // 改善移動端選單的觸控體驗
 .lg\:hidden.glass-card {
   // 添加底部安全區域
   padding-bottom: env(safe-area-inset-bottom);
+  // 優化滾動
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
 
   a {
     // 確保觸控目標足夠大
-    min-height: 44px;
+    min-height: 48px;
     display: flex;
     align-items: center;
+    // 優化觸控反饋
+    transition: background-color 0.15s ease;
+
+    &:active {
+      background-color: rgba(0, 217, 255, 0.1);
+    }
   }
 }
 
@@ -70,10 +92,16 @@ nav.bg-deep-space {
 @media (max-width: 1023px) {
   // Ensure mobile menu button is clearly visible and tappable
   button[aria-label="開啟選單"] {
-    min-width: 44px;
-    min-height: 44px;
+    min-width: 48px;
+    min-height: 48px;
     display: flex;
     align-items: center;
     justify-content: center;
+    // 觸控反饋
+    transition: background-color 0.15s ease;
+
+    &:active {
+      background-color: rgba(0, 217, 255, 0.15);
+    }
   }
 }

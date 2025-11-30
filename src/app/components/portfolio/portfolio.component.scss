@@ -1,37 +1,65 @@
+/**
+ * Portfolio 組件樣式
+ * - 卡片效果
+ * - Modal 動畫
+ * - 性能優化
+ */
+
 #portfolio {
   background: linear-gradient(180deg, transparent 0%, rgba(45, 27, 105, 0.1) 50%, transparent 100%);
 }
 
 .project-card {
-  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+              border-color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translateZ(0);
+  will-change: transform;
 
-  &:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 20px 40px rgba(0, 217, 255, 0.2), 0 0 60px rgba(0, 217, 255, 0.1);
-    border-color: var(--neon-cyan) !important;
+  // 觸控反饋
+  &:active {
+    transform: scale(0.98) translateZ(0);
+    transition-duration: 0.1s;
   }
 
-  // Project image hover zoom effect
+  @media (hover: hover) {
+    &:hover {
+      transform: translateY(-6px) translateZ(0);
+      box-shadow: 0 15px 30px rgba(0, 217, 255, 0.15), 0 0 40px rgba(0, 217, 255, 0.08);
+      border-color: var(--neon-cyan) !important;
+    }
+  }
+
+  // Project image hover zoom effect - 優化為僅使用 transform
+  .relative.h-36,
+  .relative.h-40,
   .relative.h-48 {
     overflow: hidden;
 
     & > div:first-child {
-      transition: transform 0.5s ease;
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      transform: translateZ(0);
     }
   }
 
-  &:hover .relative.h-48 > div:first-child {
-    transform: scale(1.1);
+  @media (hover: hover) {
+    &:hover .relative.h-36 > div:first-child,
+    &:hover .relative.h-40 > div:first-child,
+    &:hover .relative.h-48 > div:first-child {
+      transform: scale(1.05) translateZ(0);
+    }
   }
 
   // View details arrow animation
   .view-details svg,
   .group-hover\\:translate-x-1 {
-    transition: transform 0.3s ease;
+    transition: transform 0.2s ease;
   }
 
-  &:hover .view-details svg {
-    transform: translateX(4px);
+  @media (hover: hover) {
+    &:hover .view-details svg {
+      transform: translateX(3px);
+    }
   }
 
   // Ensure SVG icons in cards are properly sized
@@ -47,12 +75,14 @@
   overflow: hidden;
 }
 
+// Modal 動畫 - 更快更流暢
 .animate-fade-in {
-  animation: fadeIn 0.3s ease forwards;
+  animation: fadeIn 0.2s ease-out forwards;
 }
 
 .animate-scale-in {
-  animation: scaleIn 0.3s ease forwards;
+  animation: scaleIn 0.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  transform: translateZ(0);
 }
 
 @keyframes fadeIn {
@@ -67,10 +97,36 @@
 @keyframes scaleIn {
   from {
     opacity: 0;
-    transform: scale(0.95);
+    transform: scale(0.96) translateY(10px) translateZ(0);
   }
   to {
     opacity: 1;
-    transform: scale(1);
+    transform: scale(1) translateY(0) translateZ(0);
+  }
+}
+
+// Modal 滾動優化
+.fixed.inset-0 {
+  // 優化 backdrop-blur 性能
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+
+  & > div {
+    // 優化 modal 內容滾動
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+}
+
+// 減少動畫在低性能設備上
+@media (prefers-reduced-motion: reduce) {
+  .project-card {
+    transition: none;
+  }
+
+  .animate-fade-in,
+  .animate-scale-in {
+    animation: none;
+    opacity: 1;
   }
 }

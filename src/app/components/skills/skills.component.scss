@@ -1,4 +1,19 @@
+/**
+ * Skills 組件樣式
+ * - Tab 切換效果
+ * - 進度條動畫
+ * - 性能優化
+ */
+
 .category-tab {
+  // 使用 GPU 加速
+  transform: translateZ(0);
+  will-change: transform, background-color;
+  transition: transform 0.15s ease,
+              background-color 0.15s ease,
+              border-color 0.15s ease,
+              color 0.15s ease;
+
   &.active {
     background: linear-gradient(
       135deg,
@@ -12,26 +27,34 @@
   &:not(.active) {
     color: var(--light-gray);
 
-    &:hover {
-      border-color: rgba(0, 217, 255, 0.5);
-      color: var(--neon-cyan);
+    @media (hover: hover) {
+      &:hover {
+        border-color: rgba(0, 217, 255, 0.5);
+        color: var(--neon-cyan);
+      }
+    }
+
+    &:active {
+      transform: scale(0.97) translateZ(0);
+      background-color: rgba(0, 217, 255, 0.1);
     }
   }
 }
 
 .skill-item {
-  animation: fadeInUp 0.5s ease forwards;
+  animation: fadeInUp 0.3s ease-out forwards;
   opacity: 0;
+  transform: translateZ(0);
 }
 
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(15px) translateZ(0);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) translateZ(0);
   }
 }
 
@@ -39,7 +62,10 @@
   position: relative;
   overflow: hidden;
   border-radius: 9999px;
+  transform: translateZ(0);
+  will-change: width;
 
+  // 移除持續動畫以節省性能，改用靜態效果
   &::after {
     content: "";
     position: absolute;
@@ -49,11 +75,11 @@
     bottom: 0;
     background: linear-gradient(
       90deg,
-      transparent,
-      rgba(255, 255, 255, 0.3),
-      transparent
+      transparent 0%,
+      rgba(255, 255, 255, 0.15) 50%,
+      transparent 100%
     );
-    animation: shimmer 2s infinite;
+    // 靜態漸變，不使用動畫
   }
 }
 
@@ -70,43 +96,42 @@
   background: linear-gradient(90deg, #a855f7, #7c3aed);
 }
 
-@keyframes shimmer {
-  0% {
-    transform: translateX(-100%);
-  }
-  100% {
-    transform: translateX(100%);
-  }
-}
-
-@keyframes pulse-glow {
-  0%,
-  100% {
-    opacity: 1;
-    box-shadow: 0 0 10px currentColor;
-  }
-  50% {
-    opacity: 0.8;
-    box-shadow: 0 0 20px currentColor;
-  }
-}
-
-.skill-bar {
-  // ... existing styles ...
-  &.active-pulse {
-    animation: pulse-glow 2s infinite;
-  }
-}
-
 .tech-icon {
-  &:hover {
-    .glass-card {
-      transform: translateY(-5px);
-      box-shadow: 0 0 20px rgba(0, 217, 255, 0.3);
+  .glass-card {
+    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+                box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translateZ(0);
+    will-change: transform;
+  }
+
+  @media (hover: hover) {
+    &:hover .glass-card {
+      transform: translateY(-4px) translateZ(0);
+      box-shadow: 0 0 15px rgba(0, 217, 255, 0.25);
     }
   }
 
-  .glass-card {
-    transition: all 0.3s ease;
+  &:active .glass-card {
+    transform: scale(0.95) translateZ(0);
+  }
+}
+
+// 響應式優化
+@media (max-width: 639px) {
+  .skill-item {
+    animation-duration: 0.2s;
+  }
+}
+
+// 減少動畫在低性能設備上
+@media (prefers-reduced-motion: reduce) {
+  .skill-item {
+    animation: none;
+    opacity: 1;
+  }
+
+  .category-tab,
+  .tech-icon .glass-card {
+    transition: none;
   }
 }

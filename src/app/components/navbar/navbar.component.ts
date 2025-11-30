@@ -1,6 +1,6 @@
-import { Component, signal, HostListener } from '@angular/core';
+import { Component, signal, HostListener, NgZone } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { trigger, state, style, animate, transition } from '@angular/animations';
+import { trigger, style, animate, transition } from '@angular/animations';
 
 @Component({
   selector: 'app-navbar',
@@ -11,11 +11,11 @@ import { trigger, state, style, animate, transition } from '@angular/animations'
   animations: [
     trigger('slideDown', [
       transition(':enter', [
-        style({ height: 0, opacity: 0 }),
-        animate('300ms cubic-bezier(0.4, 0, 0.2, 1)', style({ height: '*', opacity: 1 }))
+        style({ height: 0, opacity: 0, transform: 'translateY(-10px)' }),
+        animate('200ms cubic-bezier(0.4, 0, 0.2, 1)', style({ height: '*', opacity: 1, transform: 'translateY(0)' }))
       ]),
       transition(':leave', [
-        animate('200ms cubic-bezier(0.4, 0, 0.2, 1)', style({ height: 0, opacity: 0 }))
+        animate('150ms cubic-bezier(0.4, 0, 0.2, 1)', style({ height: 0, opacity: 0, transform: 'translateY(-10px)' }))
       ])
     ])
   ]
@@ -23,6 +23,8 @@ import { trigger, state, style, animate, transition } from '@angular/animations'
 export class NavbarComponent {
   isScrolled = signal(false);
   isMobileMenuOpen = signal(false);
+  private scrollTimeout: any;
+  private lastScrollY = 0;
 
   navLinks = [
     { label: '關於我', href: '#about' },
@@ -33,13 +35,25 @@ export class NavbarComponent {
     { label: '聯絡', href: '#contact' },
   ];
 
+  constructor(private ngZone: NgZone) {}
+
   @HostListener('window:scroll')
   onWindowScroll() {
-    this.isScrolled.set(window.scrollY > 50);
-    // 滾動時自動關閉移動端選單
-    if (this.isMobileMenuOpen()) {
-      this.closeMobileMenu();
-    }
+    // 使用節流優化滾動事件
+    if (this.scrollTimeout) return;
+
+    this.scrollTimeout = setTimeout(() => {
+      const currentScrollY = window.scrollY;
+      this.isScrolled.set(currentScrollY > 50);
+
+      // 只有在向下滾動超過一定距離時才關閉選單
+      if (this.isMobileMenuOpen() && currentScrollY > this.lastScrollY + 50) {
+        this.closeMobileMenu();
+      }
+
+      this.lastScrollY = currentScrollY;
+      this.scrollTimeout = null;
+    }, 16); // ~60fps
   }
 
   @HostListener('window:resize')
@@ -51,25 +65,40 @@ export class NavbarComponent {
   }
 
   toggleMobileMenu() {
-    this.isMobileMenuOpen.update(v => !v);
+    const newState = !this.isMobileMenuOpen();
+    this.isMobileMenuOpen.set(newState);
+
+    // 打開選單時防止背景滾動
+    if (newState) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
   }
 
   closeMobileMenu() {
     this.isMobileMenuOpen.set(false);
+    document.body.style.overflow = '';
   }
 
   scrollTo(href: string, event: Event) {
     event.preventDefault();
-    const element = document.querySelector(href);
-    if (element) {
-      // 計算導航欄高度以避免內容被遮擋
-      const navHeight = 80;
-      const elementPosition = element.getBoundingClientRect().top + window.scrollY;
-      window.scrollTo({
-        top: elementPosition - navHeight,
-        behavior: 'smooth'
-      });
-      this.closeMobileMenu();
-    }
+
+    // 先關閉選單，然後滾動
+    this.closeMobileMenu();
+
+    // 使用 requestAnimationFrame 確保動畫流暢
+    requestAnimationFrame(() => {
+      const element = document.querySelector(href);
+      if (element) {
+        // 計算導航欄高度以避免內容被遮擋
+        const navHeight = 72;
+        const elementPosition = element.getBoundingClientRect().top + window.scrollY;
+        window.scrollTo({
+          top: elementPosition - navHeight,
+          behavior: 'smooth'
+        });
+      }
+    });
   }
 }

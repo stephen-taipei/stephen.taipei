@@ -1,47 +1,120 @@
+/**
+ * Contact 組件樣式
+ * - 表單樣式
+ * - 社群連結
+ * - 性能優化
+ */
+
 #contact {
   background: linear-gradient(180deg, transparent 0%, rgba(45, 27, 105, 0.1) 50%, transparent 100%);
 }
 
 // Social link icons - ensure proper sizing
+.flex.gap-3,
 .flex.gap-4 {
   a {
+    transition: transform 0.15s ease,
+                color 0.15s ease,
+                border-color 0.15s ease;
+    transform: translateZ(0);
+
+    &:active {
+      transform: scale(0.9) translateZ(0);
+    }
+
+    @media (hover: hover) {
+      &:hover {
+        transform: translateY(-2px) translateZ(0);
+      }
+    }
+
     svg {
       width: 1.25rem;
       height: 1.25rem;
       flex-shrink: 0;
+
+      @media (min-width: 640px) {
+        width: 1.25rem;
+        height: 1.25rem;
+      }
     }
   }
 }
 
 // Contact method icons
+.flex.items-center.gap-3,
 .flex.items-center.gap-4 {
+  .w-10.h-10,
   .w-12.h-12 {
     flex-shrink: 0;
 
     svg {
-      width: 1.5rem;
-      height: 1.5rem;
+      width: 1.25rem;
+      height: 1.25rem;
+
+      @media (min-width: 640px) {
+        width: 1.5rem;
+        height: 1.5rem;
+      }
     }
   }
 }
 
+// 表單輸入優化
 input, textarea {
+  transition: border-color 0.15s ease,
+              box-shadow 0.15s ease;
+  transform: translateZ(0);
+
   &:focus {
     box-shadow: 0 0 0 2px rgba(0, 217, 255, 0.1);
   }
+
+  // 優化 iOS 輸入體驗
+  -webkit-appearance: none;
+  border-radius: 0.5rem;
 }
 
+// 提交按鈕優化
+button[type="submit"] {
+  transition: transform 0.15s ease,
+              box-shadow 0.15s ease;
+  transform: translateZ(0);
+
+  &:active:not(:disabled) {
+    transform: scale(0.97) translateZ(0);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+  }
+}
+
+// 成功訊息動畫
 .animate-scale-in {
-  animation: scaleIn 0.5s ease forwards;
+  animation: scaleIn 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  transform: translateZ(0);
 }
 
 @keyframes scaleIn {
   from {
     opacity: 0;
-    transform: scale(0.9);
+    transform: scale(0.95) translateZ(0);
   }
   to {
     opacity: 1;
-    transform: scale(1);
+    transform: scale(1) translateZ(0);
+  }
+}
+
+// 減少動畫在低性能設備上
+@media (prefers-reduced-motion: reduce) {
+  .animate-scale-in {
+    animation: none;
+    opacity: 1;
+  }
+
+  input, textarea, button, a {
+    transition: none;
   }
 }
