@@ -2,7 +2,7 @@
  * Hero 組件樣式
  * - Three.js 粒子背景
  * - 響應式佈局
- * - 動畫效果
+ * - 動畫效果（性能優化）
  */
 
 #hero {
@@ -22,6 +22,8 @@ canvas {
   display: block;
   width: 100%;
   height: 100%;
+  // 優化 canvas 渲染
+  image-rendering: optimizeSpeed;
 }
 
 // Hero 內容包裝器
@@ -55,9 +57,9 @@ canvas {
   }
 }
 
-// 打字機光標動畫
+// 打字機光標動畫 - 使用 CSS 而非 JS 控制
 .hero-subtitle .animate-pulse {
-  animation: cursorBlink 1s ease-in-out infinite;
+  animation: cursorBlink 1s step-end infinite;
 }
 
 @keyframes cursorBlink {
@@ -69,56 +71,62 @@ canvas {
   }
 }
 
-// 標題入場動畫
+// 標題入場動畫 - 優化為使用 GPU 加速
 .hero-title {
-  animation: heroTitleIn 1s ease-out forwards;
+  animation: heroTitleIn 0.6s ease-out forwards;
+  transform: translateZ(0);
 }
 
 .hero-subtitle {
-  animation: heroSubtitleIn 1s ease-out 0.2s forwards;
+  animation: heroSubtitleIn 0.6s ease-out 0.15s forwards;
   opacity: 0;
+  transform: translateZ(0);
 }
 
 .hero-cta {
-  animation: heroCTAIn 0.8s ease-out 0.5s forwards;
+  animation: heroCTAIn 0.5s ease-out 0.3s forwards;
   opacity: 0;
+  transform: translateZ(0);
 }
 
 @keyframes heroTitleIn {
   from {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(20px) translateZ(0);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) translateZ(0);
   }
 }
 
 @keyframes heroSubtitleIn {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(15px) translateZ(0);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) translateZ(0);
   }
 }
 
 @keyframes heroCTAIn {
   from {
     opacity: 0;
-    transform: translateY(15px);
+    transform: translateY(10px) translateZ(0);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) translateZ(0);
   }
 }
 
-// 滾動指示器
+// 滾動指示器 - 優化 bounce 動畫
 .animate-bounce {
+  animation: gentleBounce 2s ease-in-out infinite;
+  will-change: transform;
+
   svg {
     width: 1.75rem;
     height: 1.75rem;
@@ -130,9 +138,37 @@ canvas {
   }
 }
 
+@keyframes gentleBounce {
+  0%, 100% {
+    transform: translateY(0) translateZ(0);
+  }
+  50% {
+    transform: translateY(8px) translateZ(0);
+  }
+}
+
 // 發光文字效果在移動端減弱
 .glow-text {
   @media (max-width: 639px) {
-    text-shadow: 0 0 8px var(--neon-cyan), 0 0 16px var(--neon-cyan);
+    text-shadow: 0 0 6px var(--neon-cyan), 0 0 12px var(--neon-cyan);
+  }
+}
+
+// 減少動畫在低性能設備上
+@media (prefers-reduced-motion: reduce) {
+  .hero-title,
+  .hero-subtitle,
+  .hero-cta {
+    animation: none;
+    opacity: 1;
+  }
+
+  .animate-bounce {
+    animation: none;
+  }
+
+  .hero-subtitle .animate-pulse {
+    animation: none;
+    opacity: 1;
   }
 }

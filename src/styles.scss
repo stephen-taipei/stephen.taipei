@@ -76,6 +76,40 @@
   box-sizing: border-box;
 }
 
+// ============================================
+// 性能優化 - GPU 加速和硬體渲染
+// ============================================
+.gpu-accelerate {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+// 優化過渡效果 - 只對 transform 和 opacity 使用硬體加速
+.smooth-transition {
+  transition-property: transform, opacity;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform, opacity;
+}
+
+// 減少重繪 - 固定定位元素
+.fixed,
+[class*="fixed"] {
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+// 優化滾動性能
+.scroll-container {
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+
+// 觸控優化 - 防止 300ms 延遲
+button, a, [role="button"] {
+  touch-action: manipulation;
+}
+
 // SVG Icon Constraints - Prevent icons from expanding uncontrollably
 svg {
   max-width: 100%;
@@ -228,18 +262,23 @@ h6 {
 }
 
 .hover-glow {
-  transition: all 0.3s ease;
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+              border-color 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+  transform: translateZ(0);
 
-  // Mobile friendly active state
+  // Mobile friendly active state - 更快的反饋
   &:active {
-    transform: scale(0.98);
+    transform: scale(0.97) translateZ(0);
+    transition-duration: 0.1s;
   }
 
   @media (hover: hover) {
     &:hover {
-      box-shadow: 0 0 30px rgba(0, 217, 255, 0.4),
-        0 0 60px rgba(0, 217, 255, 0.15);
-      transform: translateY(-5px);
+      box-shadow: 0 0 25px rgba(0, 217, 255, 0.35),
+        0 0 50px rgba(0, 217, 255, 0.1);
+      transform: translateY(-4px) translateZ(0);
       border-color: rgba(0, 217, 255, 0.4);
     }
   }
@@ -312,7 +351,8 @@ h6 {
   border-radius: 0.75rem;
   font-weight: 600;
   font-size: 0.9375rem;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   background: linear-gradient(135deg, var(--neon-cyan), var(--deep-purple));
   color: white;
   position: relative;
@@ -321,6 +361,8 @@ h6 {
   text-decoration: none;
   cursor: pointer;
   border: none;
+  will-change: transform;
+  transform: translateZ(0);
 
   &::after {
     content: "";
@@ -331,17 +373,18 @@ h6 {
     height: 100%;
     background: linear-gradient(rgba(255, 255, 255, 0.2), transparent);
     opacity: 0;
-    transition: opacity 0.3s;
+    transition: opacity 0.2s;
   }
 
   &:active {
-    transform: scale(0.97);
+    transform: scale(0.96) translateZ(0);
+    transition-duration: 0.1s;
   }
 
   @media (hover: hover) {
     &:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 10px 30px rgba(0, 217, 255, 0.4);
+      transform: translateY(-2px) translateZ(0);
+      box-shadow: 0 8px 25px rgba(0, 217, 255, 0.35);
       &::after {
         opacity: 1;
       }
@@ -363,25 +406,31 @@ h6 {
   border-radius: 0.75rem;
   font-weight: 600;
   font-size: 0.9375rem;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+              background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+              color 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   border: 2px solid var(--neon-cyan);
   color: var(--neon-cyan);
   background: transparent;
   min-height: 48px; // 觸控友善最小高度
   text-decoration: none;
   cursor: pointer;
+  will-change: transform;
+  transform: translateZ(0);
 
   &:active {
     background: rgba(0, 217, 255, 0.15);
-    transform: scale(0.97);
+    transform: scale(0.96) translateZ(0);
+    transition-duration: 0.1s;
   }
 
   @media (hover: hover) {
     &:hover {
       background: var(--neon-cyan);
       color: var(--deep-space);
-      box-shadow: 0 0 25px rgba(0, 217, 255, 0.5);
-      transform: translateY(-3px);
+      box-shadow: 0 0 20px rgba(0, 217, 255, 0.4);
+      transform: translateY(-2px) translateZ(0);
     }
   }
 
@@ -391,7 +440,7 @@ h6 {
   }
 }
 
-// Grid Background Animation
+// Grid Background Animation - 優化性能
 .cyber-grid {
   position: fixed;
   top: 0;
@@ -401,26 +450,24 @@ h6 {
   pointer-events: none;
   z-index: 0;
   background-image: linear-gradient(
-      rgba(0, 217, 255, 0.05) 1px,
+      rgba(0, 217, 255, 0.03) 1px,
       transparent 1px
     ),
-    linear-gradient(90deg, rgba(0, 217, 255, 0.05) 1px, transparent 1px);
+    linear-gradient(90deg, rgba(0, 217, 255, 0.03) 1px, transparent 1px);
   background-size: 40px 40px;
-  animation: gridMove 20s linear infinite;
-  opacity: 0.6;
+  opacity: 0.5;
+  // 移除動畫以提升性能，改用靜態背景
+  transform: perspective(500px) rotateX(60deg) translateZ(0);
+  will-change: auto; // 不需要持續動畫
 
   @media (min-width: 768px) {
     background-size: 50px 50px;
-    opacity: 0.8;
+    opacity: 0.6;
   }
-}
 
-@keyframes gridMove {
-  0% {
-    transform: perspective(500px) rotateX(60deg) translateY(0);
-  }
-  100% {
-    transform: perspective(500px) rotateX(60deg) translateY(40px);
+  // 在低性能設備上完全隱藏
+  @media (prefers-reduced-motion: reduce) {
+    display: none;
   }
 }
 
@@ -616,36 +663,46 @@ section:not(#hero) {
 // 改善的 glass-card hover 效果 (觸控友善)
 .glass-card-interactive {
   @extend .glass-card;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+              border-color 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+  transform: translateZ(0);
 
   &:active {
-    transform: scale(0.98);
+    transform: scale(0.97) translateZ(0);
     border-color: rgba(0, 217, 255, 0.3);
+    transition-duration: 0.1s;
   }
 
   @media (hover: hover) {
     &:hover {
-      transform: translateY(-4px);
+      transform: translateY(-3px) translateZ(0);
       border-color: rgba(0, 217, 255, 0.4);
-      box-shadow: 0 8px 30px rgba(0, 217, 255, 0.15);
+      box-shadow: 0 6px 25px rgba(0, 217, 255, 0.12);
     }
   }
 }
 
-// 浮動粒子動畫
+// 浮動粒子動畫 - 優化為僅使用 transform
 @keyframes float {
   0%, 100% {
-    transform: translateY(0) rotate(0deg);
-    opacity: 0.3;
+    transform: translateY(0) translateZ(0);
   }
   50% {
-    transform: translateY(-20px) rotate(180deg);
-    opacity: 0.6;
+    transform: translateY(-15px) translateZ(0);
   }
 }
 
 .animate-float {
-  animation: float 6s ease-in-out infinite;
+  animation: float 8s ease-in-out infinite;
+  will-change: transform;
+  opacity: 0.4;
+
+  // 減少動畫在低性能設備上
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
 }
 
 // 漸入動畫
