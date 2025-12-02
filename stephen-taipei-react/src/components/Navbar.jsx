@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Menu, X, Globe } from 'lucide-react';
-import { useLanguage } from '../i18n/LanguageContext';
+import { useLanguage, LANGUAGE_OPTIONS } from '../i18n/LanguageContext';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { language, toggleLanguage, t } = useLanguage();
+  const { language, setLanguage, t } = useLanguage();
 
   const navLinks = [
     { name: t.nav.about, href: '#about' },
@@ -38,25 +38,46 @@ const Navbar = () => {
             </div>
 
             {/* Language Switcher */}
-            <button
-              onClick={toggleLanguage}
-              className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-gray-600 hover:text-primary-dark border border-gray-200 rounded-full hover:border-primary/30 transition-all"
-              aria-label="Toggle language"
-            >
+            <div className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-gray-600 border border-gray-200 rounded-full hover:border-primary/30 transition-all">
               <Globe className="w-4 h-4" />
-              <span>{language === 'zh' ? 'EN' : '中文'}</span>
-            </button>
+              <select
+                value={language}
+                onChange={(e) => setLanguage(e.target.value)}
+                className="bg-transparent outline-none cursor-pointer"
+                aria-label="Select language"
+              >
+                {LANGUAGE_OPTIONS.map((lang) => (
+                  <option key={lang.value} value={lang.value}>
+                    {lang.label}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
 
           <div className="flex items-center gap-2 md:hidden">
             {/* Mobile Language Switcher */}
-            <button
-              onClick={toggleLanguage}
-              className="p-2 text-gray-600 hover:text-primary-dark"
-              aria-label="Toggle language"
-            >
-              <Globe className="w-5 h-5" />
-            </button>
+            <div className="p-2 text-gray-600 hover:text-primary-dark">
+              <label htmlFor="mobile-language" className="sr-only">
+                Select language
+              </label>
+              <div className="flex items-center border border-gray-200 rounded-md px-2 py-1">
+                <Globe className="w-5 h-5 mr-2" />
+                <select
+                  id="mobile-language"
+                  value={language}
+                  onChange={(e) => setLanguage(e.target.value)}
+                  className="bg-transparent text-sm outline-none"
+                  aria-label="Select language"
+                >
+                  {LANGUAGE_OPTIONS.map((lang) => (
+                    <option key={lang.value} value={lang.value}>
+                      {lang.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
 
             <button
               onClick={() => setIsOpen(!isOpen)}

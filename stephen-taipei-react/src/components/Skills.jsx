@@ -6,6 +6,7 @@ import { useLanguage } from '../i18n/LanguageContext';
 const Skills = () => {
   const [activeTab, setActiveTab] = useState('Frontend');
   const { t, language } = useLanguage();
+  const isChinese = language?.toLowerCase().startsWith('zh');
 
   const categories = [
     { id: 'Frontend', icon: Code, label: t.skills.frontend },
@@ -26,8 +27,8 @@ const Skills = () => {
     Backend: [
       { name: 'Laravel Octane + Swoole', level: 95 },
       { name: 'WebSocket Server', level: 90 },
-      { name: language === 'zh' ? 'MySQL (讀寫分離)' : 'MySQL (Read/Write Separation)', level: 90 },
-      { name: language === 'zh' ? 'Redis (快取策略)' : 'Redis (Caching Strategy)', level: 90 },
+      { name: isChinese ? 'MySQL (讀寫分離)' : 'MySQL (Read/Write Separation)', level: 90 },
+      { name: isChinese ? 'Redis (快取策略)' : 'Redis (Caching Strategy)', level: 90 },
       { name: 'PHP (Smarty)', level: 85 },
     ],
     DevOps: [
@@ -41,9 +42,9 @@ const Skills = () => {
     AI: [
       { name: 'OpenAI API', level: 95 },
       { name: 'Cursor + Claude + Codex + Gemini', level: 95 },
-      { name: language === 'zh' ? 'AI 繪圖應用' : 'AI Image Generation', level: 85 },
+      { name: isChinese ? 'AI 繪圖應用' : 'AI Image Generation', level: 85 },
       { name: 'LINE / WeChat API', level: 85 },
-      { name: language === 'zh' ? '支付寶 / Google 串接' : 'Alipay / Google Integration', level: 85 },
+      { name: isChinese ? '支付寶 / Google 串接' : 'Alipay / Google Integration', level: 85 },
     ]
   };
 
