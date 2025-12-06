@@ -8,8 +8,8 @@ const About = () => {
 
   return (
     <section id="about" className="py-20 bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 gap-12 items-center lg:grid-cols-2">
 
           <motion.div
             initial={{ opacity: 0, x: -50 }}
@@ -20,20 +20,20 @@ const About = () => {
             <div className="relative">
               {/* Clean, professional placeholder for profile image or graphic */}
               <div className="aspect-[4/3] rounded-2xl bg-gradient-to-tr from-gray-100 to-gray-200 overflow-hidden shadow-xl flex items-center justify-center relative">
-                <div className="absolute inset-0 bg-grid-slate-100 [mask-image:linear-gradient(0deg,white,rgba(255,255,255,0.6))]"></div>
-                <div className="text-center p-8 z-10">
-                  <User className="w-24 h-24 mx-auto text-primary-light mb-4 opacity-80" />
-                  <p className="text-gray-500 font-medium">{t.hero.name}</p>
-                  <p className="text-gray-400 text-sm">{t.about.location}</p>
-                </div>
+                <div className="absolute inset-0 bg-grid-slate-100 bg-cover bg-center [background-image:url('/digital-cover.webp')]"></div>
+                {/* <div className="z-10 p-4 text-center rounded-2xl backdrop-blur-md bg-white/70">
+                  <img src="/stephen-avatar.webp" alt="stephen avatar" className="object-cover mx-auto mb-4 w-full h-24 rounded-2xl" />
+                  <p className="font-medium text-gray-900">{t.hero.name}</p>
+                  <p className="text-sm text-gray-700">{t.about.location}</p>
+                </div> */}
               </div>
               {/* Floating badges */}
-              <div className="absolute -bottom-6 -right-6 bg-white p-4 rounded-xl shadow-lg border border-gray-100 flex items-center gap-3">
-                <div className="bg-blue-50 p-2 rounded-lg text-primary">
+              <div className="flex absolute -right-6 -bottom-6 gap-3 items-center p-4 bg-white rounded-xl border border-gray-100 shadow-lg">
+                <div className="p-2 bg-blue-50 rounded-lg text-primary">
                   <Award className="w-6 h-6" />
                 </div>
                 <div>
-                  <p className="text-xs text-gray-500 font-bold uppercase">{t.about.badgeTitle}</p>
+                  <p className="text-xs font-bold text-gray-500 uppercase">{t.about.badgeTitle}</p>
                   <p className="text-sm font-bold text-gray-900">{t.about.badgeValue}</p>
                 </div>
               </div>
@@ -51,15 +51,15 @@ const About = () => {
               {t.about.title}<span className="text-primary">{t.about.titleHighlight}</span>
             </h2>
 
-            <div className="prose prose-lg text-gray-600">
+            <div className="text-gray-600 prose prose-lg">
               <p>{t.about.description1}</p>
               <p>{t.about.description2}</p>
               <p>{t.about.description3}</p>
             </div>
 
             <div className="grid grid-cols-2 gap-4 pt-4">
-              <div className="flex items-start gap-3">
-                <div className="mt-1 bg-green-50 p-2 rounded-lg text-green-600">
+              <div className="flex gap-3 items-start">
+                <div className="p-2 mt-1 text-green-600 bg-green-50 rounded-lg">
                   <Zap className="w-5 h-5" />
                 </div>
                 <div>
@@ -67,8 +67,8 @@ const About = () => {
                   <p className="text-sm text-gray-500">{t.about.performanceDesc}</p>
                 </div>
               </div>
-              <div className="flex items-start gap-3">
-                <div className="mt-1 bg-purple-50 p-2 rounded-lg text-purple-600">
+              <div className="flex gap-3 items-start">
+                <div className="p-2 mt-1 text-purple-600 bg-purple-50 rounded-lg">
                   <Users className="w-5 h-5" />
                 </div>
                 <div>
