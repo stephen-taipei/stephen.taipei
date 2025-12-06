@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import { ExternalLink, Wrench, Gamepad2, Puzzle, Palette, Cpu, Sparkles, Boxes, Zap } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { ExternalLink, Wrench, Gamepad2, Puzzle, Palette, Cpu, Sparkles, Boxes, Zap, ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useLanguage } from '../i18n/LanguageContext';
+import { getToolsByCategoryId } from '../data/toolsRegistry';
 
 const Tools = () => {
   const { t } = useLanguage();
@@ -10,75 +12,75 @@ const Tools = () => {
   const toolCategories = [
     {
       key: 'aiTools',
+      categoryId: 'ai-local-tools',
       icon: Sparkles,
       color: 'from-purple-500 to-indigo-600',
       bgColor: 'bg-purple-50',
       textColor: 'text-purple-600',
-      count: '1000+',
-      path: '/tools/awesome-ai-local-tools-1000',
+      path: '/tools/ai-local-tools',
     },
     {
       key: 'chromeExtensions',
+      categoryId: 'chrome-extensions',
       icon: Puzzle,
       color: 'from-blue-500 to-cyan-600',
       bgColor: 'bg-blue-50',
       textColor: 'text-blue-600',
-      count: '1000+',
-      path: '/tools/awesome-chrome-extensions-1000',
+      path: '/tools/chrome-extensions',
     },
     {
       key: 'freeGames',
+      categoryId: 'free-games',
       icon: Gamepad2,
       color: 'from-green-500 to-emerald-600',
       bgColor: 'bg-green-50',
       textColor: 'text-green-600',
-      count: '1000+',
-      path: '/tools/awesome-free-games-1000',
+      path: '/tools/free-games',
     },
     {
       key: 'miniTools',
+      categoryId: 'mini-tools',
       icon: Wrench,
       color: 'from-orange-500 to-amber-600',
       bgColor: 'bg-orange-50',
       textColor: 'text-orange-600',
-      count: '1000+',
-      path: '/tools/awesome-free-mini-tools-1000',
+      path: '/tools/mini-tools',
     },
     {
       key: 'tailwindTemplates',
+      categoryId: 'tailwind-templates',
       icon: Palette,
       color: 'from-pink-500 to-rose-600',
       bgColor: 'bg-pink-50',
       textColor: 'text-pink-600',
-      count: '1000+',
-      path: '/tools/awesome-tailwind-ui-templates-1000',
+      path: '/tools/tailwind-templates',
     },
     {
       key: 'wasmTools',
+      categoryId: 'wasm-tools',
       icon: Cpu,
       color: 'from-red-500 to-orange-600',
       bgColor: 'bg-red-50',
       textColor: 'text-red-600',
-      count: '1000+',
-      path: '/tools/awesome-wasm-tools-1000',
+      path: '/tools/wasm-tools',
     },
     {
       key: 'webToys',
+      categoryId: 'web-toys',
       icon: Boxes,
       color: 'from-teal-500 to-cyan-600',
       bgColor: 'bg-teal-50',
       textColor: 'text-teal-600',
-      count: '1000+',
-      path: '/tools/awesome-web-toys-1000',
+      path: '/tools/web-toys',
     },
     {
       key: 'webWorkers',
+      categoryId: 'web-workers',
       icon: Zap,
       color: 'from-yellow-500 to-orange-600',
       bgColor: 'bg-yellow-50',
       textColor: 'text-yellow-600',
-      count: '1000+',
-      path: '/tools/awesome-web-workers-examples-1000',
+      path: '/tools/web-workers',
     },
   ];
 
@@ -109,53 +111,72 @@ const Tools = () => {
           {toolCategories.map((category, index) => {
             const Icon = category.icon;
             const toolData = t.tools.categories[category.key];
+            const toolCount = getToolsByCategoryId(category.categoryId).length;
 
             return (
-              <motion.a
+              <motion.div
                 key={category.key}
-                href={category.path}
-                target="_blank"
-                rel="noopener noreferrer"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 viewport={{ once: true }}
-                onMouseEnter={() => setHoveredIndex(index)}
-                onMouseLeave={() => setHoveredIndex(null)}
-                className="group relative bg-white rounded-2xl p-6 shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 overflow-hidden"
               >
-                {/* Gradient overlay on hover */}
-                <div className={`absolute inset-0 bg-gradient-to-br ${category.color} opacity-0 group-hover:opacity-5 transition-opacity duration-300`} />
+                <Link
+                  to={category.path}
+                  onMouseEnter={() => setHoveredIndex(index)}
+                  onMouseLeave={() => setHoveredIndex(null)}
+                  className="group relative block bg-white rounded-2xl p-6 shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 overflow-hidden"
+                >
+                  {/* Gradient overlay on hover */}
+                  <div className={`absolute inset-0 bg-gradient-to-br ${category.color} opacity-0 group-hover:opacity-5 transition-opacity duration-300`} />
 
-                {/* Icon */}
-                <div className={`inline-flex items-center justify-center w-14 h-14 ${category.bgColor} rounded-xl mb-4 group-hover:scale-110 transition-transform duration-300`}>
-                  <Icon className={`w-7 h-7 ${category.textColor}`} />
-                </div>
+                  {/* Icon */}
+                  <div className={`inline-flex items-center justify-center w-14 h-14 ${category.bgColor} rounded-xl mb-4 group-hover:scale-110 transition-transform duration-300`}>
+                    <Icon className={`w-7 h-7 ${category.textColor}`} />
+                  </div>
 
-                {/* Title */}
-                <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-primary transition-colors">
-                  {toolData.title}
-                </h3>
+                  {/* Title */}
+                  <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-primary transition-colors">
+                    {toolData.title}
+                  </h3>
 
-                {/* Description */}
-                <p className="text-gray-600 text-sm mb-4 line-clamp-2">
-                  {toolData.description}
-                </p>
+                  {/* Description */}
+                  <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+                    {toolData.description}
+                  </p>
 
-                {/* Count badge */}
-                <div className="flex items-center justify-between">
-                  <span className={`inline-flex items-center gap-1.5 px-3 py-1 ${category.bgColor} ${category.textColor} text-sm font-semibold rounded-full`}>
-                    {category.count} {t.tools.toolsLabel}
-                  </span>
-                  <ExternalLink className="w-4 h-4 text-gray-400 group-hover:text-primary transition-colors" />
-                </div>
+                  {/* Count badge */}
+                  <div className="flex items-center justify-between">
+                    <span className={`inline-flex items-center gap-1.5 px-3 py-1 ${category.bgColor} ${category.textColor} text-sm font-semibold rounded-full`}>
+                      {toolCount > 0 ? `${toolCount} ${t.tools.toolsLabel}` : '開發中'}
+                    </span>
+                    <ArrowRight className="w-4 h-4 text-gray-400 group-hover:text-primary group-hover:translate-x-1 transition-all" />
+                  </div>
 
-                {/* Hover effect border */}
-                <div className={`absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r ${category.color} transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left`} />
-              </motion.a>
+                  {/* Hover effect border */}
+                  <div className={`absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r ${category.color} transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left`} />
+                </Link>
+              </motion.div>
             );
           })}
         </div>
+
+        {/* View All Button */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+          viewport={{ once: true }}
+          className="mt-12 text-center"
+        >
+          <Link
+            to="/tools"
+            className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-primary to-purple-600 text-white rounded-xl font-semibold hover:shadow-lg hover:shadow-primary/25 transition-all duration-300 hover:-translate-y-0.5"
+          >
+            {t.tools.viewAll || '瀏覽所有工具'}
+            <ArrowRight className="w-5 h-5" />
+          </Link>
+        </motion.div>
 
         {/* Features */}
         <motion.div
