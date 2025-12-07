@@ -103,42 +103,38 @@ const categoryConfigs = {
       '20-landing-pages': { name: 'Landing Pages', nameTw: '登陸頁面' }
     },
     parseToolFile: (filename, subCategory) => {
-      // Match pattern like "test-001.html"
-      const match = filename.match(/^test-(\d+)\.html$/);
+      // Match patterns: nav-001.html, hero-001.html, feat-001.html, content-001.html,
+      // cta-001.html, price-001.html, test-001.html, team-001.html, gallery-001.html,
+      // form-001.html, landing-040.html
+      const match = filename.match(/^([a-z-]+)-(\d+)\.html$/);
       if (match) {
+        const prefix = match[1];
+        const number = match[2];
+
         const categoryMap = {
-          '01-navigation': 'Navigation',
-          '02-hero-sections': 'Hero Section',
-          '03-features': 'Feature',
-          '04-content': 'Content',
-          '05-cta': 'CTA',
-          '06-pricing': 'Pricing',
-          '07-testimonials': 'Testimonial',
-          '08-team': 'Team',
-          '09-gallery': 'Gallery',
-          '10-forms': 'Form',
-          '20-landing-pages': 'Landing Page'
+          '01-navigation': { prefix: 'nav', name: 'Navigation', nameTw: '導航列' },
+          '02-hero-sections': { prefix: 'hero', name: 'Hero Section', nameTw: '主視覺區塊' },
+          '03-features': { prefix: 'feat', name: 'Feature', nameTw: '功能區塊' },
+          '04-content': { prefix: 'content', name: 'Content', nameTw: '內容區塊' },
+          '05-cta': { prefix: 'cta', name: 'CTA', nameTw: '行動呼籲' },
+          '06-pricing': { prefix: 'price', name: 'Pricing', nameTw: '價格' },
+          '07-testimonials': { prefix: 'test', name: 'Testimonial', nameTw: '推薦' },
+          '08-team': { prefix: 'team', name: 'Team', nameTw: '團隊' },
+          '09-gallery': { prefix: 'gallery', name: 'Gallery', nameTw: '圖廊' },
+          '10-forms': { prefix: 'form', name: 'Form', nameTw: '表單' },
+          '20-landing-pages': { prefix: 'landing', name: 'Landing Page', nameTw: '登陸頁面' }
         };
-        const categoryMapTw = {
-          '01-navigation': '導航列',
-          '02-hero-sections': '主視覺區塊',
-          '03-features': '功能區塊',
-          '04-content': '內容區塊',
-          '05-cta': '行動呼籲',
-          '06-pricing': '價格',
-          '07-testimonials': '推薦',
-          '08-team': '團隊',
-          '09-gallery': '圖廊',
-          '10-forms': '表單',
-          '20-landing-pages': '登陸頁面'
-        };
-        return {
-          id: match[1],
-          slug: filename.replace('.html', ''),
-          name: `${categoryMap[subCategory]} ${match[1]}`,
-          nameTw: `${categoryMapTw[subCategory]} ${match[1]}`,
-          category: subCategory
-        };
+
+        const category = categoryMap[subCategory];
+        if (category && prefix === category.prefix) {
+          return {
+            id: number,
+            slug: filename.replace('.html', ''),
+            name: `${category.name} ${number}`,
+            nameTw: `${category.nameTw} ${number}`,
+            category: subCategory
+          };
+        }
       }
       return null;
     }
