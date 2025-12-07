@@ -94,24 +94,49 @@ const categoryConfigs = {
       '02-hero-sections': { name: 'Hero Sections', nameTw: '主視覺區塊' },
       '03-features': { name: 'Features', nameTw: '功能區塊' },
       '04-content': { name: 'Content', nameTw: '內容區塊' },
+      '05-cta': { name: 'CTA', nameTw: '行動呼籲' },
+      '06-pricing': { name: 'Pricing', nameTw: '價格' },
+      '07-testimonials': { name: 'Testimonials', nameTw: '推薦' },
+      '08-team': { name: 'Team', nameTw: '團隊' },
+      '09-gallery': { name: 'Gallery', nameTw: '圖廊' },
+      '10-forms': { name: 'Forms', nameTw: '表單' },
       '20-landing-pages': { name: 'Landing Pages', nameTw: '登陸頁面' }
     },
     parseToolFile: (filename, subCategory) => {
-      const match = filename.match(/^(nav|hero|feat|content|landing)-(\d+)\.html$/);
+      // Match pattern like "test-001.html"
+      const match = filename.match(/^test-(\d+)\.html$/);
       if (match) {
-        const typeMap = {
-          'nav': { en: 'Navigation', tw: '導航列' },
-          'hero': { en: 'Hero Section', tw: '主視覺區塊' },
-          'feat': { en: 'Feature', tw: '功能區塊' },
-          'content': { en: 'Content', tw: '內容區塊' },
-          'landing': { en: 'Landing Page', tw: '登陸頁面' }
+        const categoryMap = {
+          '01-navigation': 'Navigation',
+          '02-hero-sections': 'Hero Section',
+          '03-features': 'Feature',
+          '04-content': 'Content',
+          '05-cta': 'CTA',
+          '06-pricing': 'Pricing',
+          '07-testimonials': 'Testimonial',
+          '08-team': 'Team',
+          '09-gallery': 'Gallery',
+          '10-forms': 'Form',
+          '20-landing-pages': 'Landing Page'
         };
-        const type = typeMap[match[1]];
+        const categoryMapTw = {
+          '01-navigation': '導航列',
+          '02-hero-sections': '主視覺區塊',
+          '03-features': '功能區塊',
+          '04-content': '內容區塊',
+          '05-cta': '行動呼籲',
+          '06-pricing': '價格',
+          '07-testimonials': '推薦',
+          '08-team': '團隊',
+          '09-gallery': '圖廊',
+          '10-forms': '表單',
+          '20-landing-pages': '登陸頁面'
+        };
         return {
-          id: match[2],
+          id: match[1],
           slug: filename.replace('.html', ''),
-          name: `${type.en} ${match[2]}`,
-          nameTw: `${type.tw} ${match[2]}`,
+          name: `${categoryMap[subCategory]} ${match[1]}`,
+          nameTw: `${categoryMapTw[subCategory]} ${match[1]}`,
           category: subCategory
         };
       }
@@ -136,6 +161,7 @@ const categoryConfigs = {
       '10-experimental': { name: 'Experimental', nameTw: '實驗性' }
     },
     parseToolDir: (dirname) => {
+      // Match pattern like "001-tab-manager-pro"
       const match = dirname.match(/^(\d+)-(.+)$/);
       if (match) {
         return {
@@ -166,6 +192,7 @@ const categoryConfigs = {
       'puzzle': { name: 'Puzzle', nameTw: '益智' }
     },
     parseToolDir: (dirname) => {
+      // Match pattern like "game-001-tetris"
       const match = dirname.match(/^game-(\d+)-(.+)$/);
       if (match) {
         return {
@@ -190,7 +217,27 @@ const categoryConfigs = {
     bgColor: 'bg-orange-50',
     textColor: 'text-orange-600',
     toolsDir: 'src/tools',
-    isReactApp: true
+    hasSubCategories: true,
+    subCategories: {
+      '01-text': { name: 'Text Tools', nameTw: '文字工具' },
+      '25-other': { name: 'Other', nameTw: '其他' }
+    },
+    parseToolFile: (filename, subCategory) => {
+      // Match pattern like "CaseConverter.tsx"
+      const match = filename.match(/^([A-Z][a-zA-Z]+)\.tsx$/);
+      if (match) {
+        // Convert camelCase to readable name
+        const name = match[1].replace(/([A-Z])/g, ' $1').trim();
+        return {
+          id: filename.replace('.tsx', '').toLowerCase(),
+          slug: filename.replace('.tsx', ''),
+          name: name,
+          nameTw: name,
+          category: subCategory
+        };
+      }
+      return null;
+    }
   },
   'awesome-wasm-tools-1000': {
     id: 'wasm-tools',
@@ -210,6 +257,7 @@ const categoryConfigs = {
       'calculation': { name: 'Calculation', nameTw: '計算' }
     },
     parseToolDir: (dirname) => {
+      // Match pattern like "IMG-001" or "CAL-002"
       const match = dirname.match(/^(IMG|CAL)-(\d+)$/);
       if (match) {
         const type = match[1] === 'IMG' ? 'Image Tool' : 'Calculator';
