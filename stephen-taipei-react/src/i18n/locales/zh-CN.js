@@ -31,7 +31,7 @@ export default {
     description1:
       '我热衷于学习与跨领域整合，从设计背景转向信息管理，最终专注于全栈开发与系统架构。熟悉 Angular 与 Laravel，具备从前端框架到后端架构的完整开发经验。',
     description2:
-      '曾带领 6 人团队，使用 Git、Trello、Slack 等工具进行看板式项目管理，成功完成多项 WebApp 开发与上线，累积需求分析、系统规划、协作与代码质量控管的实战经验。',
+      '曾带领 6 人团队，使用 Git (CI/CD)、Trello、Slack、RedMine 等工具进行项目管理，成功完成多项 Web / Android App / iOS App 开发与上线，累积需求分析、系统规划、协作与代码质量控管的实战经验。',
     description3:
       '在职场之外，我创立了街舞教室，并在街舞比赛中获得全国冠军与世界前 8 强。这样的经历培养了毅力、专注与突破挑战的决心，也延伸到我的工作态度中。',
     performanceTitle: '效能优化',
@@ -209,6 +209,36 @@ export default {
         description: '持续开发新工具，定期更新与维护',
       },
     ],
+  },
+
+  // Open Source Tools Pages
+  openSource: {
+    title: 'Stephen 的开源工具平台',
+    subtitle: '8 大主题 · 1000+ 开源工具',
+    description: '完全免费、开源、在浏览器本地运行。涵盖 AI 工具、网页游戏、开发者工具、视觉效果等多种类别。',
+    searchPlaceholder: '搜索工具类别...',
+    backToHome: '首页',
+    back: '返回',
+    categoryNotFound: '类别不存在',
+    backToTools: '返回工具平台',
+    openInNewTab: '在新标签页打开',
+    copyLink: '复制链接',
+    copied: '已复制',
+    refresh: '刷新',
+    previousTool: '上一个工具',
+    nextTool: '下一个工具',
+    toolCount: '{count} 个工具',
+    comingSoon: '开发中',
+    free: '完全免费',
+    freeDesc: '所有工具完全免费使用，无需注册或付费',
+    local: '本地运行',
+    localDesc: '工具在浏览器本地运行，数据不外传，保护隐私',
+    opensource: '开源贡献',
+    opensourceDesc: '所有工具开源，欢迎贡献与改进',
+    copyrightText: '© 2024 Stephen Taipei · 开源工具平台',
+    github: "GitHub",
+    viewAllTools: "浏览所有工具",
+    tools: "工具",
   },
 
   // Footer

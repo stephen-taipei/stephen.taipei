@@ -31,7 +31,7 @@ export default {
     description1:
       "Tôi đam mê học hỏi và kết hợp đa lĩnh vực. Xuất thân từ thiết kế, chuyển sang quản trị thông tin và tập trung vào phát triển full stack cùng kiến trúc hệ thống. Thành thạo Angular và Laravel với kinh nghiệm đầy đủ từ frontend tới backend.",
     description2:
-      "Dẫn dắt đội 6 người dùng Git, Trello, Slack theo phong cách Kanban. Hoàn thành nhiều WebApp, tích lũy kinh nghiệm thực tế về phân tích yêu cầu, lập kế hoạch hệ thống, cộng tác và kiểm soát chất lượng mã.",
+      "Dẫn dắt đội 6 người dùng Git (CI/CD), Trello, Slack, RedMine cho quản lý dự án. Hoàn thành nhiều Web / Android App / iOS App, tích lũy kinh nghiệm thực tế về phân tích yêu cầu, lập kế hoạch hệ thống, cộng tác và kiểm soát chất lượng mã.",
     description3:
       "Ngoài công việc, tôi sáng lập studio nhảy đường phố và đạt vô địch quốc gia, Top 8 thế giới. Những trải nghiệm này rèn luyện sự bền bỉ, tập trung và quyết tâm vượt thử thách, phản ánh trong thái độ làm việc của tôi.",
     performanceTitle: "Hiệu năng",
@@ -241,6 +241,36 @@ export default {
     formMessage: "Tin nhắn",
     formMessagePlaceholder: "Hello Stephen...",
     sendMessage: "Gửi tin nhắn",
+  },
+
+  // Open Source Tools Pages
+  openSource: {
+    title: 'Nền tảng Công cụ Mã nguồn Mở của Stephen',
+    subtitle: '8 Chủ đề · 1000+ Công cụ Mã nguồn Mở',
+    description: 'Hoàn toàn miễn phí, mã nguồn mở, chạy cục bộ trên trình duyệt. Bao gồm công cụ AI, game web, công cụ phát triển, hiệu ứng hình ảnh và nhiều hơn nữa.',
+    searchPlaceholder: 'Tìm kiếm danh mục công cụ...',
+    backToHome: 'Trang chủ',
+    back: 'Quay lại',
+    categoryNotFound: 'Không tìm thấy danh mục',
+    backToTools: 'Quay lại Công cụ',
+    openInNewTab: 'Mở trong tab mới',
+    copyLink: 'Sao chép liên kết',
+    copied: 'Đã sao chép',
+    refresh: 'Làm mới',
+    previousTool: 'Công cụ trước',
+    nextTool: 'Công cụ tiếp theo',
+    toolCount: '{count} công cụ',
+    comingSoon: 'Sắp ra mắt',
+    free: 'Hoàn toàn miễn phí',
+    freeDesc: 'Tất cả công cụ hoàn toàn miễn phí, không cần đăng ký hoặc thanh toán',
+    local: 'Chạy cục bộ',
+    localDesc: 'Công cụ chạy cục bộ trên trình duyệt, dữ liệu không được truyền đi, bảo vệ quyền riêng tư',
+    opensource: 'Đóng góp mã nguồn mở',
+    opensourceDesc: 'Tất cả công cụ đều là mã nguồn mở, chào đón đóng góp và cải tiến',
+    copyrightText: '© 2024 Stephen Taipei · Nền tảng Công cụ Mã nguồn Mở',
+    github: "GitHub",
+    viewAllTools: "Xem tất cả các công cụ",
+    tools: "công cụ",
   },
 
   // Footer

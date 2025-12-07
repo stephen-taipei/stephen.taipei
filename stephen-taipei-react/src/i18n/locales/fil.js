@@ -26,7 +26,7 @@ export default {
     description1:
       "Masigasig ako sa pag-aaral at cross-domain integration. Mula sa design background, lumipat ako sa information management, at sa huli ay nagtuon sa full-stack development at system architecture. Bihasa sa Angular at Laravel na may kumpletong development experience mula frontend frameworks hanggang backend architecture.",
     description2:
-      "Pinamunuan ang 6-na-taong team gamit ang Git, Trello, at Slack para sa Kanban-style project management. Matagumpay na nakumpleto ang maraming WebApp development, na nakaipon ng praktikal na karanasan sa requirements analysis, system planning, collaboration, at code quality control.",
+      "Pinamunuan ang 6-na-taong team gamit ang Git (CI/CD), Trello, Slack, at RedMine para sa project management. Matagumpay na nakumpleto ang maraming Web / Android App / iOS App development, na nakaipon ng praktikal na karanasan sa requirements analysis, system planning, collaboration, at code quality control.",
     description3:
       "Sa labas ng trabaho, nagtayo ako ng street dance studio at nakamit ang national champion at world top 8 sa dance competitions. Ang mga karanasang ito ay naglinang ng tiyaga, pokus, at determinasyon na malampasan ang mga hamon.",
     performanceTitle: "Performance",
@@ -228,6 +228,36 @@ export default {
     formMessagePlaceholder: "Kumusta Stephen...",
     sendMessage: "Ipadala ang Mensahe",
   },
+  // Open Source Tools Pages
+  openSource: {
+    title: "Stephen's Open Source Tools Platform",
+    subtitle: "8 Tema · 1000+ Open Source Tools",
+    description: "Ganap na libre, open source, tumatakbo nang lokal sa iyong browser. Sumasaklaw sa AI tools, web games, developer tools, visual effects at marami pa.",
+    searchPlaceholder: "Maghanap ng kategorya ng tool...",
+    backToHome: "Home",
+    back: "Bumalik",
+    categoryNotFound: "Hindi nahanap ang kategorya",
+    backToTools: "Bumalik sa Tools",
+    openInNewTab: "Buksan sa bagong tab",
+    copyLink: "Kopyahin ang link",
+    copied: "Nakopya",
+    refresh: "I-refresh",
+    previousTool: "Nakaraang tool",
+    nextTool: "Susunod na tool",
+    toolCount: "{count} tools",
+    comingSoon: "Paparating na",
+    free: "Ganap na libre",
+    freeDesc: "Lahat ng tools ay ganap na libre, walang rehistrasyon o bayad na kailangan",
+    local: "Lokal na execution",
+    localDesc: "Ang mga tool ay tumatakbo nang lokal sa iyong browser, ang iyong data ay hindi ipinapadala, pinoprotektahan ang iyong privacy",
+    opensource: "Open source contribution",
+    opensourceDesc: "Lahat ng tools ay open source, malugod na tinatanggap ang kontribusyon at pagpapabuti",
+    copyrightText: "© 2024 Stephen Taipei · Open Source Tools Platform",
+    github: "GitHub",
+    viewAllTools: "Tingnan ang lahat ng mga tool",
+    tools: "mga tool",
+  },
+
   footer: {
     copyright: "Lahat ng karapatan ay nakalaan",
   },

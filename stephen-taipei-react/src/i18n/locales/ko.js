@@ -31,7 +31,7 @@ export default {
     description1:
       "학습과 융합에 열정이 있습니다. 디자인 배경에서 정보관리로 전향해 풀스택 개발과 시스템 아키텍처에 집중해 왔습니다. Angular와 Laravel에 능숙하며, 프런트엔드 프레임워크부터 백엔드 아키텍처까지 전체 개발 경험을 갖추고 있습니다.",
     description2:
-      "Git, Trello, Slack을 활용한 칸반 방식으로 6인 팀을 이끌며 여러 WebApp을 성공적으로 출시했습니다. 요구사항 분석, 시스템 기획, 협업, 코드 품질 관리에 대한 실무 경험을 쌓았습니다.",
+      "Git (CI/CD), Trello, Slack, RedMine을 활용한 프로젝트 관리로 6인 팀을 이끌며 여러 Web / Android App / iOS App을 성공적으로 출시했습니다. 요구사항 분석, 시스템 기획, 협업, 코드 품질 관리에 대한 실무 경험을 쌓았습니다.",
     description3:
       "업무 외에는 스트리트 댄스 스튜디오를 창업해 전국 우승과 세계 Top 8을 달성했습니다. 이 경험으로 끈기와 집중력, 도전을 돌파하는 태도를 키웠으며, 이는 제 업무에도 이어집니다.",
     performanceTitle: "성능",
@@ -240,6 +240,36 @@ export default {
         description: "새로운 도구를 지속적으로 개발하고 정기적인 업데이트와 유지보수",
       },
     ],
+  },
+
+  // Open Source Tools Pages
+  openSource: {
+    title: 'Stephen의 오픈소스 도구 플랫폼',
+    subtitle: '8개 주제 · 1000+ 오픈소스 도구',
+    description: '완전 무료, 오픈소스, 브라우저에서 로컬 실행. AI 도구, 웹 게임, 개발자 도구, 시각 효과 등 다양한 분야를 다룹니다.',
+    searchPlaceholder: '도구 카테고리 검색...',
+    backToHome: '홈',
+    back: '뒤로',
+    categoryNotFound: '카테고리를 찾을 수 없습니다',
+    backToTools: '도구로 돌아가기',
+    openInNewTab: '새 탭에서 열기',
+    copyLink: '링크 복사',
+    copied: '복사됨',
+    refresh: '새로고침',
+    previousTool: '이전 도구',
+    nextTool: '다음 도구',
+    toolCount: '{count}개 도구',
+    comingSoon: '개발 중',
+    free: '완전 무료',
+    freeDesc: '모든 도구는 완전 무료로 사용 가능하며, 등록이나 결제가 필요 없습니다',
+    local: '로컬 실행',
+    localDesc: '도구는 브라우저에서 로컬로 실행되며, 데이터가 전송되지 않아 개인정보를 보호합니다',
+    opensource: '오픈소스 기여',
+    opensourceDesc: '모든 도구는 오픈소스이며, 기여와 개선을 환영합니다',
+    copyrightText: '© 2024 Stephen Taipei · 오픈소스 도구 플랫폼',
+    github: "GitHub",
+    viewAllTools: "모든 도구 보기",
+    tools: "도구",
   },
 
   // Footer

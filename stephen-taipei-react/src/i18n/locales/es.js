@@ -26,7 +26,7 @@ export default {
     description1:
       "Me apasiona el aprendizaje y la integración interdisciplinaria. Desde un trasfondo en diseño, hice la transición a gestión de información y finalmente me enfoqué en desarrollo full-stack y arquitectura de sistemas. Competente en Angular y Laravel con experiencia completa desde frameworks frontend hasta arquitectura backend.",
     description2:
-      "Lideré un equipo de 6 personas usando Git, Trello y Slack para gestión de proyectos Kanban. Completé exitosamente múltiples desarrollos de WebApp, acumulando experiencia práctica en análisis de requisitos, planificación de sistemas, colaboración y control de calidad de código.",
+      "Lideré un equipo de 6 personas usando Git (CI/CD), Trello, Slack y RedMine para gestión de proyectos. Completé exitosamente múltiples desarrollos de Web / Android App / iOS App, acumulando experiencia práctica en análisis de requisitos, planificación de sistemas, colaboración y control de calidad de código.",
     description3:
       "Fuera del trabajo, fundé un estudio de street dance y logré campeón nacional y top 8 mundial en competencias de baile. Estas experiencias cultivaron perseverancia, enfoque y determinación para superar desafíos.",
     performanceTitle: "Rendimiento",
@@ -228,6 +228,36 @@ export default {
       },
     ],
   },
+  // Open Source Tools Pages
+  openSource: {
+    title: "Plataforma de Herramientas Open Source de Stephen",
+    subtitle: "8 Temas · 1000+ Herramientas Open Source",
+    description: "Completamente gratis, código abierto, ejecutándose localmente en tu navegador. Cubriendo herramientas IA, juegos web, herramientas de desarrollo, efectos visuales y más.",
+    searchPlaceholder: "Buscar categorías de herramientas...",
+    backToHome: "Inicio",
+    back: "Volver",
+    categoryNotFound: "Categoría no encontrada",
+    backToTools: "Volver a Herramientas",
+    openInNewTab: "Abrir en nueva pestaña",
+    copyLink: "Copiar enlace",
+    copied: "Copiado",
+    refresh: "Actualizar",
+    previousTool: "Herramienta anterior",
+    nextTool: "Siguiente herramienta",
+    toolCount: "{count} herramientas",
+    comingSoon: "Próximamente",
+    free: "Completamente gratis",
+    freeDesc: "Todas las herramientas son completamente gratuitas, sin necesidad de registro o pago",
+    local: "Ejecución local",
+    localDesc: "Las herramientas se ejecutan localmente en tu navegador, tus datos no se transmiten, protegiendo tu privacidad",
+    opensource: "Contribución open source",
+    opensourceDesc: "Todas las herramientas son open source, las contribuciones y mejoras son bienvenidas",
+    copyrightText: "© 2024 Stephen Taipei · Plataforma de Herramientas Open Source",
+    github: "GitHub",
+    viewAllTools: "Explorar todas las herramientas",
+    tools: "herramientas",
+  },
+
   footer: {
     copyright: "Todos los derechos reservados",
   },

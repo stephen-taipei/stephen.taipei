@@ -31,7 +31,7 @@ export default {
     description1:
       "Saya gemar belajar dan menggabungkan pelbagai bidang. Bermula dengan latar belakang reka bentuk, beralih ke pengurusan maklumat dan akhirnya memberi tumpuan pada pembangunan full stack serta arkitektur sistem. Mahir dalam Angular dan Laravel dengan pengalaman lengkap dari frontend ke backend.",
     description2:
-      "Pernah mengetuai pasukan 6 orang menggunakan Git, Trello dan Slack dengan gaya Kanban. Berjaya menyiapkan beberapa WebApp, mengumpul pengalaman praktikal dalam analisis keperluan, perancangan sistem, kerjasama dan kawalan kualiti kod.",
+      "Pernah mengetuai pasukan 6 orang menggunakan Git (CI/CD), Trello, Slack dan RedMine dengan gaya Kanban. Berjaya menyiapkan beberapa Web / Android App / iOS App, mengumpul pengalaman praktikal dalam analisis keperluan, perancangan sistem, kerjasama dan kawalan kualiti kod.",
     description3:
       "Di luar kerja, saya menubuhkan studio tarian jalanan dan memenangi juara kebangsaan serta Top 8 dunia. Pengalaman ini membina ketekunan, fokus dan tekad untuk mengatasi cabaran—sikap yang saya bawa ke tempat kerja.",
     performanceTitle: "Prestasi",
@@ -240,6 +240,36 @@ export default {
     formMessage: "Mesej",
     formMessagePlaceholder: "Hello Stephen...",
     sendMessage: "Hantar Mesej",
+  },
+
+    // Open Source Tools Pages
+  openSource: {
+    title: 'Platform Alat Sumber Terbuka Stephen',
+    subtitle: '8 Tema · 1000+ Alat Sumber Terbuka',
+    description: 'Sepenuhnya percuma, sumber terbuka, berjalan secara tempatan dalam pelayar anda. Merangkumi alat AI, permainan web, alat pembangun, kesan visual dan banyak lagi.',
+    searchPlaceholder: 'Cari kategori alat...',
+    backToHome: 'Laman Utama',
+    back: 'Kembali',
+    categoryNotFound: 'Kategori tidak dijumpai',
+    backToTools: 'Kembali ke Alat',
+    openInNewTab: 'Buka dalam tab baharu',
+    copyLink: 'Salin pautan',
+    copied: 'Disalin',
+    refresh: 'Muat semula',
+    previousTool: 'Alat sebelumnya',
+    nextTool: 'Alat seterusnya',
+    toolCount: '{count} alat',
+    comingSoon: 'Akan datang',
+    free: 'Sepenuhnya percuma',
+    freeDesc: 'Semua alat adalah percuma sepenuhnya, tiada pendaftaran atau bayaran diperlukan',
+    local: 'Pelaksanaan tempatan',
+    localDesc: 'Alat berjalan secara tempatan dalam pelayar anda, data anda tidak dihantar, melindungi privasi anda',
+    opensource: 'Sumbangan sumber terbuka',
+    opensourceDesc: 'Semua alat adalah sumber terbuka, sumbangan dan penambahbaikan dialu-alukan',
+    copyrightText: '© 2024 Stephen Taipei · Platform Alat Sumber Terbuka',
+    github: "GitHub",
+    viewAllTools: "Lihat semua alat",
+    tools: "alat",
   },
 
   // Footer

@@ -17,7 +17,7 @@ const Tools = () => {
       color: 'from-purple-500 to-indigo-600',
       bgColor: 'bg-purple-50',
       textColor: 'text-purple-600',
-      path: '/tools/ai-local-tools',
+      path: '/open-source/ai-local-tools',
     },
     {
       key: 'chromeExtensions',
@@ -26,7 +26,7 @@ const Tools = () => {
       color: 'from-blue-500 to-cyan-600',
       bgColor: 'bg-blue-50',
       textColor: 'text-blue-600',
-      path: '/tools/chrome-extensions',
+      path: '/open-source/chrome-extensions',
     },
     {
       key: 'freeGames',
@@ -35,7 +35,7 @@ const Tools = () => {
       color: 'from-green-500 to-emerald-600',
       bgColor: 'bg-green-50',
       textColor: 'text-green-600',
-      path: '/tools/free-games',
+      path: '/open-source/free-games',
     },
     {
       key: 'miniTools',
@@ -44,7 +44,7 @@ const Tools = () => {
       color: 'from-orange-500 to-amber-600',
       bgColor: 'bg-orange-50',
       textColor: 'text-orange-600',
-      path: '/tools/mini-tools',
+      path: '/open-source/mini-tools',
     },
     {
       key: 'tailwindTemplates',
@@ -53,7 +53,7 @@ const Tools = () => {
       color: 'from-pink-500 to-rose-600',
       bgColor: 'bg-pink-50',
       textColor: 'text-pink-600',
-      path: '/tools/tailwind-templates',
+      path: '/open-source/tailwind-templates',
     },
     {
       key: 'wasmTools',
@@ -62,7 +62,7 @@ const Tools = () => {
       color: 'from-red-500 to-orange-600',
       bgColor: 'bg-red-50',
       textColor: 'text-red-600',
-      path: '/tools/wasm-tools',
+      path: '/open-source/wasm-tools',
     },
     {
       key: 'webToys',
@@ -71,7 +71,7 @@ const Tools = () => {
       color: 'from-teal-500 to-cyan-600',
       bgColor: 'bg-teal-50',
       textColor: 'text-teal-600',
-      path: '/tools/web-toys',
+      path: '/open-source/web-toys',
     },
     {
       key: 'webWorkers',
@@ -80,7 +80,7 @@ const Tools = () => {
       color: 'from-yellow-500 to-orange-600',
       bgColor: 'bg-yellow-50',
       textColor: 'text-yellow-600',
-      path: '/tools/web-workers',
+      path: '/open-source/web-workers',
     },
   ];
 
@@ -170,10 +170,10 @@ const Tools = () => {
           className="mt-12 text-center"
         >
           <Link
-            to="/tools"
+            to="/open-source"
             className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-primary to-purple-600 text-white rounded-xl font-semibold hover:shadow-lg hover:shadow-primary/25 transition-all duration-300 hover:-translate-y-0.5"
           >
-            {t.tools.viewAll || '瀏覽所有工具'}
+            {t.openSource.viewAllTools}
             <ArrowRight className="w-5 h-5" />
           </Link>
         </motion.div>

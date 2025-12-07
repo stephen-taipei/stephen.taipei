@@ -31,7 +31,7 @@ export default {
     description1:
       "I am passionate about learning and cross-domain integration. Starting from a design background, I transitioned to information management, and ultimately focused on full-stack development and system architecture. Proficient in Angular and Laravel with complete development experience from frontend frameworks to backend architecture.",
     description2:
-      "Led a 6-person team using Git, Trello, and Slack for Kanban-style project management. Successfully completed multiple WebApp developments, accumulating practical experience in requirements analysis, system planning, collaboration, and code quality control.",
+      "Led a 6-person team using Git (CI/CD), Trello, Slack, and RedMine for project management. Successfully completed multiple Web / Android App / iOS App developments, accumulating practical experience in requirements analysis, system planning, collaboration, and code quality control.",
     description3:
       "Outside of work, I founded a street dance studio and achieved national champion and world top 8 in dance competitions. These experiences cultivated perseverance, focus, and determination to overcome challenges, which extends to my work attitude.",
     performanceTitle: "Performance",
@@ -241,6 +241,36 @@ export default {
         description: "Continuously developing new tools with regular updates and maintenance",
       },
     ],
+  },
+
+  // Open Source Tools Pages
+  openSource: {
+    title: "Stephen's Open Source Tools Platform",
+    subtitle: "8 Themes · 1000+ Open Source Tools",
+    description: "Completely free, open source, running locally in your browser. Covering AI tools, web games, developer tools, visual effects and more.",
+    searchPlaceholder: "Search tool categories...",
+    backToHome: "Home",
+    back: "Back",
+    categoryNotFound: "Category not found",
+    backToTools: "Back to Tools",
+    openInNewTab: "Open in new tab",
+    copyLink: "Copy link",
+    copied: "Copied",
+    refresh: "Refresh",
+    previousTool: "Previous tool",
+    nextTool: "Next tool",
+    toolCount: "{count} tools",
+    comingSoon: "Coming soon",
+    free: "Completely free",
+    freeDesc: "All tools are completely free to use, no registration or payment required",
+    local: "Local execution",
+    localDesc: "Tools run locally in your browser, your data is not transmitted, protecting your privacy",
+    opensource: "Open source contribution",
+    opensourceDesc: "All tools are open source, welcome to contribute and improve",
+    copyrightText: "© 2024 Stephen Taipei · Open Source Tools Platform",
+    github: "GitHub",
+    viewAllTools: "Browse all tools",
+    tools: "tools",
   },
 
   // Footer

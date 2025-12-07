@@ -3,9 +3,10 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
   Sparkles, Puzzle, Gamepad2, Wrench, Palette, Cpu, Boxes, Zap,
-  Search, ArrowRight, ChevronRight, Home, ExternalLink
+  Search, ArrowRight, ChevronRight, Home, ExternalLink, Globe
 } from 'lucide-react';
 import { categories, getTotalToolsCount, getToolsByCategoryId } from '../data/toolsRegistry';
+import { useLanguage, LANGUAGE_OPTIONS } from '../i18n/LanguageContext';
 
 const iconMap = {
   Sparkles,
@@ -19,6 +20,7 @@ const iconMap = {
 };
 
 const ToolsDemo = () => {
+  const { t, language, changeLanguage } = useLanguage();
   const [searchQuery, setSearchQuery] = useState('');
 
   const filteredCategories = categories.filter(cat =>
@@ -35,16 +37,39 @@ const ToolsDemo = () => {
             <div className="flex items-center gap-4">
               <Link to="/" className="flex items-center gap-2 text-gray-600 hover:text-primary transition-colors">
                 <Home className="w-5 h-5" />
-                <span className="hidden sm:inline">首頁</span>
+                <span className="hidden sm:inline">{t.openSource.backToHome}</span>
               </Link>
               <div className="h-6 w-px bg-gray-300" />
               <h1 className="text-xl font-bold bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
-                開源工具平台
+                Stephen's Open Source
               </h1>
             </div>
-            <div className="flex items-center gap-2 px-3 py-1.5 bg-green-100 text-green-700 rounded-full text-sm font-medium">
-              <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-              {getTotalToolsCount()}+ 工具
+            <div className="flex items-center gap-4">
+              {/* Language Selector */}
+              <div className="relative group">
+                <button className="flex items-center gap-2 px-3 py-2 text-gray-600 hover:text-primary transition-colors rounded-lg hover:bg-gray-100">
+                  <Globe className="w-5 h-5" />
+                  <span className="text-sm font-medium">{language.toUpperCase()}</span>
+                </button>
+                <div className="absolute right-0 mt-0 w-48 bg-white rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 border border-gray-100 z-50">
+                  {LANGUAGE_OPTIONS.map((lang) => (
+                    <button
+                      key={lang.value}
+                      onClick={() => changeLanguage(lang.value)}
+                      className={`w-full text-left px-4 py-2.5 hover:bg-gray-50 first:rounded-t-lg last:rounded-b-lg transition-colors text-sm ${
+                        language === lang.value ? 'bg-primary/10 text-primary font-semibold' : 'text-gray-700'
+                      }`}
+                    >
+                      {lang.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              {/* Tool Count */}
+              <div className="flex items-center gap-2 px-3 py-1.5 bg-green-100 text-green-700 rounded-full text-sm font-medium">
+                <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+                {getTotalToolsCount()}+ {t.openSource.tools}
+              </div>
             </div>
           </div>
         </div>
@@ -61,10 +86,10 @@ const ToolsDemo = () => {
             className="text-center"
           >
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-              8大主題 · 1000+ 開源工具
+              {t.openSource.subtitle}
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-8">
-              完全免費、開源、在瀏覽器本地運行。涵蓋 AI 工具、網頁遊戲、開發者工具、視覺效果等多種類別。
+              {t.openSource.description}
             </p>
 
             {/* Search Bar */}
@@ -72,7 +97,7 @@ const ToolsDemo = () => {
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
               <input
                 type="text"
-                placeholder="搜尋工具類別..."
+                placeholder={t.openSource.searchPlaceholder}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-12 pr-4 py-4 bg-white rounded-2xl border border-gray-200 shadow-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
@@ -110,19 +135,19 @@ const ToolsDemo = () => {
 
                     {/* Title */}
                     <h3 className="text-lg font-bold text-gray-900 mb-1 group-hover:text-primary transition-colors">
-                      {category.nameTw}
+                      {language === 'zh-TW' || language === 'zh-HK' ? category.nameTw : language === 'zh-CN' ? category.nameZh : category.name}
                     </h3>
                     <p className="text-sm text-gray-500 mb-3">{category.name}</p>
 
                     {/* Description */}
                     <p className="text-gray-600 text-sm mb-4 line-clamp-2">
-                      {category.descriptionTw}
+                      {language === 'zh-TW' || language === 'zh-HK' ? category.descriptionTw : language === 'zh-CN' ? category.descriptionZh : category.description}
                     </p>
 
                     {/* Footer */}
                     <div className="flex items-center justify-between">
                       <span className={`inline-flex items-center gap-1.5 px-3 py-1 ${category.bgColor} ${category.textColor} text-sm font-semibold rounded-full`}>
-                        {toolCount > 0 ? `${toolCount} 個工具` : '開發中'}
+                        {toolCount > 0 ? `${toolCount} ${t.openSource.tools}` : t.openSource.comingSoon}
                       </span>
                       <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-primary group-hover:translate-x-1 transition-all" />
                     </div>
@@ -151,8 +176,8 @@ const ToolsDemo = () => {
               <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 text-green-600 rounded-2xl mb-4">
                 <Sparkles className="w-8 h-8" />
               </div>
-              <h4 className="text-xl font-bold text-gray-900 mb-2">完全免費</h4>
-              <p className="text-gray-600">所有工具完全免費使用，無需註冊或付費</p>
+              <h4 className="text-xl font-bold text-gray-900 mb-2">{t.openSource.free}</h4>
+              <p className="text-gray-600">{t.openSource.freeDesc}</p>
             </motion.div>
 
             <motion.div
@@ -165,8 +190,8 @@ const ToolsDemo = () => {
               <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-100 text-blue-600 rounded-2xl mb-4">
                 <Zap className="w-8 h-8" />
               </div>
-              <h4 className="text-xl font-bold text-gray-900 mb-2">本地運行</h4>
-              <p className="text-gray-600">工具在瀏覽器本地運行，資料不外傳，保護隱私</p>
+              <h4 className="text-xl font-bold text-gray-900 mb-2">{t.openSource.local}</h4>
+              <p className="text-gray-600">{t.openSource.localDesc}</p>
             </motion.div>
 
             <motion.div
@@ -179,8 +204,8 @@ const ToolsDemo = () => {
               <div className="inline-flex items-center justify-center w-16 h-16 bg-purple-100 text-purple-600 rounded-2xl mb-4">
                 <Boxes className="w-8 h-8" />
               </div>
-              <h4 className="text-xl font-bold text-gray-900 mb-2">開源貢獻</h4>
-              <p className="text-gray-600">所有工具開源，歡迎貢獻與改進</p>
+              <h4 className="text-xl font-bold text-gray-900 mb-2">{t.openSource.opensource}</h4>
+              <p className="text-gray-600">{t.openSource.opensourceDesc}</p>
             </motion.div>
           </div>
         </div>
@@ -190,7 +215,7 @@ const ToolsDemo = () => {
       <footer className="py-8 border-t border-gray-200 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <p className="text-gray-600">
-            © 2024 Stephen Taipei · 開源工具平台
+            {t.openSource.copyrightText}
           </p>
           <div className="flex items-center justify-center gap-4 mt-4">
             <a
@@ -200,7 +225,7 @@ const ToolsDemo = () => {
               className="flex items-center gap-2 text-gray-500 hover:text-primary transition-colors"
             >
               <ExternalLink className="w-4 h-4" />
-              GitHub
+              {t.openSource.github}
             </a>
           </div>
         </div>

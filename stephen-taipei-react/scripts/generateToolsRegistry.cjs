@@ -6,6 +6,20 @@
 
 const fs = require('fs');
 const path = require('path');
+const { execSync } = require('child_process');
+
+// Update all submodules first
+console.log('--- Updating submodules ---');
+try {
+  execSync('git submodule update --remote --merge', {
+    cwd: path.join(__dirname, '..'),
+    stdio: 'inherit'
+  });
+  console.log('Submodules updated.\n');
+} catch (error) {
+  console.error('Failed to update submodules:', error.message);
+  // Continue anyway - maybe offline or no updates
+}
 
 const TOOLS_DIR = path.join(__dirname, '../src/tools');
 const OUTPUT_FILE = path.join(__dirname, '../src/data/toolsRegistry.js');
@@ -77,18 +91,27 @@ const categoryConfigs = {
     hasSubCategories: true,
     subCategories: {
       '01-navigation': { name: 'Navigation', nameTw: '導航列' },
+      '02-hero-sections': { name: 'Hero Sections', nameTw: '主視覺區塊' },
+      '03-features': { name: 'Features', nameTw: '功能區塊' },
+      '04-content': { name: 'Content', nameTw: '內容區塊' },
       '20-landing-pages': { name: 'Landing Pages', nameTw: '登陸頁面' }
     },
     parseToolFile: (filename, subCategory) => {
-      const match = filename.match(/^(nav|landing)-(\d+)\.html$/);
+      const match = filename.match(/^(nav|hero|feat|content|landing)-(\d+)\.html$/);
       if (match) {
-        const type = match[1] === 'nav' ? 'Navigation' : 'Landing Page';
-        const typeTw = match[1] === 'nav' ? '導航列' : '登陸頁面';
+        const typeMap = {
+          'nav': { en: 'Navigation', tw: '導航列' },
+          'hero': { en: 'Hero Section', tw: '主視覺區塊' },
+          'feat': { en: 'Feature', tw: '功能區塊' },
+          'content': { en: 'Content', tw: '內容區塊' },
+          'landing': { en: 'Landing Page', tw: '登陸頁面' }
+        };
+        const type = typeMap[match[1]];
         return {
           id: match[2],
           slug: filename.replace('.html', ''),
-          name: `${type} ${match[2]}`,
-          nameTw: `${typeTw} ${match[2]}`,
+          name: `${type.en} ${match[2]}`,
+          nameTw: `${type.tw} ${match[2]}`,
           category: subCategory
         };
       }
@@ -304,7 +327,7 @@ function generateRegistry() {
       color: config.color,
       bgColor: config.bgColor,
       textColor: config.textColor,
-      path: `/tools/${config.id}`,
+      path: `/open-source/${config.id}`,
       submodule: submoduleName,
       toolsDir: config.toolsDir,
     });
@@ -357,41 +380,47 @@ export function getToolUrl(categoryId, toolSlug) {
   if (categoryId === 'tailwind-templates') {
     // Determine subcategory from slug
     if (toolSlug.startsWith('nav-')) {
-      return \`/tools/\${category.submodule}/\${category.toolsDir}/01-navigation/\${toolSlug}.html\`;
+      return \`/open-source/\${category.submodule}/\${category.toolsDir}/01-navigation/\${toolSlug}.html\`;
+    } else if (toolSlug.startsWith('hero-')) {
+      return \`/open-source/\${category.submodule}/\${category.toolsDir}/02-hero-sections/\${toolSlug}.html\`;
+    } else if (toolSlug.startsWith('feat-')) {
+      return \`/open-source/\${category.submodule}/\${category.toolsDir}/03-features/\${toolSlug}.html\`;
+    } else if (toolSlug.startsWith('content-')) {
+      return \`/open-source/\${category.submodule}/\${category.toolsDir}/04-content/\${toolSlug}.html\`;
     } else if (toolSlug.startsWith('landing-')) {
-      return \`/tools/\${category.submodule}/\${category.toolsDir}/20-landing-pages/\${toolSlug}.html\`;
+      return \`/open-source/\${category.submodule}/\${category.toolsDir}/20-landing-pages/\${toolSlug}.html\`;
     }
   }
 
   if (categoryId === 'chrome-extensions') {
     const tool = chrome_extensions_tools.find(t => t.slug === toolSlug);
     if (tool) {
-      return \`/tools/\${category.submodule}/\${category.toolsDir}/\${tool.category}/\${toolSlug}/index.html\`;
+      return \`/open-source/\${category.submodule}/\${category.toolsDir}/\${tool.category}/\${toolSlug}/index.html\`;
     }
   }
 
   if (categoryId === 'free-games') {
     const tool = free_games_tools.find(t => t.slug === toolSlug);
     if (tool) {
-      return \`/tools/\${category.submodule}/\${category.toolsDir}/\${tool.category}/\${toolSlug}/index.html\`;
+      return \`/open-source/\${category.submodule}/\${category.toolsDir}/\${tool.category}/\${toolSlug}/index.html\`;
     }
   }
 
   if (categoryId === 'wasm-tools') {
     const tool = wasm_tools_tools.find(t => t.slug === toolSlug);
     if (tool) {
-      return \`/tools/\${category.submodule}/\${category.toolsDir}/\${tool.category}/\${toolSlug}/index.html\`;
+      return \`/open-source/\${category.submodule}/\${category.toolsDir}/\${tool.category}/\${toolSlug}/index.html\`;
     }
   }
 
   if (categoryId === 'web-workers') {
     const tool = web_workers_tools.find(t => t.slug === toolSlug);
     if (tool) {
-      return \`/tools/\${category.submodule}/\${category.toolsDir}/\${tool.category}/\${toolSlug}/index.html\`;
+      return \`/open-source/\${category.submodule}/\${category.toolsDir}/\${tool.category}/\${toolSlug}/index.html\`;
     }
   }
 
-  return \`/tools/\${category.submodule}/\${category.toolsDir}/\${toolSlug}/index.html\`;
+  return \`/open-source/\${category.submodule}/\${category.toolsDir}/\${toolSlug}/index.html\`;
 }
 
 // Total tools count
@@ -412,3 +441,35 @@ export function getTotalToolsCount() {
 }
 
 generateRegistry();
+
+// Run build and deploy
+console.log('\n--- Running npm run build ---');
+try {
+  execSync('npm run build', {
+    cwd: path.join(__dirname, '..'),
+    stdio: 'inherit'
+  });
+  console.log('Build completed successfully!\n');
+} catch (error) {
+  console.error('Build failed:', error.message);
+  process.exit(1);
+}
+
+console.log('--- Syncing to stephen.taipei ---');
+try {
+  const certPath = path.join(process.env.HOME, 'Downloads/website/cert/copila-ssh-key');
+  const distPath = path.join(__dirname, '../dist/');
+  const remoteHost = 'stephen@64.176.35.245';
+  const remotePath = '/var/www/stephen.taipei/';
+
+  const rsyncCmd = `rsync -ahv --delete --exclude=.DS_Store --rsync-path="sudo rsync" -e "ssh -i ${certPath}" --verbose --itemize-changes ${distPath} ${remoteHost}:${remotePath}`;
+  execSync(rsyncCmd, { stdio: 'inherit' });
+
+  const chownCmd = `ssh -i ${certPath} ${remoteHost} "sudo chown -R www-data:www-data ${remotePath}"`;
+  execSync(chownCmd, { stdio: 'inherit' });
+
+  console.log('\nDeploy completed successfully!');
+} catch (error) {
+  console.error('Deploy failed:', error.message);
+  process.exit(1);
+}

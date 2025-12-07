@@ -26,7 +26,7 @@ export default {
     description1:
       "学習とクロスドメイン統合に情熱を持っています。デザインのバックグラウンドから情報管理に移行し、最終的にフルスタック開発とシステムアーキテクチャに焦点を当てました。フロントエンドフレームワークからバックエンドアーキテクチャまでの完全な開発経験を持つAngularとLaravelに精通。",
     description2:
-      "Git、Trello、Slackを使用したカンバンスタイルのプロジェクト管理で6人のチームをリード。要件分析、システム計画、コラボレーション、コード品質管理の実践的な経験を積みながら、複数のWebApp開発を成功裏に完了。",
+      "Git (CI/CD)、Trello、Slack、RedMineを使用したプロジェクト管理で6人のチームをリード。要件分析、システム計画、コラボレーション、コード品質管理の実践的な経験を積みながら、複数のWeb / Android App / iOS App開発を成功裏に完了。",
     description3:
       "仕事以外では、ストリートダンススタジオを設立し、ダンス大会で全国チャンピオンと世界トップ8を達成。これらの経験は、忍耐力、集中力、困難を乗り越える決意を培いました。",
     performanceTitle: "パフォーマンス",
@@ -225,6 +225,36 @@ export default {
         description: "新しいツールを継続的に開発し、定期的に更新とメンテナンス",
       },
     ],
+  },
+
+  // Open Source Tools Pages
+  openSource: {
+    title: 'Stephen のオープンソースツールプラットフォーム',
+    subtitle: '8 テーマ · 1000+ オープンソースツール',
+    description: '完全無料、オープンソース、ブラウザでローカル実行。AI ツール、ウェブゲーム、開発者ツール、視覚効果など多数。',
+    searchPlaceholder: 'ツールカテゴリを検索...',
+    backToHome: 'ホーム',
+    back: '戻る',
+    categoryNotFound: 'カテゴリが見つかりません',
+    backToTools: 'ツールに戻る',
+    openInNewTab: '新しいタブで開く',
+    copyLink: 'リンクをコピー',
+    copied: 'コピーしました',
+    refresh: '更新',
+    previousTool: '前のツール',
+    nextTool: '次のツール',
+    toolCount: '{count} ツール',
+    comingSoon: '開発中',
+    free: '完全無料',
+    freeDesc: 'すべてのツールは完全無料、登録や支払い不要',
+    local: 'ローカル実行',
+    localDesc: 'ツールはブラウザでローカル実行され、データは送信されず、プライバシーを保護',
+    opensource: 'オープンソース貢献',
+    opensourceDesc: 'すべてのツールはオープンソース、貢献と改善を歓迎',
+    copyrightText: '© 2024 Stephen Taipei · オープンソースツールプラットフォーム',
+    github: "GitHub",
+    viewAllTools: "すべてのツールを閲覧",
+    tools: "ツール",
   },
 
   footer: {

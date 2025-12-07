@@ -3,9 +3,10 @@ import { Link, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
   Sparkles, Puzzle, Gamepad2, Wrench, Palette, Cpu, Boxes, Zap,
-  Search, ChevronLeft, ChevronRight, Play, Grid, List, ExternalLink
+  Search, ChevronLeft, ChevronRight, Play, Grid, List, ExternalLink, Globe
 } from 'lucide-react';
 import { categories, getToolsByCategoryId, getCategoryById } from '../data/toolsRegistry';
+import { useLanguage, LANGUAGE_OPTIONS } from '../i18n/LanguageContext';
 
 const iconMap = {
   Sparkles,
@@ -19,6 +20,7 @@ const iconMap = {
 };
 
 const CategoryPage = () => {
+  const { t, language, changeLanguage } = useLanguage();
   const { categoryId } = useParams();
   const [searchQuery, setSearchQuery] = useState('');
   const [viewMode, setViewMode] = useState('grid'); // 'grid' or 'list'
@@ -51,9 +53,9 @@ const CategoryPage = () => {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">類別不存在</h2>
-          <Link to="/tools" className="text-primary hover:underline">
-            返回工具平台
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">{t.openSource.categoryNotFound}</h2>
+          <Link to="/open-source" className="text-primary hover:underline">
+            {t.openSource.backToTools}
           </Link>
         </div>
       </div>
@@ -70,11 +72,11 @@ const CategoryPage = () => {
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-4">
               <Link
-                to="/tools"
+                to="/open-source"
                 className="flex items-center gap-2 text-gray-600 hover:text-primary transition-colors"
               >
                 <ChevronLeft className="w-5 h-5" />
-                <span className="hidden sm:inline">返回</span>
+                <span className="hidden sm:inline">{t.openSource.back}</span>
               </Link>
               <div className="h-6 w-px bg-gray-300" />
               <div className="flex items-center gap-3">
@@ -82,13 +84,36 @@ const CategoryPage = () => {
                   <Icon className={`w-5 h-5 ${category.textColor}`} />
                 </div>
                 <h1 className="text-lg font-bold text-gray-900">
-                  {category.nameTw}
+                  {language === 'zh-TW' || language === 'zh-HK' ? category.nameTw : language === 'zh-CN' ? category.nameZh : category.name}
                 </h1>
               </div>
             </div>
-            <div className="flex items-center gap-2 px-3 py-1.5 bg-green-100 text-green-700 rounded-full text-sm font-medium">
-              <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-              {tools.length} 工具
+            <div className="flex items-center gap-4">
+              {/* Language Selector */}
+              <div className="relative group">
+                <button className="flex items-center gap-2 px-3 py-2 text-gray-600 hover:text-primary transition-colors rounded-lg hover:bg-gray-100">
+                  <Globe className="w-5 h-5" />
+                  <span className="text-sm font-medium">{language.toUpperCase()}</span>
+                </button>
+                <div className="absolute right-0 mt-0 w-48 bg-white rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 border border-gray-100 z-50">
+                  {LANGUAGE_OPTIONS.map((lang) => (
+                    <button
+                      key={lang.value}
+                      onClick={() => changeLanguage(lang.value)}
+                      className={`w-full text-left px-4 py-2.5 hover:bg-gray-50 first:rounded-t-lg last:rounded-b-lg transition-colors text-sm ${
+                        language === lang.value ? 'bg-primary/10 text-primary font-semibold' : 'text-gray-700'
+                      }`}
+                    >
+                      {lang.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              {/* Tool Count */}
+              <div className="flex items-center gap-2 px-3 py-1.5 bg-green-100 text-green-700 rounded-full text-sm font-medium">
+                <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+                {tools.length} {t.openSource.tools}
+              </div>
             </div>
           </div>
         </div>
@@ -109,12 +134,12 @@ const CategoryPage = () => {
                 <Icon className="w-8 h-8" />
               </div>
               <div>
-                <h2 className="text-3xl font-bold">{category.nameTw}</h2>
+                <h2 className="text-3xl font-bold">{language === 'zh-TW' || language === 'zh-HK' ? category.nameTw : language === 'zh-CN' ? category.nameZh : category.name}</h2>
                 <p className="text-white/80">{category.name}</p>
               </div>
             </div>
             <p className="text-lg text-white/90 max-w-2xl">
-              {category.descriptionTw}
+              {language === 'zh-TW' || language === 'zh-HK' ? category.descriptionTw : language === 'zh-CN' ? category.descriptionZh : category.description}
             </p>
           </motion.div>
         </div>
@@ -129,7 +154,7 @@ const CategoryPage = () => {
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
               <input
                 type="text"
-                placeholder="搜尋工具..."
+                placeholder={t.openSource.searchPlaceholder}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-12 pr-4 py-3 bg-gray-50 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
@@ -160,7 +185,7 @@ const CategoryPage = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {Object.keys(groupedTools).length === 0 ? (
             <div className="text-center py-12">
-              <p className="text-gray-500">沒有找到符合的工具</p>
+              <p className="text-gray-500">{language === 'zh-TW' || language === 'zh-HK' || language === 'zh-CN' ? '沒有找到符合的工具' : 'No matching tools found'}</p>
             </div>
           ) : (
             Object.entries(groupedTools).map(([subCategory, categoryTools]) => (
@@ -183,7 +208,7 @@ const CategoryPage = () => {
                         transition={{ duration: 0.3, delay: index * 0.05 }}
                       >
                         <Link
-                          to={`/tools/${categoryId}/${tool.slug}`}
+                          to={`/open-source/${categoryId}/${tool.slug}`}
                           className="group block bg-white rounded-xl p-4 shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100"
                         >
                           <div className="flex items-start justify-between mb-3">
@@ -210,7 +235,7 @@ const CategoryPage = () => {
                         transition={{ duration: 0.3, delay: index * 0.03 }}
                       >
                         <Link
-                          to={`/tools/${categoryId}/${tool.slug}`}
+                          to={`/open-source/${categoryId}/${tool.slug}`}
                           className="group flex items-center justify-between bg-white rounded-lg p-4 shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100"
                         >
                           <div className="flex items-center gap-4">

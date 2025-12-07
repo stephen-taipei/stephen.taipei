@@ -42,9 +42,9 @@ function App() {
           <Route path="/" element={<HomePage />} />
 
           {/* Tools Demo Platform */}
-          <Route path="/tools" element={<ToolsDemo />} />
-          <Route path="/tools/:categoryId" element={<CategoryPage />} />
-          <Route path="/tools/:categoryId/:toolSlug" element={<ToolViewer />} />
+          <Route path="/open-source" element={<ToolsDemo />} />
+          <Route path="/open-source/:categoryId" element={<CategoryPage />} />
+          <Route path="/open-source/:categoryId/:toolSlug" element={<ToolViewer />} />
         </Routes>
       </Router>
     </LanguageProvider>
