@@ -24,6 +24,133 @@ try {
 const TOOLS_DIR = path.join(__dirname, '../src/tools');
 const OUTPUT_FILE = path.join(__dirname, '../src/data/toolsRegistry.js');
 
+function syncToolsFromLocalSources() {
+  const baseDir = path.join(process.env.HOME || '', 'Downloads/website');
+  const sources = [
+    'awesome-ai-local-tools-1000',
+    'awesome-wasm-tools-1000',
+    'awesome-chrome-extensions-1000',
+    'awesome-web-toys-1000',
+    'awesome-tailwind-ui-templates-1000',
+    'awesome-free-mini-tools-1000',
+    'awesome-web-workers-examples-1000',
+    'awesome-free-games-1000',
+  ];
+
+  let synced = 0;
+  for (const repoName of sources) {
+    const srcDir = path.join(baseDir, repoName);
+    const destDir = path.join(TOOLS_DIR, repoName);
+
+    if (!fs.existsSync(srcDir) || !fs.existsSync(destDir)) continue;
+
+    console.log(`[sync] ${repoName}: ${srcDir} -> ${destDir}`);
+    execSync(
+      [
+        'rsync -ah --delete',
+        '--exclude .git',
+        '--exclude node_modules',
+        '--exclude dist',
+        '--exclude build',
+        '--exclude .DS_Store',
+        `"${srcDir}/"`,
+        `"${destDir}/"`,
+      ].join(' '),
+      { stdio: 'inherit' }
+    );
+    synced += 1;
+  }
+
+  if (synced > 0) {
+    console.log(`[sync] Synced ${synced} repo(s) from ${baseDir}\n`);
+  }
+}
+
+// Optional: if local source repos exist under ~/Downloads/website, sync them into src/tools
+// so the build uses the latest local content without requiring submodule pushes.
+syncToolsFromLocalSources();
+
+function walkFiles(dir) {
+  const results = [];
+  const entries = fs.readdirSync(dir, { withFileTypes: true });
+  for (const entry of entries) {
+    const fullPath = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      results.push(...walkFiles(fullPath));
+    } else {
+      results.push(fullPath);
+    }
+  }
+  return results;
+}
+
+function compileModuleTsScriptsInDir(rootDir) {
+  if (!fs.existsSync(rootDir)) return;
+
+  let esbuild;
+  try {
+    // Vite depends on esbuild, so it should be available after install.
+    esbuild = require('esbuild');
+  } catch (err) {
+    console.error('[precompile] Missing dependency: esbuild');
+    console.error('[precompile] Run: npm i -D esbuild');
+    throw err;
+  }
+
+  const htmlFiles = walkFiles(rootDir).filter((p) => path.basename(p).toLowerCase() === 'index.html');
+  const scriptRe = /<script\b[^>]*type=["']module["'][^>]*src=["']([^"']+)["'][^>]*>\s*<\/script>/gi;
+
+  let compiledCount = 0;
+  let updatedHtmlCount = 0;
+
+  for (const htmlPath of htmlFiles) {
+    const htmlDir = path.dirname(htmlPath);
+    const originalHtml = fs.readFileSync(htmlPath, 'utf-8');
+
+    let match;
+    const replacements = [];
+
+    while ((match = scriptRe.exec(originalHtml)) !== null) {
+      const src = match[1];
+      if (!src || !src.match(/\.(ts|tsx)$/i)) continue;
+      if (src.startsWith('http://') || src.startsWith('https://') || src.startsWith('//')) continue;
+
+      const entryPath = path.resolve(htmlDir, src);
+      if (!fs.existsSync(entryPath)) continue;
+
+      const outSrc = src.replace(/\.(ts|tsx)$/i, '.js');
+      const outPath = path.resolve(htmlDir, outSrc);
+
+      esbuild.buildSync({
+        entryPoints: [entryPath],
+        outfile: outPath,
+        bundle: true,
+        format: 'esm',
+        platform: 'browser',
+        target: 'es2018',
+        sourcemap: false,
+        logLevel: 'silent',
+      });
+
+      compiledCount += 1;
+      replacements.push([src, outSrc]);
+    }
+
+    if (replacements.length > 0) {
+      let nextHtml = originalHtml;
+      for (const [from, to] of replacements) {
+        nextHtml = nextHtml.split(from).join(to);
+      }
+      if (nextHtml !== originalHtml) {
+        fs.writeFileSync(htmlPath, nextHtml, 'utf-8');
+        updatedHtmlCount += 1;
+      }
+    }
+  }
+
+  console.log(`[precompile] Compiled ${compiledCount} module entry(s), updated ${updatedHtmlCount} HTML file(s) under ${rootDir}`);
+}
+
 // Category configurations
 const categoryConfigs = {
   'awesome-ai-local-tools-1000': {
@@ -630,6 +757,18 @@ try {
   process.exit(1);
 }
 
+// Precompile TypeScript module scripts in built open-source assets (prod cannot load .ts directly).
+console.log('--- Precompiling TypeScript module scripts in dist/open-source ---');
+try {
+  const distPath = path.join(__dirname, '../dist/');
+  const freeGamesDistDir = path.join(distPath, 'open-source/awesome-free-games-1000/src/games');
+  compileModuleTsScriptsInDir(freeGamesDistDir);
+  console.log('Precompile completed successfully!\n');
+} catch (error) {
+  console.error('Precompile failed:', error.message);
+  process.exit(1);
+}
+
 console.log('--- Syncing to stephen.taipei ---');
 try {
   const certPath = path.join(process.env.HOME, 'Downloads/website/cert/copila-ssh-key');
@@ -637,7 +776,7 @@ try {
   const remoteHost = 'stephen@64.176.35.245';
   const remotePath = '/var/www/stephen.taipei/';
 
-  const rsyncCmd = `rsync -ahv --delete --exclude=.DS_Store --rsync-path="sudo rsync" -e "ssh -i ${certPath}" --verbose --itemize-changes ${distPath} ${remoteHost}:${remotePath}`;
+  const rsyncCmd = `rsync -ahv --delete --exclude=.DS_Store --exclude='*.ts' --exclude='*.tsx' --rsync-path="sudo rsync" -e "ssh -i ${certPath}" --verbose --itemize-changes ${distPath} ${remoteHost}:${remotePath}`;
   execSync(rsyncCmd, { stdio: 'inherit' });
 
   const chownCmd = `ssh -i ${certPath} ${remoteHost} "sudo chown -R www-data:www-data ${remotePath}"`;
