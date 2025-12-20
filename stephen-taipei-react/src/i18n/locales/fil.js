@@ -161,7 +161,7 @@ export default {
   },
   tools: {
     title: "Stephen's Open Source Tools",
-    subtitle: "8000+ free open source tools I developed and maintain, covering AI, games, development tools and more",
+    subtitle: "8000+ libreng open source tools na binuo at pinapanatili kasama ang AI, saklaw ang AI, games, development tools at higit pa",
     totalCount: "8000+ Free Tools",
     toolsLabel: "Tools",
     categories: {

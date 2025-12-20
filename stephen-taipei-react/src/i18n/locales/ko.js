@@ -189,7 +189,7 @@ export default {
   // Tools Section
   tools: {
     title: "Stephen의 오픈소스 도구",
-    subtitle: "AI, 게임, 개발 도구 등 다양한 분야의 8000개 이상의 무료 오픈소스 도구를 개발 및 유지관리 중",
+    subtitle: "AI와 함께 협업하여 개발 및 유지관리하는 8000개 이상의 무료 오픈소스 도구, AI, 게임, 개발 도구 등 다양한 분야 포함",
     totalCount: "8000+ 무료 도구",
     toolsLabel: "도구",
     categories: {

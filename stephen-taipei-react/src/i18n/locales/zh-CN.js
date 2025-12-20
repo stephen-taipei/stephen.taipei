@@ -158,7 +158,7 @@ export default {
   // Tools Section
   tools: {
     title: 'Stephen 的开源工具',
-    subtitle: '我开发并维护的 8000+ 免费开源工具，涵盖 AI、游戏、开发工具等多个领域，完全开源免费使用',
+    subtitle: '我与 AI 共同协作开发并维护的 8000+ 免费开源工具，涵盖 AI、游戏、开发工具等多个领域，完全开源免费使用',
     totalCount: '8000+ 免费工具',
     toolsLabel: '工具',
     categories: {

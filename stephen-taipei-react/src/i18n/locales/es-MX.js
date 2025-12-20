@@ -176,7 +176,7 @@ export default {
   },
   tools: {
     title: "Stephen's Open Source Tools",
-    subtitle: "8000+ free open source tools I developed and maintain, covering AI, games, development tools and more",
+    subtitle: "8000+ herramientas de código abierto gratuitas co-desarrolladas con IA, incluyendo IA, juegos, herramientas de desarrollo y más",
     totalCount: "8000+ Free Tools",
     toolsLabel: "Tools",
     categories: {

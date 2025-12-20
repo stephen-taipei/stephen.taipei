@@ -174,7 +174,7 @@ export default {
   },
   tools: {
     title: "Stephen のオープンソースツール",
-    subtitle: "AI、ゲーム、開発ツールなど多分野にわたる 8000 以上の無料オープンソースツールを開発・メンテナンス中",
+    subtitle: "AI と共同で開発・メンテナンスしている 8000 以上の無料オープンソースツール、AI、ゲーム、開発ツールなど多分野をカバー",
     totalCount: "8000+ 無料ツール",
     toolsLabel: "ツール",
     categories: {

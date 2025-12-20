@@ -190,7 +190,7 @@ export default {
   // Tools Section
   tools: {
     title: "Stephen's Open Source Tools",
-    subtitle: "8000+ free open source tools I developed and maintain, covering AI, games, development tools and more",
+    subtitle: "8000+ ferramentas open source gratuitas co-desenvolvidas com IA, incluindo IA, jogos, ferramentas de desenvolvimento e mais",
     totalCount: "8000+ Free Tools",
     toolsLabel: "Tools",
     categories: {
