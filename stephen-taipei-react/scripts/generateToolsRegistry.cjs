@@ -119,17 +119,36 @@ function compileModuleTsScriptsInDir(rootDir) {
       if (!fs.existsSync(entryPath)) continue;
 
       const outSrc = src.replace(/\.(ts|tsx)$/i, '.js');
-      const outPath = path.resolve(htmlDir, outSrc);
-
+      // Use outdir (not outfile) because bundling can emit additional files (e.g. images via `file` loader).
+      // We keep stable filenames by using entryNames '[name]' so main.ts -> main.js.
       esbuild.buildSync({
         entryPoints: [entryPath],
-        outfile: outPath,
+        outdir: htmlDir,
+        entryNames: '[name]',
+        assetNames: 'assets/[name]-[hash]',
+        chunkNames: 'chunks/[name]-[hash]',
         bundle: true,
         format: 'esm',
         platform: 'browser',
         target: 'es2018',
         sourcemap: false,
         logLevel: 'silent',
+        loader: {
+          '.png': 'file',
+          '.jpg': 'file',
+          '.jpeg': 'file',
+          '.gif': 'file',
+          '.svg': 'file',
+          '.webp': 'file',
+          '.mp3': 'file',
+          '.wav': 'file',
+          '.ogg': 'file',
+          '.mp4': 'file',
+          '.woff': 'file',
+          '.woff2': 'file',
+          '.ttf': 'file',
+          '.otf': 'file',
+        },
       });
 
       compiledCount += 1;

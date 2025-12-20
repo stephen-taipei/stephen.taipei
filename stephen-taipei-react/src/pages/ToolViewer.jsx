@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
@@ -33,6 +33,18 @@ const ToolViewer = () => {
 
   // Construct the tool URL
   const toolUrl = tool ? getToolUrl(categoryId, toolSlug) : null;
+  const isRecursiveEmbed = useMemo(() => {
+    if (!toolUrl) return false;
+    try {
+      const resolved = new URL(toolUrl, window.location.href);
+      return (
+        resolved.origin === window.location.origin &&
+        resolved.pathname === window.location.pathname
+      );
+    } catch {
+      return false;
+    }
+  }, [toolUrl]);
 
   // Find previous and next tools
   const currentIndex = tools.findIndex(t => t.slug === toolSlug);
@@ -42,6 +54,10 @@ const ToolViewer = () => {
   useEffect(() => {
     setIsLoading(true);
   }, [toolSlug]);
+
+  useEffect(() => {
+    if (!toolUrl || isRecursiveEmbed) setIsLoading(false);
+  }, [toolUrl, isRecursiveEmbed]);
 
   const handleIframeLoad = () => {
     setIsLoading(false);
@@ -134,13 +150,30 @@ const ToolViewer = () => {
         </div>
 
         {/* Fullscreen Iframe */}
-        <iframe
-          ref={iframeRef}
-          src={toolUrl}
-          className="w-full h-full pt-12"
-          onLoad={handleIframeLoad}
-          title={language === 'zh-TW' || language === 'zh-HK' ? tool.nameTw : language === 'zh-CN' ? tool.nameZh : tool.name}
-        />
+        {toolUrl && !isRecursiveEmbed ? (
+          <iframe
+            ref={iframeRef}
+            src={toolUrl}
+            className="w-full h-full pt-12"
+            onLoad={handleIframeLoad}
+            title={language === 'zh-TW' || language === 'zh-HK' ? tool.nameTw : language === 'zh-CN' ? tool.nameZh : tool.name}
+          />
+        ) : (
+          <div className="w-full h-full pt-12 flex items-center justify-center text-white/80">
+            <div className="text-center px-6">
+              <p className="text-lg font-semibold">
+                {language === 'zh-TW' || language === 'zh-HK' || language === 'zh-CN'
+                  ? '預覽連結設定異常'
+                  : 'Preview link is misconfigured'}
+              </p>
+              <p className="text-sm mt-2 text-white/60">
+                {language === 'zh-TW' || language === 'zh-HK' || language === 'zh-CN'
+                  ? '為避免 iframe 無限嵌入，已停止載入預覽。'
+                  : 'Preview loading stopped to prevent iframe recursion.'}
+              </p>
+            </div>
+          </div>
+        )}
       </div>
     );
   }
@@ -248,13 +281,30 @@ const ToolViewer = () => {
             )}
 
             {/* Iframe */}
-            <iframe
-              ref={iframeRef}
-              src={toolUrl}
-              className="w-full h-full"
-              onLoad={handleIframeLoad}
-              title={language === 'zh-TW' || language === 'zh-HK' ? tool.nameTw : language === 'zh-CN' ? tool.nameZh : tool.name}
-            />
+            {toolUrl && !isRecursiveEmbed ? (
+              <iframe
+                ref={iframeRef}
+                src={toolUrl}
+                className="w-full h-full"
+                onLoad={handleIframeLoad}
+                title={language === 'zh-TW' || language === 'zh-HK' ? tool.nameTw : language === 'zh-CN' ? tool.nameZh : tool.name}
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center bg-gray-50">
+                <div className="text-center px-6">
+                  <p className="text-gray-900 font-semibold">
+                    {language === 'zh-TW' || language === 'zh-HK' || language === 'zh-CN'
+                      ? '預覽連結設定異常'
+                      : 'Preview link is misconfigured'}
+                  </p>
+                  <p className="text-gray-600 text-sm mt-2">
+                    {language === 'zh-TW' || language === 'zh-HK' || language === 'zh-CN'
+                      ? '為避免 iframe 無限嵌入，已停止載入預覽。'
+                      : 'Preview loading stopped to prevent iframe recursion.'}
+                  </p>
+                </div>
+              </div>
+            )}
           </div>
         </motion.div>
 
