@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { Menu, X, Globe } from 'lucide-react';
 import { useLanguage, LANGUAGE_OPTIONS } from '../i18n/LanguageContext';
 
@@ -16,13 +17,26 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className="fixed w-full bg-white/90 backdrop-blur-sm shadow-sm z-50 border-b border-gray-100">
+    <>
+      {/* Mobile menu backdrop overlay - rendered via portal to body */}
+      {isOpen && createPortal(
+        <div
+          className="fixed inset-0 bg-black/50 md:hidden"
+          style={{ zIndex: 40 }}
+          onClick={() => setIsOpen(false)}
+        />,
+        document.body
+      )}
+      <nav className="fixed w-full bg-white/90 backdrop-blur-sm shadow-sm z-50 border-b border-gray-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex-shrink-0">
-            <span className="text-2xl font-bold bg-gradient-to-r from-primary-dark to-secondary bg-clip-text text-transparent">
+            <button
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+              className="text-2xl font-bold bg-gradient-to-r from-primary-dark to-secondary bg-clip-text text-transparent cursor-pointer hover:opacity-80 transition-opacity"
+            >
               Stephen.Taipei
-            </span>
+            </button>
           </div>
 
           <div className="hidden md:flex items-center gap-6">
@@ -90,8 +104,9 @@ const Navbar = () => {
         </div>
       </div>
 
+      {/* Mobile menu */}
       {isOpen && (
-        <div className="md:hidden">
+        <div className="md:hidden relative" style={{ zIndex: 45 }}>
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white border-b border-gray-100 shadow-lg">
             {navLinks.map((link) => (
               <a
@@ -107,6 +122,7 @@ const Navbar = () => {
         </div>
       )}
     </nav>
+    </>
   );
 };
 

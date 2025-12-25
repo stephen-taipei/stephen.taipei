@@ -252,7 +252,7 @@ export default {
     localDesc: "Les outils s'exécutent localement dans votre navigateur, vos données ne sont pas transmises, protégeant votre vie privée",
     opensource: "Contribution open source",
     opensourceDesc: "Tous les outils sont open source, les contributions et améliorations sont les bienvenues",
-    copyrightText: "© 2024 Stephen Taipei · Plateforme d'Outils Open Source",
+    copyrightText: "© 2025 Stephen Taipei · Plateforme d'Outils Open Source",
     github: "GitHub",
     viewAllTools: "Parcourir tous les outils",
     tools: "outils",

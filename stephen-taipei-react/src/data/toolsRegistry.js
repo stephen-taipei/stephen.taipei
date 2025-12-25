@@ -17119,6 +17119,16 @@ export function getToolUrl(categoryId, toolSlug) {
     }
   }
 
+  // Special handling for mini-tools: uses hash router with kebab-case paths
+  if (categoryId === 'mini-tools') {
+    // Convert PascalCase slug to kebab-case for hash router
+    const kebabPath = toolSlug
+      .replace(/([a-z])([A-Z])/g, '$1-$2')
+      .replace(/([A-Z])([A-Z][a-z])/g, '$1-$2')
+      .toLowerCase();
+    return `/open-source/${category.submodule}/dist/index.html#${kebabPath}`;
+  }
+
   return `/open-source/${category.submodule}/${category.toolsDir}/${toolSlug}/index.html`;
 }
 

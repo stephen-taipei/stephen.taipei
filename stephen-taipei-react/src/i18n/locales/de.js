@@ -251,7 +251,7 @@ export default {
     localDesc: "Tools laufen lokal im Browser, Ihre Daten werden nicht übertragen, Ihre Privatsphäre wird geschützt",
     opensource: "Open Source Beitrag",
     opensourceDesc: "Alle Tools sind Open Source, Beiträge und Verbesserungen willkommen",
-    copyrightText: "© 2024 Stephen Taipei · Open Source Tools Plattform",
+    copyrightText: "© 2025 Stephen Taipei · Open Source Tools Plattform",
     github: "GitHub",
     viewAllTools: "Alle Werkzeuge durchsuchen",
     tools: "Werkzeuge",

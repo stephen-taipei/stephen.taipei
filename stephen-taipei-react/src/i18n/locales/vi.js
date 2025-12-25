@@ -267,7 +267,7 @@ export default {
     localDesc: 'Công cụ chạy cục bộ trên trình duyệt, dữ liệu không được truyền đi, bảo vệ quyền riêng tư',
     opensource: 'Đóng góp mã nguồn mở',
     opensourceDesc: 'Tất cả công cụ đều là mã nguồn mở, chào đón đóng góp và cải tiến',
-    copyrightText: '© 2024 Stephen Taipei · Nền tảng Công cụ Mã nguồn Mở',
+    copyrightText: '© 2025 Stephen Taipei · Nền tảng Công cụ Mã nguồn Mở',
     github: "GitHub",
     viewAllTools: "Xem tất cả các công cụ",
     tools: "công cụ",

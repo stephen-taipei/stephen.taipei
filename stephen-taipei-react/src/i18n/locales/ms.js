@@ -266,7 +266,7 @@ export default {
     localDesc: 'Alat berjalan secara tempatan dalam pelayar anda, data anda tidak dihantar, melindungi privasi anda',
     opensource: 'Sumbangan sumber terbuka',
     opensourceDesc: 'Semua alat adalah sumber terbuka, sumbangan dan penambahbaikan dialu-alukan',
-    copyrightText: '© 2024 Stephen Taipei · Platform Alat Sumber Terbuka',
+    copyrightText: '© 2025 Stephen Taipei · Platform Alat Sumber Terbuka',
     github: "GitHub",
     viewAllTools: "Lihat semua alat",
     tools: "alat",

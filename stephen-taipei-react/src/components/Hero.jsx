@@ -17,9 +17,9 @@ const Hero = () => {
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center z-10">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0.2, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
+          transition={{ duration: 0.4, ease: "easeOut" }}
         >
           <h2 className="text-xl md:text-2xl font-semibold text-primary mb-4 tracking-wide">
             {t.hero.name}

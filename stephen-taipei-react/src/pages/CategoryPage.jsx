@@ -265,7 +265,7 @@ const CategoryPage = () => {
       <footer className="py-8 border-t border-gray-200 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <p className="text-gray-600">
-            © 2024 Stephen Taipei · {category.nameTw}
+            © 2025 Stephen Taipei · {category.nameTw}
           </p>
         </div>
       </footer>

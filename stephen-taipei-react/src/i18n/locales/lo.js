@@ -265,7 +265,7 @@ export default {
     localDesc: 'ເຄື່ອງມືດຳເນີນການທ້ອງຖິ່ນໃນ browser ຂອງທ່ານ ຂໍ້ມູນຂອງທ່ານບໍ່ຖືກສົ່ງອອກ ປົກປ້ອງຄວາມເປັນສ່ວນຕົວ',
     opensource: 'ການປະກອບສ່ວນໂອເພນຊອດ',
     opensourceDesc: 'ເຄື່ອງມືທັງໝົດເປັນໂອເພນຊອດ ຍິນດີຕ້ອນຮັບການປະກອບສ່ວນ ແລະການປັບປຸງ',
-    copyrightText: '© 2024 Stephen Taipei · ແພລດຟອມເຄື່ອງມືໂອເພນຊອດ',
+    copyrightText: '© 2025 Stephen Taipei · ແພລດຟອມເຄື່ອງມືໂອເພນຊອດ',
     github: "GitHub",
     viewAllTools: "ເບິ່ງຂໍ້ມູນທັງໝົດ",
     tools: "ເຄື່ອງມື",

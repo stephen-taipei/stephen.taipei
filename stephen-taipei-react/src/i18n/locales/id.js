@@ -251,7 +251,7 @@ export default {
     localDesc: "Alat berjalan lokal di browser Anda, data Anda tidak ditransmisikan, melindungi privasi Anda",
     opensource: "Kontribusi open source",
     opensourceDesc: "Semua alat adalah open source, kontribusi dan perbaikan sangat diharapkan",
-    copyrightText: "© 2024 Stephen Taipei · Platform Alat Open Source",
+    copyrightText: "© 2025 Stephen Taipei · Platform Alat Open Source",
     github: "GitHub",
     viewAllTools: "Jelajahi semua alat",
     tools: "alat",

@@ -251,7 +251,7 @@ export default {
     localDesc: 'ツールはブラウザでローカル実行され、データは送信されず、プライバシーを保護',
     opensource: 'オープンソース貢献',
     opensourceDesc: 'すべてのツールはオープンソース、貢献と改善を歓迎',
-    copyrightText: '© 2024 Stephen Taipei · オープンソースツールプラットフォーム',
+    copyrightText: '© 2025 Stephen Taipei · オープンソースツールプラットフォーム',
     github: "GitHub",
     viewAllTools: "すべてのツールを閲覧",
     tools: "ツール",

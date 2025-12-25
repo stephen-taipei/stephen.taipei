@@ -251,7 +251,7 @@ export default {
     localDesc: "टूल्स आपके ब्राउज़र में लोकली चलते हैं, आपका डेटा ट्रांसमिट नहीं होता, आपकी प्राइवेसी सुरक्षित रहती है",
     opensource: "ओपन सोर्स योगदान",
     opensourceDesc: "सभी टूल्स ओपन सोर्स हैं, योगदान और सुधार का स्वागत है",
-    copyrightText: "© 2024 Stephen Taipei · ओपन सोर्स टूल्स प्लेटफॉर्म",
+    copyrightText: "© 2025 Stephen Taipei · ओपन सोर्स टूल्स प्लेटफॉर्म",
     github: "GitHub",
     viewAllTools: "सभी उपकरण देखें",
     tools: "उपकरण",

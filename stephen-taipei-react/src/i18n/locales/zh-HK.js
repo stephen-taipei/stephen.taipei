@@ -234,7 +234,7 @@ export default {
     localDesc: '工具在瀏覽器本地運行，資料不外傳，保護私隱',
     opensource: '開源貢獻',
     opensourceDesc: '所有工具開源，歡迎貢獻與改進',
-    copyrightText: '© 2024 Stephen Taipei · 開源工具平台',
+    copyrightText: '© 2025 Stephen Taipei · 開源工具平台',
     github: "GitHub",
     viewAllTools: "瀏覽所有工具",
     tools: "工具",

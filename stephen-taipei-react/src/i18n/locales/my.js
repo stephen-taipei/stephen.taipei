@@ -267,7 +267,7 @@ export default {
     localDesc: 'ကိရိယာများသည် သင့် browser တွင် local ဖြင့်အလုပ်လုပ်သည်၊ သင့်ဒေတာများမပို့ဆောင်ပါ၊ သင့်ကိုယ်ပိုင်လုံခြုံမှုကိုကာကွယ်သည်',
     opensource: 'Open source ပံ့ပိုးမှု',
     opensourceDesc: 'ကိရိယာအားလုံးသည် open source ဖြစ်သည်၊ ပံ့ပိုးမှုများနှင့် တိုးတက်မှုများကို ကြိုဆိုပါသည်',
-    copyrightText: '© 2024 Stephen Taipei · Open Source Tools ပလက်ဖောင်း',
+    copyrightText: '© 2025 Stephen Taipei · Open Source Tools ပလက်ဖောင်း',
     github: "GitHub",
     viewAllTools: "အားလုံးကိရိယာများကိုကြည့်ရှုပါ",
     tools: "ကိရိယာများ",

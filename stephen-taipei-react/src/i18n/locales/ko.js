@@ -266,7 +266,7 @@ export default {
     localDesc: '도구는 브라우저에서 로컬로 실행되며, 데이터가 전송되지 않아 개인정보를 보호합니다',
     opensource: '오픈소스 기여',
     opensourceDesc: '모든 도구는 오픈소스이며, 기여와 개선을 환영합니다',
-    copyrightText: '© 2024 Stephen Taipei · 오픈소스 도구 플랫폼',
+    copyrightText: '© 2025 Stephen Taipei · 오픈소스 도구 플랫폼',
     github: "GitHub",
     viewAllTools: "모든 도구 보기",
     tools: "도구",

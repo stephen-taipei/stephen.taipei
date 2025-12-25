@@ -252,7 +252,7 @@ export default {
     localDesc: "Ang mga tool ay tumatakbo nang lokal sa iyong browser, ang iyong data ay hindi ipinapadala, pinoprotektahan ang iyong privacy",
     opensource: "Open source contribution",
     opensourceDesc: "Lahat ng tools ay open source, malugod na tinatanggap ang kontribusyon at pagpapabuti",
-    copyrightText: "© 2024 Stephen Taipei · Open Source Tools Platform",
+    copyrightText: "© 2025 Stephen Taipei · Open Source Tools Platform",
     github: "GitHub",
     viewAllTools: "Tingnan ang lahat ng mga tool",
     tools: "mga tool",
