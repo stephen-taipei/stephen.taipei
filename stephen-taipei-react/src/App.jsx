@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { LanguageProvider } from './i18n/LanguageContext';
 import Navbar from './components/Navbar';
@@ -12,11 +12,21 @@ import AwesomeApp100 from './components/AwesomeApp100';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 
-// Tools Demo Platform Pages
-import ToolsDemo from './pages/ToolsDemo';
-import CategoryPage from './pages/CategoryPage';
-import ToolViewer from './pages/ToolViewer';
-import NotFound from './pages/NotFound';
+// Lazy load pages for code splitting
+const ToolsDemo = lazy(() => import('./pages/ToolsDemo'));
+const CategoryPage = lazy(() => import('./pages/CategoryPage'));
+const ToolViewer = lazy(() => import('./pages/ToolViewer'));
+const NotFound = lazy(() => import('./pages/NotFound'));
+
+// Loading fallback component
+const PageLoader = () => (
+  <div className="min-h-screen flex items-center justify-center bg-gray-50">
+    <div className="flex flex-col items-center gap-4">
+      <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+      <p className="text-gray-500 text-sm">載入中...</p>
+    </div>
+  </div>
+);
 
 // Catch-all component for direct tool file access
 const ToolFileRedirect = () => {
@@ -77,21 +87,23 @@ function App() {
   return (
     <LanguageProvider>
       <Router>
-        <Routes>
-          {/* Main Portfolio Site */}
-          <Route path="/" element={<HomePage />} />
+        <Suspense fallback={<PageLoader />}>
+          <Routes>
+            {/* Main Portfolio Site */}
+            <Route path="/" element={<HomePage />} />
 
-          {/* Tools Demo Platform */}
-          <Route path="/open-source" element={<ToolsDemo />} />
-          <Route path="/open-source/:categoryId" element={<CategoryPage />} />
-          <Route path="/open-source/:categoryId/:toolSlug" element={<ToolViewer />} />
+            {/* Tools Demo Platform - Lazy loaded */}
+            <Route path="/open-source" element={<ToolsDemo />} />
+            <Route path="/open-source/:categoryId" element={<CategoryPage />} />
+            <Route path="/open-source/:categoryId/:toolSlug" element={<ToolViewer />} />
 
-          {/* Catch-all for direct tool file access */}
-          <Route path="/open-source/*" element={<ToolFileRedirect />} />
+            {/* Catch-all for direct tool file access */}
+            <Route path="/open-source/*" element={<ToolFileRedirect />} />
 
-          {/* 404 Not Found */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+            {/* 404 Not Found - Lazy loaded */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Suspense>
       </Router>
     </LanguageProvider>
   );

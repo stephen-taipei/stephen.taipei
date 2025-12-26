@@ -53,6 +53,31 @@ export default defineConfig({
       input: {
         main: path.resolve(__dirname, 'index.html'),
       },
+      output: {
+        // Manual chunks for better code splitting
+        manualChunks(id) {
+          // React core
+          if (id.includes('node_modules/react') ||
+              id.includes('node_modules/react-dom') ||
+              id.includes('node_modules/react-router')) {
+            return 'vendor-react';
+          }
+          // Animation library
+          if (id.includes('node_modules/framer-motion')) {
+            return 'vendor-motion';
+          }
+          // Icon library
+          if (id.includes('node_modules/lucide-react')) {
+            return 'vendor-icons';
+          }
+          // Tools registry data (large data file)
+          if (id.includes('toolsRegistry') ||
+              id.includes('toolDescriptions') ||
+              id.includes('toolIcons')) {
+            return 'tools-data';
+          }
+        },
+      },
     },
   },
 })
