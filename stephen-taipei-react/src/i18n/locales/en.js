@@ -271,6 +271,14 @@ export default {
     github: "GitHub",
     viewAllTools: "Browse all tools",
     tools: "tools",
+    sortDefault: "Default",
+    sortByName: "By Name",
+    sortById: "By ID",
+    clearFilters: "Clear",
+    foundTools: "Found {count} tools",
+    noMatchingTools: "No matching tools found",
+    showLess: "Show Less",
+    showMore: "Show More ({count})",
   },
 
   // Awesome APP 100 Section

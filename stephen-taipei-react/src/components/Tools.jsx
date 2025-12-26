@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { ExternalLink, Wrench, Gamepad2, Puzzle, Palette, Cpu, Sparkles, Boxes, Zap, ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useLanguage } from '../i18n/LanguageContext';
-import { getToolsByCategoryId } from '../data/toolsRegistry';
+import { getToolsByCategoryId, getTotalToolsCount } from '../data/toolsRegistry';
 
 const Tools = () => {
   const { t } = useLanguage();
@@ -102,7 +102,7 @@ const Tools = () => {
             </p>
             <div className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-medium">
               <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-              {t.tools.totalCount}
+              {getTotalToolsCount()}+ {t.tools.toolsLabel}
             </div>
           </motion.div>
         </div>

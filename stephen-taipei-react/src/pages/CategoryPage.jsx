@@ -244,9 +244,9 @@ const CategoryPage = () => {
                   onChange={(e) => setSortBy(e.target.value)}
                   className="px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-700 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none cursor-pointer"
                 >
-                  <option value="default">{language === 'zh-TW' || language === 'zh-HK' || language === 'zh-CN' ? '預設排序' : 'Default'}</option>
-                  <option value="name">{language === 'zh-TW' || language === 'zh-HK' || language === 'zh-CN' ? '名稱排序' : 'By Name'}</option>
-                  <option value="id">{language === 'zh-TW' || language === 'zh-HK' || language === 'zh-CN' ? '編號排序' : 'By ID'}</option>
+                  <option value="default">{t.openSource.sortDefault}</option>
+                  <option value="name">{t.openSource.sortByName}</option>
+                  <option value="id">{t.openSource.sortById}</option>
                 </select>
               </div>
 
@@ -294,7 +294,7 @@ const CategoryPage = () => {
                     className="flex items-center gap-1 px-3 py-1.5 rounded-full text-sm font-medium bg-red-50 text-red-600 hover:bg-red-100 transition-colors"
                   >
                     <X className="w-3 h-3" />
-                    {language === 'zh-TW' || language === 'zh-HK' || language === 'zh-CN' ? '清除篩選' : 'Clear'}
+                    {t.openSource.clearFilters}
                   </button>
                 )}
               </div>
@@ -303,9 +303,7 @@ const CategoryPage = () => {
             {/* Active Filters Summary */}
             {(selectedSubCategories.length > 0 || searchQuery) && (
               <div className="text-sm text-gray-500">
-                {language === 'zh-TW' || language === 'zh-HK' || language === 'zh-CN'
-                  ? `找到 ${filteredTools.length} 個工具`
-                  : `Found ${filteredTools.length} tools`}
+                {t.openSource.foundTools.replace('{count}', filteredTools.length)}
               </div>
             )}
           </div>
@@ -317,7 +315,7 @@ const CategoryPage = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {Object.keys(groupedTools).length === 0 ? (
             <div className="text-center py-12">
-              <p className="text-gray-500">{language === 'zh-TW' || language === 'zh-HK' || language === 'zh-CN' ? '沒有找到符合的工具' : 'No matching tools found'}</p>
+              <p className="text-gray-500">{t.openSource.noMatchingTools}</p>
             </div>
           ) : (
             Object.entries(groupedTools).map(([subCategory, categoryTools]) => {
@@ -391,13 +389,11 @@ const CategoryPage = () => {
                           {expandedCategories[subCategory] ? (
                             <>
                               <ChevronLeft className="w-4 h-4 rotate-90" />
-                              {language === 'zh-TW' || language === 'zh-HK' || language === 'zh-CN' ? '收起' : 'Show Less'}
+                              {t.openSource.showLess}
                             </>
                           ) : (
                             <>
-                              {language === 'zh-TW' || language === 'zh-HK' || language === 'zh-CN'
-                                ? `顯示更多 (${categoryTools.length - DEFAULT_VISIBLE_COUNT} 個)`
-                                : `Show More (${categoryTools.length - DEFAULT_VISIBLE_COUNT})`}
+                              {t.openSource.showMore.replace('{count}', categoryTools.length - DEFAULT_VISIBLE_COUNT)}
                               <ChevronRight className="w-4 h-4 rotate-90" />
                             </>
                           )}
@@ -457,13 +453,11 @@ const CategoryPage = () => {
                           {expandedCategories[subCategory] ? (
                             <>
                               <ChevronLeft className="w-4 h-4 rotate-90" />
-                              {language === 'zh-TW' || language === 'zh-HK' || language === 'zh-CN' ? '收起' : 'Show Less'}
+                              {t.openSource.showLess}
                             </>
                           ) : (
                             <>
-                              {language === 'zh-TW' || language === 'zh-HK' || language === 'zh-CN'
-                                ? `顯示更多 (${categoryTools.length - DEFAULT_VISIBLE_COUNT} 個)`
-                                : `Show More (${categoryTools.length - DEFAULT_VISIBLE_COUNT})`}
+                              {t.openSource.showMore.replace('{count}', categoryTools.length - DEFAULT_VISIBLE_COUNT)}
                               <ChevronRight className="w-4 h-4 rotate-90" />
                             </>
                           )}

@@ -18,14 +18,14 @@ const About = () => {
             transition={{ duration: 0.6 }}
           >
             <div className="relative">
-              {/* Clean, professional placeholder for profile image or graphic */}
-              <div className="aspect-[4/3] rounded-2xl bg-gradient-to-tr from-gray-100 to-gray-200 overflow-hidden shadow-xl flex items-center justify-center relative">
-                <div className="absolute inset-0 bg-grid-slate-100 bg-cover bg-center [background-image:url('/digital-cover.webp')]"></div>
-                {/* <div className="z-10 p-4 text-center rounded-2xl backdrop-blur-md bg-white/70">
-                  <img src="/stephen-avatar.webp" alt="stephen avatar" className="object-cover mx-auto mb-4 w-full h-24 rounded-2xl" />
-                  <p className="font-medium text-gray-900">{t.hero.name}</p>
-                  <p className="text-sm text-gray-700">{t.about.location}</p>
-                </div> */}
+              {/* Professional profile image */}
+              <div className="aspect-[4/3] rounded-2xl bg-gradient-to-tr from-gray-100 to-gray-200 overflow-hidden shadow-xl relative">
+                <img
+                  src="/digital-cover.webp"
+                  alt="Stephen Chuang - Senior Full Stack Engineer and System Architect"
+                  className="w-full h-full object-cover"
+                  loading="lazy"
+                />
               </div>
               {/* Floating badges */}
               <div className="flex absolute right-2 -bottom-6 sm:-right-6 gap-3 items-center p-4 bg-white rounded-xl border border-gray-100 shadow-lg">

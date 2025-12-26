@@ -231,6 +231,14 @@ export default {
     github: 'GitHub',
     viewAllTools: '瀏覽所有工具',
     tools: '工具',
+    sortDefault: '預設排序',
+    sortByName: '名稱排序',
+    sortById: '編號排序',
+    clearFilters: '清除篩選',
+    foundTools: '找到 {count} 個工具',
+    noMatchingTools: '沒有找到符合的工具',
+    showLess: '收起',
+    showMore: '顯示更多 ({count} 個)',
   },
 
   // Awesome APP 100 Section

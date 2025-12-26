@@ -16,6 +16,7 @@ import Footer from './components/Footer';
 import ToolsDemo from './pages/ToolsDemo';
 import CategoryPage from './pages/CategoryPage';
 import ToolViewer from './pages/ToolViewer';
+import NotFound from './pages/NotFound';
 
 // Catch-all component for direct tool file access
 const ToolFileRedirect = () => {
@@ -87,6 +88,9 @@ function App() {
 
           {/* Catch-all for direct tool file access */}
           <Route path="/open-source/*" element={<ToolFileRedirect />} />
+
+          {/* 404 Not Found */}
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>
     </LanguageProvider>
