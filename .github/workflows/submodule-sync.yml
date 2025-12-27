@@ -1,14 +1,11 @@
 name: Sync Submodules
 
 # 觸發方式：
-# 1. 定時檢查（每小時）
-# 2. 從 submodule 接收 repository_dispatch 事件
-# 3. 手動觸發
+# 1. 定時檢查（每小時）- 主要同步機制
+# 2. 手動觸發
 on:
   schedule:
     - cron: '0 * * * *'  # 每小時檢查一次
-  repository_dispatch:
-    types: [submodule-updated]
   workflow_dispatch:
     inputs:
       force_deploy:
@@ -16,6 +13,11 @@ on:
         required: false
         default: false
         type: boolean
+
+# 使用 GITHUB_TOKEN 而非 PAT
+permissions:
+  contents: read
+  actions: read
 
 env:
   NODE_VERSION: "20"
@@ -32,7 +34,7 @@ jobs:
         with:
           submodules: recursive
           fetch-depth: 0
-          token: ${{ secrets.GH_PAT }}
+          # 使用預設的 GITHUB_TOKEN（公開 repo 不需要額外 token）
 
       - name: Check for submodule updates
         id: check
@@ -67,13 +69,6 @@ jobs:
             fi
             cd - > /dev/null
           done < <(git submodule status)
-
-          # Handle repository_dispatch (always has updates)
-          if [ "${{ github.event_name }}" = "repository_dispatch" ]; then
-            HAS_UPDATES="true"
-            UPDATED_MODULES="${{ github.event.client_payload.submodule || 'triggered by dispatch' }}"
-            echo "Triggered by repository_dispatch: $UPDATED_MODULES"
-          fi
 
           # Handle force deploy
           if [ "${{ github.event.inputs.force_deploy }}" = "true" ]; then

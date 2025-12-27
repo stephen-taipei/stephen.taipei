@@ -12,6 +12,11 @@ on:
         default: true
         type: boolean
 
+# 使用 GITHUB_TOKEN 而非 PAT
+permissions:
+  contents: write
+  actions: read
+
 env:
   NODE_VERSION: "20"
   DEPLOY_PATH: /var/www/stephen.taipei
@@ -25,7 +30,7 @@ jobs:
         with:
           submodules: recursive
           fetch-depth: 0
-          token: ${{ secrets.GH_PAT }}
+          # 使用預設的 GITHUB_TOKEN（公開 repo 不需要額外 token）
 
       - name: Update submodules to latest
         if: ${{ github.event.inputs.update_submodules != 'false' }}
@@ -215,18 +220,20 @@ jobs:
           echo "Deployment failed health check and was rolled back"
           exit 1
 
-  # Optional: Commit submodule updates back to repo
+  # Commit submodule updates back to repo (使用 GITHUB_TOKEN)
   update-submodule-refs:
     needs: deploy
     runs-on: ubuntu-latest
     if: ${{ github.event.inputs.update_submodules != 'false' }}
+    permissions:
+      contents: write
     steps:
       - name: Checkout code with submodules
         uses: actions/checkout@v4.2.2
         with:
           submodules: recursive
           fetch-depth: 0
-          token: ${{ secrets.GH_PAT }}
+          # 使用預設的 GITHUB_TOKEN
 
       - name: Update and commit submodule references
         run: |
