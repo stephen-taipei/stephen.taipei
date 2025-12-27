@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build:tools": "bash scripts/build-ts-tools.sh",
+    "build": "npm run build:tools && vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },

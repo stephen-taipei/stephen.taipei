@@ -1,0 +1,249 @@
+name: Deploy stephen.taipei (Production)
+
+on:
+  push:
+    branches: [main]
+  workflow_call:  # 允許被其他 workflow 呼叫
+  workflow_dispatch:
+    inputs:
+      update_submodules:
+        description: 'Update submodules to latest commits'
+        required: false
+        default: true
+        type: boolean
+
+env:
+  NODE_VERSION: "20"
+  DEPLOY_PATH: /var/www/stephen.taipei
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code with submodules
+        uses: actions/checkout@v4.2.2
+        with:
+          submodules: recursive
+          fetch-depth: 0
+          token: ${{ secrets.GH_PAT }}
+
+      - name: Update submodules to latest
+        if: ${{ github.event.inputs.update_submodules != 'false' }}
+        run: |
+          git submodule update --remote --merge
+
+          # Check if there are changes
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "SUBMODULES_UPDATED=true" >> $GITHUB_ENV
+            echo "Submodules updated to latest commits"
+          else
+            echo "SUBMODULES_UPDATED=false" >> $GITHUB_ENV
+            echo "No submodule updates"
+          fi
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4.1.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4.0.0
+        with:
+          version: 9
+
+      # ============================================
+      # Build submodules that are framework projects
+      # ============================================
+
+      - name: Build awesome-free-mini-tools-1000 (React)
+        working-directory: stephen-taipei-react/src/tools/awesome-free-mini-tools-1000
+        run: |
+          if [ -f "package.json" ]; then
+            echo "Building awesome-free-mini-tools-1000..."
+            npm install
+            npm run build || echo "Build failed or no build script"
+          fi
+
+      - name: Build awesome-wasm-tools-1000
+        working-directory: stephen-taipei-react/src/tools/awesome-wasm-tools-1000
+        run: |
+          if [ -f "package.json" ]; then
+            echo "Building awesome-wasm-tools-1000..."
+            # Clean any merge conflicts in package.json if exist
+            git checkout package.json 2>/dev/null || true
+            npm install
+            npm run build || echo "Build failed or no build script"
+          fi
+
+      - name: Build awesome-free-games-1000 (TypeScript)
+        working-directory: stephen-taipei-react/src/tools/awesome-free-games-1000
+        run: |
+          if [ -f "package.json" ]; then
+            echo "Building awesome-free-games-1000..."
+            npm install
+            npm run build || echo "Build failed or no build script"
+          fi
+
+      # ============================================
+      # Build main project
+      # ============================================
+
+      - name: Install main project dependencies
+        working-directory: stephen-taipei-react
+        run: npm install
+
+      - name: Install esbuild globally
+        run: npm install -g esbuild
+
+      - name: Build TypeScript tools
+        working-directory: stephen-taipei-react
+        run: npm run build:tools
+
+      - name: Build main project
+        working-directory: stephen-taipei-react
+        run: npm run build
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4.6.0
+        with:
+          name: stephen-taipei-build
+          path: stephen-taipei-react/dist/
+          retention-days: 7
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4.1.8
+        with:
+          name: stephen-taipei-build
+          path: ./deploy
+
+      - name: Ensure deploy path exists
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.WEB_SERVER_HOST }}
+          username: ${{ secrets.WEB_SERVER_USER }}
+          key: ${{ secrets.WEB_SERVER_SSH_KEY }}
+          script: |
+            mkdir -p ${{ env.DEPLOY_PATH }}/releases
+            chmod -R u+rwX ${{ env.DEPLOY_PATH }}
+
+      - name: Deploy to Web Server
+        uses: appleboy/scp-action@v0.1.4
+        with:
+          host: ${{ secrets.WEB_SERVER_HOST }}
+          username: ${{ secrets.WEB_SERVER_USER }}
+          key: ${{ secrets.WEB_SERVER_SSH_KEY }}
+          source: "deploy/*"
+          target: "${{ env.DEPLOY_PATH }}/releases/${{ github.sha }}"
+          strip_components: 1
+
+      - name: Activate release
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.WEB_SERVER_HOST }}
+          username: ${{ secrets.WEB_SERVER_USER }}
+          key: ${{ secrets.WEB_SERVER_SSH_KEY }}
+          script: |
+            cd ${{ env.DEPLOY_PATH }}
+
+            # Save current release for potential rollback
+            if [ -L current ]; then
+              PREVIOUS_RELEASE=$(readlink current)
+              echo "$PREVIOUS_RELEASE" > .previous_release
+              echo "Saved previous release: $PREVIOUS_RELEASE"
+            fi
+
+            # Create symlink to new release
+            ln -sfn releases/${{ github.sha }} current
+
+            # Reload Nginx to clear cache
+            sudo nginx -t && sudo systemctl reload nginx
+
+            # Keep only last 5 releases
+            cd ${{ env.DEPLOY_PATH }}/releases
+            ls -t | tail -n +6 | xargs -r rm -rf
+
+      - name: Health check
+        id: health_check
+        continue-on-error: true
+        run: |
+          sleep 3
+          # Retry health check up to 3 times
+          for i in 1 2 3; do
+            if curl -sf https://stephen.taipei > /dev/null; then
+              echo "stephen.taipei is healthy!"
+              exit 0
+            fi
+            echo "Health check attempt $i failed, retrying..."
+            sleep 3
+          done
+          exit 1
+
+      - name: Rollback on failure
+        if: steps.health_check.outcome == 'failure'
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.WEB_SERVER_HOST }}
+          username: ${{ secrets.WEB_SERVER_USER }}
+          key: ${{ secrets.WEB_SERVER_SSH_KEY }}
+          script: |
+            cd ${{ env.DEPLOY_PATH }}
+
+            if [ -f .previous_release ]; then
+              PREVIOUS_RELEASE=$(cat .previous_release)
+              echo "Rolling back to: $PREVIOUS_RELEASE"
+
+              # Restore previous release
+              ln -sfn "$PREVIOUS_RELEASE" current
+
+              # Reload Nginx
+              sudo nginx -t && sudo systemctl reload nginx
+
+              echo "Rollback completed!"
+            else
+              echo "No previous release found for rollback!"
+              exit 1
+            fi
+
+      - name: Fail workflow if health check failed
+        if: steps.health_check.outcome == 'failure'
+        run: |
+          echo "Deployment failed health check and was rolled back"
+          exit 1
+
+  # Optional: Commit submodule updates back to repo
+  update-submodule-refs:
+    needs: deploy
+    runs-on: ubuntu-latest
+    if: ${{ github.event.inputs.update_submodules != 'false' }}
+    steps:
+      - name: Checkout code with submodules
+        uses: actions/checkout@v4.2.2
+        with:
+          submodules: recursive
+          fetch-depth: 0
+          token: ${{ secrets.GH_PAT }}
+
+      - name: Update and commit submodule references
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git submodule update --remote --merge
+
+          if [ -n "$(git status --porcelain)" ]; then
+            git add -A
+            git commit -m "chore: update submodule references
+
+            🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+            Co-Authored-By: GitHub Actions <github-actions[bot]@users.noreply.github.com>"
+            git push
+            echo "Submodule references updated and pushed"
+          else
+            echo "No submodule changes to commit"
+          fi

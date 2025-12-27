@@ -26,7 +26,7 @@ const Contact = () => {
       // For now, open mailto link as fallback
       const subject = encodeURIComponent(`Contact from ${formState.name}`);
       const body = encodeURIComponent(`Name: ${formState.name}\nEmail: ${formState.email}\n\nMessage:\n${formState.message}`);
-      window.location.href = `mailto:contact@stephen.taipei?subject=${subject}&body=${body}`;
+      window.location.href = `mailto:support@stephen.taipei?subject=${subject}&body=${body}`;
 
       setSubmitStatus('success');
       setFormState({ name: '', email: '', message: '' });
@@ -58,8 +58,8 @@ const Contact = () => {
                 </div>
                 <div>
                   <p className="text-sm text-gray-500 font-medium">{t.contact.email}</p>
-                  <a href="mailto:contact@stephen.taipei" className="text-gray-900 font-semibold hover:text-primary transition-colors">
-                    contact@stephen.taipei
+                  <a href="mailto:support@stephen.taipei" className="text-gray-900 font-semibold hover:text-primary transition-colors">
+                    support@stephen.taipei
                   </a>
                 </div>
               </div>
@@ -152,7 +152,7 @@ const Contact = () => {
                 <div className="flex items-center gap-2 p-3 bg-red-50 text-red-700 rounded-lg">
                   <AlertCircle className="w-5 h-5" />
                   <span className="text-sm font-medium">
-                    {isChinese ? '發送失敗，請直接發送郵件至 contact@stephen.taipei' : 'Failed to send. Please email directly to contact@stephen.taipei'}
+                    {isChinese ? '發送失敗，請直接發送郵件至 support@stephen.taipei' : 'Failed to send. Please email directly to support@stephen.taipei'}
                   </span>
                 </div>
               )}
