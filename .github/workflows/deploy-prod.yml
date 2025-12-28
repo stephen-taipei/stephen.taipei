@@ -196,7 +196,8 @@ jobs:
   update-submodule-refs:
     needs: deploy
     runs-on: ubuntu-latest
-    if: ${{ github.event.inputs.update_submodules != 'false' }}
+    # 預設執行，除非明確設定 update_submodules=false
+    if: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.update_submodules != 'false' }}
     steps:
       - name: Checkout code with submodules
         uses: actions/checkout@v4.2.2
