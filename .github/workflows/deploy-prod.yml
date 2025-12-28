@@ -35,6 +35,8 @@ jobs:
       - name: Update submodules to latest
         if: ${{ github.event.inputs.update_submodules != 'false' }}
         run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git submodule update --remote --merge
 
           # Check if there are changes
