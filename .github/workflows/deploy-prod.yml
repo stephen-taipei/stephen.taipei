@@ -138,7 +138,6 @@ jobs:
           target: "${{ env.DEPLOY_PATH }}"
           strip_components: 1
           overwrite: true
-          rm: true
 
       - name: Reload Nginx
         uses: appleboy/ssh-action@v1.2.0
