@@ -12,6 +12,11 @@ on:
         default: true
         type: boolean
 
+# 同一分支只允許一個 workflow 執行，新的會取消舊的
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 # 使用 GITHUB_TOKEN 而非 PAT
 permissions:
   contents: write
@@ -171,12 +176,11 @@ jobs:
           exit 1
 
   # Commit submodule updates back to repo (使用 GITHUB_TOKEN)
+  # 權限從 workflow 層級繼承
   update-submodule-refs:
     needs: deploy
     runs-on: ubuntu-latest
     if: ${{ github.event.inputs.update_submodules != 'false' }}
-    permissions:
-      contents: write
     steps:
       - name: Checkout code with submodules
         uses: actions/checkout@v4.2.2
