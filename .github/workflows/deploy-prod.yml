@@ -135,8 +135,8 @@ jobs:
           username: ${{ secrets.WEB_SERVER_USER }}
           key: ${{ secrets.WEB_SERVER_SSH_KEY }}
           script: |
-            mkdir -p ${{ env.DEPLOY_PATH }}/releases
-            chmod -R u+rwX ${{ env.DEPLOY_PATH }}/releases 2>/dev/null || true
+            mkdir -p ${{ env.DEPLOY_PATH }}/releases/${{ github.sha }}
+            chmod 755 ${{ env.DEPLOY_PATH }}/releases/${{ github.sha }}
 
       - name: Deploy to Web Server
         uses: appleboy/scp-action@v0.1.4
@@ -147,6 +147,7 @@ jobs:
           source: "deploy/*"
           target: "${{ env.DEPLOY_PATH }}/releases/${{ github.sha }}"
           strip_components: 1
+          overwrite: true
 
       - name: Activate release
         uses: appleboy/ssh-action@v1.2.0
