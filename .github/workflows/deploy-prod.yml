@@ -37,7 +37,7 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git submodule update --remote --merge
+          git submodule update --remote --checkout --force
 
           # Check if there are changes
           if [ -n "$(git status --porcelain)" ]; then
@@ -242,7 +242,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          git submodule update --remote --merge
+          git submodule update --remote --checkout --force
 
           if [ -n "$(git status --porcelain)" ]; then
             git add -A
