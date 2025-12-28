@@ -88,5 +88,8 @@ jobs:
   build-and-deploy:
     needs: check-updates
     if: needs.check-updates.outputs.has_updates == 'true'
+    permissions:
+      contents: write
+      actions: read
     uses: ./.github/workflows/deploy-prod.yml
     secrets: inherit
