@@ -113,7 +113,7 @@ jobs:
 
       - name: Regenerate tools registry
         working-directory: stephen-taipei-react
-        run: node scripts/generateToolsRegistry.cjs
+        run: node scripts/generateToolsRegistry.cjs --registry-only
 
       - name: Build main project
         working-directory: stephen-taipei-react
