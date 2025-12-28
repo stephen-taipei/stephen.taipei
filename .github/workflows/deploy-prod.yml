@@ -133,16 +133,28 @@ jobs:
           name: stephen-taipei-build
           path: ./deploy
 
-      - name: Deploy to Web Server
+      - name: Upload to temp directory
         uses: appleboy/scp-action@v0.1.4
         with:
           host: ${{ secrets.WEB_SERVER_HOST }}
           username: ${{ secrets.WEB_SERVER_USER }}
           key: ${{ secrets.WEB_SERVER_SSH_KEY }}
           source: "deploy/*"
-          target: "${{ env.DEPLOY_PATH }}"
+          target: "/tmp/stephen-taipei-deploy"
           strip_components: 1
           overwrite: true
+          rm: true
+
+      - name: Deploy with correct permissions
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.WEB_SERVER_HOST }}
+          username: ${{ secrets.WEB_SERVER_USER }}
+          key: ${{ secrets.WEB_SERVER_SSH_KEY }}
+          script: |
+            sudo rsync -av --delete /tmp/stephen-taipei-deploy/ ${{ env.DEPLOY_PATH }}/
+            sudo chown -R www-data:www-data ${{ env.DEPLOY_PATH }}
+            rm -rf /tmp/stephen-taipei-deploy
 
       - name: Reload Nginx
         uses: appleboy/ssh-action@v1.2.0
