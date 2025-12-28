@@ -136,7 +136,7 @@ jobs:
           key: ${{ secrets.WEB_SERVER_SSH_KEY }}
           script: |
             mkdir -p ${{ env.DEPLOY_PATH }}/releases
-            chmod -R u+rwX ${{ env.DEPLOY_PATH }}
+            chmod -R u+rwX ${{ env.DEPLOY_PATH }}/releases 2>/dev/null || true
 
       - name: Deploy to Web Server
         uses: appleboy/scp-action@v0.1.4
