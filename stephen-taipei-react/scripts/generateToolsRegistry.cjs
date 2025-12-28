@@ -763,6 +763,13 @@ export function getTotalToolsCount() {
 
 generateRegistry();
 
+// Check if we should skip build and deploy (for CI/CD)
+const registryOnly = process.argv.includes('--registry-only') || process.env.REGISTRY_ONLY === 'true';
+if (registryOnly) {
+  console.log('\n--- Registry only mode, skipping build and deploy ---');
+  process.exit(0);
+}
+
 // Run build and deploy
 console.log('\n--- Running npm run build ---');
 try {
