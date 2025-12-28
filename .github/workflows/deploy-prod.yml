@@ -128,16 +128,6 @@ jobs:
           name: stephen-taipei-build
           path: ./deploy
 
-      - name: Ensure deploy path exists
-        uses: appleboy/ssh-action@v1.2.0
-        with:
-          host: ${{ secrets.WEB_SERVER_HOST }}
-          username: ${{ secrets.WEB_SERVER_USER }}
-          key: ${{ secrets.WEB_SERVER_SSH_KEY }}
-          script: |
-            mkdir -p ${{ env.DEPLOY_PATH }}/releases/${{ github.sha }}
-            chmod 755 ${{ env.DEPLOY_PATH }}/releases/${{ github.sha }}
-
       - name: Deploy to Web Server
         uses: appleboy/scp-action@v0.1.4
         with:
@@ -145,35 +135,19 @@ jobs:
           username: ${{ secrets.WEB_SERVER_USER }}
           key: ${{ secrets.WEB_SERVER_SSH_KEY }}
           source: "deploy/*"
-          target: "${{ env.DEPLOY_PATH }}/releases/${{ github.sha }}"
+          target: "${{ env.DEPLOY_PATH }}"
           strip_components: 1
           overwrite: true
+          rm: true
 
-      - name: Activate release
+      - name: Reload Nginx
         uses: appleboy/ssh-action@v1.2.0
         with:
           host: ${{ secrets.WEB_SERVER_HOST }}
           username: ${{ secrets.WEB_SERVER_USER }}
           key: ${{ secrets.WEB_SERVER_SSH_KEY }}
           script: |
-            cd ${{ env.DEPLOY_PATH }}
-
-            # Save current release for potential rollback
-            if [ -L current ]; then
-              PREVIOUS_RELEASE=$(readlink current)
-              echo "$PREVIOUS_RELEASE" > .previous_release
-              echo "Saved previous release: $PREVIOUS_RELEASE"
-            fi
-
-            # Create symlink to new release
-            ln -sfn releases/${{ github.sha }} current
-
-            # Reload Nginx to clear cache
             sudo nginx -t && sudo systemctl reload nginx
-
-            # Keep only last 5 releases
-            cd ${{ env.DEPLOY_PATH }}/releases
-            ls -t | tail -n +6 | xargs -r rm -rf
 
       - name: Health check
         id: health_check
@@ -191,36 +165,10 @@ jobs:
           done
           exit 1
 
-      - name: Rollback on failure
-        if: steps.health_check.outcome == 'failure'
-        uses: appleboy/ssh-action@v1.2.0
-        with:
-          host: ${{ secrets.WEB_SERVER_HOST }}
-          username: ${{ secrets.WEB_SERVER_USER }}
-          key: ${{ secrets.WEB_SERVER_SSH_KEY }}
-          script: |
-            cd ${{ env.DEPLOY_PATH }}
-
-            if [ -f .previous_release ]; then
-              PREVIOUS_RELEASE=$(cat .previous_release)
-              echo "Rolling back to: $PREVIOUS_RELEASE"
-
-              # Restore previous release
-              ln -sfn "$PREVIOUS_RELEASE" current
-
-              # Reload Nginx
-              sudo nginx -t && sudo systemctl reload nginx
-
-              echo "Rollback completed!"
-            else
-              echo "No previous release found for rollback!"
-              exit 1
-            fi
-
       - name: Fail workflow if health check failed
         if: steps.health_check.outcome == 'failure'
         run: |
-          echo "Deployment failed health check and was rolled back"
+          echo "Deployment failed health check"
           exit 1
 
   # Commit submodule updates back to repo (使用 GITHUB_TOKEN)
