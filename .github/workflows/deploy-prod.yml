@@ -146,20 +146,22 @@ jobs:
           script: |
             # Ensure deploy directory exists with proper permissions
             sudo mkdir -p ${{ env.DEPLOY_PATH }}
-            sudo chmod 777 ${{ env.DEPLOY_PATH }}
+            sudo chmod 755 ${{ env.DEPLOY_PATH }}
 
-            # Clean old files but keep directory structure
+            # Clean old files - force remove with proper permission handling
+            sudo chmod -R u+w ${{ env.DEPLOY_PATH }}/assets 2>/dev/null || true
             sudo find ${{ env.DEPLOY_PATH }}/assets -type f -delete 2>/dev/null || true
+            sudo chmod -R u+w ${{ env.DEPLOY_PATH }}/open-source 2>/dev/null || true
             sudo find ${{ env.DEPLOY_PATH }}/open-source -type f -delete 2>/dev/null || true
             # Remove empty directories in open-source
             sudo find ${{ env.DEPLOY_PATH }}/open-source -type d -empty -delete 2>/dev/null || true
 
-            # Ensure subdirectories have proper permissions for scp
-            sudo chmod 777 ${{ env.DEPLOY_PATH }} 2>/dev/null || true
+            # Ensure subdirectories have proper permissions for extraction
+            sudo chmod 755 ${{ env.DEPLOY_PATH }} 2>/dev/null || true
             sudo mkdir -p ${{ env.DEPLOY_PATH }}/assets 2>/dev/null || true
-            sudo chmod 777 ${{ env.DEPLOY_PATH }}/assets 2>/dev/null || true
+            sudo chmod 755 ${{ env.DEPLOY_PATH }}/assets 2>/dev/null || true
             sudo mkdir -p ${{ env.DEPLOY_PATH }}/open-source 2>/dev/null || true
-            sudo chmod 777 ${{ env.DEPLOY_PATH }}/open-source 2>/dev/null || true
+            sudo chmod 755 ${{ env.DEPLOY_PATH }}/open-source 2>/dev/null || true
 
             echo "Old assets cleaned and permissions set"
 
@@ -173,6 +175,19 @@ jobs:
           target: ${{ env.DEPLOY_PATH }}
           strip_components: 1
           overwrite: true
+          command_timeout: 10m
+
+      - name: Fix permissions after deployment
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.WEB_SERVER_HOST }}
+          username: ${{ secrets.WEB_SERVER_USER }}
+          key: ${{ secrets.WEB_SERVER_SSH_KEY }}
+          script: |
+            # Fix permissions on all deployed files
+            sudo find ${{ env.DEPLOY_PATH }} -type f -exec chmod 644 {} \;
+            sudo find ${{ env.DEPLOY_PATH }} -type d -exec chmod 755 {} \;
+            echo "Permissions fixed on deployed files"
 
       - name: Verify deployment
         uses: appleboy/ssh-action@v1.2.0
