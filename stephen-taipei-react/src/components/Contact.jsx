@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Mail, Github, Linkedin, MapPin, Send, CheckCircle, AlertCircle } from 'lucide-react';
+import { Mail, Github, MapPin, Send, CheckCircle, AlertCircle } from 'lucide-react';
 import { useLanguage } from '../i18n/LanguageContext';
 
 const Contact = () => {
@@ -76,22 +76,13 @@ const Contact = () => {
 
               <div className="flex gap-4 pt-4">
                 <a
-                  href="https://github.com/tw-stephen"
+                  href="https://github.com/stephen-taipei"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-10 h-10 border border-gray-200 rounded-full flex items-center justify-center text-gray-600 hover:bg-gray-50 hover:text-primary transition-colors"
                   aria-label="GitHub Profile"
                 >
                   <Github className="w-5 h-5" />
-                </a>
-                <a
-                  href="https://www.linkedin.com/in/stephen-chuang-taipei/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-10 h-10 border border-gray-200 rounded-full flex items-center justify-center text-gray-600 hover:bg-gray-50 hover:text-primary transition-colors"
-                  aria-label="LinkedIn Profile"
-                >
-                  <Linkedin className="w-5 h-5" />
                 </a>
               </div>
             </div>
