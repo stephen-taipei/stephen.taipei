@@ -137,20 +137,20 @@ jobs:
           name: stephen-taipei-build
           path: ./deploy
 
-      - name: Clean old assets and ensure permissions
+      - name: Prepare deploy directory with open permissions
         uses: appleboy/ssh-action@v1.2.0
         with:
           host: ${{ secrets.WEB_SERVER_HOST }}
           username: ${{ secrets.WEB_SERVER_USER }}
           key: ${{ secrets.WEB_SERVER_SSH_KEY }}
           script: |
-            # Completely remove deploy directory to avoid all permission conflicts
-            sudo rm -rf ${{ env.DEPLOY_PATH }} 2>/dev/null || true
-            # Create directory but don't set restrictive permissions - let tar create it
+            # Ensure deploy directory exists and is world-writable
             sudo mkdir -p ${{ env.DEPLOY_PATH }}
-            # Give deploy user full ownership
-            sudo chown $USER:$USER ${{ env.DEPLOY_PATH }}
-            echo "Deploy directory cleaned and prepared for deployment"
+            sudo chmod 777 ${{ env.DEPLOY_PATH }}
+            # Make all existing files writable to allow tar to overwrite them
+            sudo find ${{ env.DEPLOY_PATH }} -type f -exec chmod 666 {} \; 2>/dev/null || true
+            sudo find ${{ env.DEPLOY_PATH }} -type d -exec chmod 777 {} \; 2>/dev/null || true
+            echo "Deploy directory prepared with open permissions"
 
       - name: Deploy to server
         uses: appleboy/scp-action@v0.1.4
@@ -163,7 +163,6 @@ jobs:
           strip_components: 1
           overwrite: true
           command_timeout: 10m
-          rm: true
 
       - name: Fix permissions after deployment
         uses: appleboy/ssh-action@v1.2.0
