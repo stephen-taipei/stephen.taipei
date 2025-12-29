@@ -137,19 +137,28 @@ jobs:
           name: stephen-taipei-build
           path: ./deploy
 
-      - name: Clean old assets
+      - name: Clean old assets and ensure permissions
         uses: appleboy/ssh-action@v1.2.0
         with:
           host: ${{ secrets.WEB_SERVER_HOST }}
           username: ${{ secrets.WEB_SERVER_USER }}
           key: ${{ secrets.WEB_SERVER_SSH_KEY }}
           script: |
+            # Ensure deploy directory exists with proper permissions
+            mkdir -p ${{ env.DEPLOY_PATH }}
+            chmod 755 ${{ env.DEPLOY_PATH }}
+
             # Clean old files but keep directory structure
             find ${{ env.DEPLOY_PATH }}/assets -type f -delete 2>/dev/null || true
             find ${{ env.DEPLOY_PATH }}/open-source -type f -delete 2>/dev/null || true
             # Remove empty directories in open-source
             find ${{ env.DEPLOY_PATH }}/open-source -type d -empty -delete 2>/dev/null || true
-            echo "Old assets cleaned"
+
+            # Ensure subdirectories have proper permissions
+            chmod 755 ${{ env.DEPLOY_PATH }}/assets 2>/dev/null || true
+            chmod 755 ${{ env.DEPLOY_PATH }}/open-source 2>/dev/null || true
+
+            echo "Old assets cleaned and permissions set"
 
       - name: Deploy to server
         uses: appleboy/scp-action@v0.1.4
