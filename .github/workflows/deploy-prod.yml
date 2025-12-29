@@ -148,22 +148,17 @@ jobs:
             sudo mkdir -p ${{ env.DEPLOY_PATH }}
             sudo chmod 755 ${{ env.DEPLOY_PATH }}
 
-            # Clean old files - force remove with proper permission handling
-            sudo chmod -R u+w ${{ env.DEPLOY_PATH }}/assets 2>/dev/null || true
-            sudo find ${{ env.DEPLOY_PATH }}/assets -type f -delete 2>/dev/null || true
-            sudo chmod -R u+w ${{ env.DEPLOY_PATH }}/open-source 2>/dev/null || true
-            sudo find ${{ env.DEPLOY_PATH }}/open-source -type f -delete 2>/dev/null || true
-            # Remove empty directories in open-source
-            sudo find ${{ env.DEPLOY_PATH }}/open-source -type d -empty -delete 2>/dev/null || true
+            # Completely remove old directories to avoid permission issues during extraction
+            sudo rm -rf ${{ env.DEPLOY_PATH }}/assets 2>/dev/null || true
+            sudo rm -rf ${{ env.DEPLOY_PATH }}/open-source 2>/dev/null || true
 
-            # Ensure subdirectories have proper permissions for extraction
-            sudo chmod 755 ${{ env.DEPLOY_PATH }} 2>/dev/null || true
-            sudo mkdir -p ${{ env.DEPLOY_PATH }}/assets 2>/dev/null || true
-            sudo chmod 755 ${{ env.DEPLOY_PATH }}/assets 2>/dev/null || true
-            sudo mkdir -p ${{ env.DEPLOY_PATH }}/open-source 2>/dev/null || true
-            sudo chmod 755 ${{ env.DEPLOY_PATH }}/open-source 2>/dev/null || true
+            # Recreate clean directories with proper permissions for extraction
+            sudo mkdir -p ${{ env.DEPLOY_PATH }}/assets
+            sudo chmod 755 ${{ env.DEPLOY_PATH }}/assets
+            sudo mkdir -p ${{ env.DEPLOY_PATH }}/open-source
+            sudo chmod 755 ${{ env.DEPLOY_PATH }}/open-source
 
-            echo "Old assets cleaned and permissions set"
+            echo "Old assets removed and fresh directories created"
 
       - name: Deploy to server
         uses: appleboy/scp-action@v0.1.4
