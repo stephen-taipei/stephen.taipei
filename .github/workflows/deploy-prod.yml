@@ -145,14 +145,12 @@ jobs:
           key: ${{ secrets.WEB_SERVER_SSH_KEY }}
           script: |
             # Completely remove deploy directory to avoid all permission conflicts
-            # This ensures a clean slate for tar extraction
             sudo rm -rf ${{ env.DEPLOY_PATH }} 2>/dev/null || true
-
-            # Recreate directory with proper permissions
+            # Create directory but don't set restrictive permissions - let tar create it
             sudo mkdir -p ${{ env.DEPLOY_PATH }}
-            sudo chmod 755 ${{ env.DEPLOY_PATH }}
-
-            echo "Deploy directory completely cleaned and prepared"
+            # Give deploy user full ownership
+            sudo chown $USER:$USER ${{ env.DEPLOY_PATH }}
+            echo "Deploy directory cleaned and prepared for deployment"
 
       - name: Deploy to server
         uses: appleboy/scp-action@v0.1.4
@@ -165,6 +163,7 @@ jobs:
           strip_components: 1
           overwrite: true
           command_timeout: 10m
+          rm: true
 
       - name: Fix permissions after deployment
         uses: appleboy/ssh-action@v1.2.0
