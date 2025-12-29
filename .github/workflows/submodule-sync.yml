@@ -59,13 +59,14 @@ jobs:
             # Parse submodule path
             path=$(echo "$line" | awk '{print $2}')
 
+            # Get target branch from .gitmodules or default to main
+            target_branch=$(git config --file .gitmodules submodule."$path".branch || echo "main")
+            echo "  Checking $path on branch $target_branch..."
+
             # Get current and latest commit
             cd "$path"
             current=$(git rev-parse HEAD)
-
-            # Get default branch
-            default_branch=$(git remote show origin | grep 'HEAD branch' | awk '{print $NF}')
-            latest=$(git rev-parse "origin/$default_branch" 2>/dev/null || git rev-parse origin/main 2>/dev/null || git rev-parse origin/master)
+            latest=$(git rev-parse "origin/$target_branch")
 
             if [ "$current" != "$latest" ]; then
               echo "  $path: $current -> $latest"

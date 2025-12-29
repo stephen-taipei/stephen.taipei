@@ -400,7 +400,11 @@ const categoryConfigs = {
     hasSubCategories: true,
     subCategories: {
       'horror': { name: 'Horror', nameTw: '恐怖' },
-      'puzzle': { name: 'Puzzle', nameTw: '益智' }
+      'puzzle': { name: 'Puzzle', nameTw: '益智' },
+      'arcade': { name: 'Arcade', nameTw: '街機' },
+      'action': { name: 'Action', nameTw: '動作' },
+      'card': { name: 'Card', nameTw: '卡牌' },
+      'runner': { name: 'Runner', nameTw: '跑酷' }
     },
     parseToolDir: (dirname) => {
       // Match pattern like "game-001-tetris" or "game-1000-ultimate-horror"

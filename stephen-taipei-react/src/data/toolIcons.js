@@ -153,6 +153,10 @@ const subCategoryIcons = {
   // Games
   'horror': EyeOff,
   'puzzle': Puzzle,
+  'arcade': Gamepad2,
+  'action': Zap,
+  'card': CreditCard,
+  'runner': Navigation,
 
   // Mini tools
   '01-text': Type,
@@ -242,6 +246,10 @@ export function getSubCategoryColor(subCategory, categoryId) {
     // Reds
     '11-authentication': { bg: 'bg-red-50', text: 'text-red-600' },
     'horror': { bg: 'bg-red-50', text: 'text-red-600' },
+    'arcade': { bg: 'bg-indigo-50', text: 'text-indigo-600' },
+    'action': { bg: 'bg-orange-50', text: 'text-orange-600' },
+    'card': { bg: 'bg-blue-50', text: 'text-blue-600' },
+    'runner': { bg: 'bg-emerald-50', text: 'text-emerald-600' },
 
     // Roses
     '12-cards': { bg: 'bg-rose-50', text: 'text-rose-600' },

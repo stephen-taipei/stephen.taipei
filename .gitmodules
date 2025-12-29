@@ -1,32 +1,32 @@
 [submodule "stephen-taipei-react/src/tools/awesome-ai-local-tools-1000"]
 	path = stephen-taipei-react/src/tools/awesome-ai-local-tools-1000
 	url = https://github.com/stephen-taipei/awesome-ai-local-tools-1000.git
-	branch = dev
+	branch = main
 [submodule "stephen-taipei-react/src/tools/awesome-chrome-extensions-1000"]
 	path = stephen-taipei-react/src/tools/awesome-chrome-extensions-1000
 	url = https://github.com/stephen-taipei/awesome-chrome-extensions-1000.git
-	branch = dev
+	branch = main
 [submodule "stephen-taipei-react/src/tools/awesome-free-games-1000"]
 	path = stephen-taipei-react/src/tools/awesome-free-games-1000
 	url = https://github.com/stephen-taipei/awesome-free-games-1000.git
-	branch = dev
+	branch = main
 [submodule "stephen-taipei-react/src/tools/awesome-free-mini-tools-1000"]
 	path = stephen-taipei-react/src/tools/awesome-free-mini-tools-1000
 	url = https://github.com/stephen-taipei/awesome-free-mini-tools-1000.git
-	branch = dev
+	branch = main
 [submodule "stephen-taipei-react/src/tools/awesome-tailwind-ui-templates-1000"]
 	path = stephen-taipei-react/src/tools/awesome-tailwind-ui-templates-1000
 	url = https://github.com/stephen-taipei/awesome-tailwind-ui-templates-1000.git
-	branch = dev
+	branch = main
 [submodule "stephen-taipei-react/src/tools/awesome-wasm-tools-1000"]
 	path = stephen-taipei-react/src/tools/awesome-wasm-tools-1000
 	url = https://github.com/stephen-taipei/awesome-wasm-tools-1000.git
-	branch = dev
+	branch = main
 [submodule "stephen-taipei-react/src/tools/awesome-web-toys-1000"]
 	path = stephen-taipei-react/src/tools/awesome-web-toys-1000
 	url = https://github.com/stephen-taipei/awesome-web-toys-1000.git
-	branch = dev
+	branch = main
 [submodule "stephen-taipei-react/src/tools/awesome-web-workers-examples-1000"]
 	path = stephen-taipei-react/src/tools/awesome-web-workers-examples-1000
 	url = https://github.com/stephen-taipei/awesome-web-workers-examples-1000.git
-	branch = dev
+	branch = main
