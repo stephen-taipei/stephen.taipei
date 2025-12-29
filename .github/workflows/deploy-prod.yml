@@ -144,22 +144,15 @@ jobs:
           username: ${{ secrets.WEB_SERVER_USER }}
           key: ${{ secrets.WEB_SERVER_SSH_KEY }}
           script: |
-            # Ensure deploy directory exists with proper permissions
+            # Completely remove deploy directory to avoid all permission conflicts
+            # This ensures a clean slate for tar extraction
+            sudo rm -rf ${{ env.DEPLOY_PATH }} 2>/dev/null || true
+
+            # Recreate directory with proper permissions
             sudo mkdir -p ${{ env.DEPLOY_PATH }}
             sudo chmod 755 ${{ env.DEPLOY_PATH }}
 
-            # Completely remove old directories to avoid permission issues during extraction
-            sudo rm -rf ${{ env.DEPLOY_PATH }}/assets 2>/dev/null || true
-            sudo rm -rf ${{ env.DEPLOY_PATH }}/open-source 2>/dev/null || true
-
-            # Recreate clean directories with world-writable permissions
-            # This ensures tar extraction works regardless of user context
-            sudo mkdir -p ${{ env.DEPLOY_PATH }}/assets
-            sudo mkdir -p ${{ env.DEPLOY_PATH }}/open-source
-            sudo chmod 777 ${{ env.DEPLOY_PATH }}/assets
-            sudo chmod 777 ${{ env.DEPLOY_PATH }}/open-source
-
-            echo "Old assets removed and directories prepared for deployment"
+            echo "Deploy directory completely cleaned and prepared"
 
       - name: Deploy to server
         uses: appleboy/scp-action@v0.1.4
