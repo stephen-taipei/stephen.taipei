@@ -137,38 +137,30 @@ jobs:
           name: stephen-taipei-build
           path: ./deploy
 
-      - name: Upload to temp directory
+      - name: Deploy to server
         uses: appleboy/scp-action@v0.1.4
         with:
           host: ${{ secrets.WEB_SERVER_HOST }}
           username: ${{ secrets.WEB_SERVER_USER }}
           key: ${{ secrets.WEB_SERVER_SSH_KEY }}
           source: "deploy/*"
-          target: "/tmp/st-build-${{ github.run_id }}"
+          target: ${{ env.DEPLOY_PATH }}
           strip_components: 1
           overwrite: true
           rm: true
 
-      - name: Verify upload and deploy
+      - name: Verify deployment
         uses: appleboy/ssh-action@v1.2.0
         with:
           host: ${{ secrets.WEB_SERVER_HOST }}
           username: ${{ secrets.WEB_SERVER_USER }}
           key: ${{ secrets.WEB_SERVER_SSH_KEY }}
           script: |
-            echo "=== Temp directory contents ==="
-            ls -la /tmp/st-build-${{ github.run_id }}/ | head -20
-            echo ""
-            echo "=== Assets in temp ==="
-            ls -la /tmp/st-build-${{ github.run_id }}/assets/ | head -10
-            echo ""
-            echo "=== Running rsync ==="
-            sudo rsync -av --delete /tmp/st-build-${{ github.run_id }}/ ${{ env.DEPLOY_PATH }}/
+            echo "=== Deployed files ==="
+            ls -la ${{ env.DEPLOY_PATH }}/ | head -15
             echo ""
             echo "=== Deployed assets ==="
-            ls -la ${{ env.DEPLOY_PATH }}/assets/ | head -10
-            sudo chown -R www-data:www-data ${{ env.DEPLOY_PATH }}
-            rm -rf /tmp/st-build-${{ github.run_id }}
+            ls -la ${{ env.DEPLOY_PATH }}/assets/ | grep -E "main-|tools-data" | head -5
 
       - name: Reload Nginx
         uses: appleboy/ssh-action@v1.2.0
