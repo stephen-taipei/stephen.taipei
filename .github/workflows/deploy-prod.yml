@@ -137,6 +137,18 @@ jobs:
           name: stephen-taipei-build
           path: ./deploy
 
+      - name: Clean old assets
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.WEB_SERVER_HOST }}
+          username: ${{ secrets.WEB_SERVER_USER }}
+          key: ${{ secrets.WEB_SERVER_SSH_KEY }}
+          script: |
+            # Clean old versioned assets to prevent accumulation
+            rm -rf ${{ env.DEPLOY_PATH }}/assets/*
+            rm -rf ${{ env.DEPLOY_PATH }}/open-source/*
+            echo "Old assets cleaned"
+
       - name: Deploy to server
         uses: appleboy/scp-action@v0.1.4
         with:
@@ -147,7 +159,6 @@ jobs:
           target: ${{ env.DEPLOY_PATH }}
           strip_components: 1
           overwrite: true
-          rm: true
 
       - name: Verify deployment
         uses: appleboy/ssh-action@v1.2.0
