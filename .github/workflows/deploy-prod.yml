@@ -152,14 +152,12 @@ jobs:
             sudo rm -rf ${{ env.DEPLOY_PATH }}/assets 2>/dev/null || true
             sudo rm -rf ${{ env.DEPLOY_PATH }}/open-source 2>/dev/null || true
 
-            # Recreate clean directories and ensure current user owns them
-            # This allows scp to extract files without permission issues
+            # Recreate clean directories with world-writable permissions
+            # This ensures tar extraction works regardless of user context
             sudo mkdir -p ${{ env.DEPLOY_PATH }}/assets
             sudo mkdir -p ${{ env.DEPLOY_PATH }}/open-source
-            sudo chown -R $USER:$USER ${{ env.DEPLOY_PATH }}/assets
-            sudo chown -R $USER:$USER ${{ env.DEPLOY_PATH }}/open-source
-            chmod 755 ${{ env.DEPLOY_PATH }}/assets
-            chmod 755 ${{ env.DEPLOY_PATH }}/open-source
+            sudo chmod 777 ${{ env.DEPLOY_PATH }}/assets
+            sudo chmod 777 ${{ env.DEPLOY_PATH }}/open-source
 
             echo "Old assets removed and directories prepared for deployment"
 
