@@ -144,13 +144,13 @@ jobs:
           username: ${{ secrets.WEB_SERVER_USER }}
           key: ${{ secrets.WEB_SERVER_SSH_KEY }}
           script: |
-            # Ensure deploy directory exists and is world-writable
+            # Ensure deploy directory exists
             sudo mkdir -p ${{ env.DEPLOY_PATH }}
-            sudo chmod 777 ${{ env.DEPLOY_PATH }}
-            # Make all existing files writable to allow tar to overwrite them
-            sudo find ${{ env.DEPLOY_PATH }} -type f -exec chmod 666 {} \; 2>/dev/null || true
-            sudo find ${{ env.DEPLOY_PATH }} -type d -exec chmod 777 {} \; 2>/dev/null || true
-            echo "Deploy directory prepared with open permissions"
+            # Change ownership to the current user to allow overwriting
+            sudo chown -R $(whoami) ${{ env.DEPLOY_PATH }}
+            # Set permissions
+            sudo chmod -R 755 ${{ env.DEPLOY_PATH }}
+            echo "Deploy directory prepared with ownership for $(whoami)"
 
       - name: Deploy to server
         uses: appleboy/scp-action@v0.1.4
