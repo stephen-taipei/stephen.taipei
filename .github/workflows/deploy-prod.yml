@@ -137,6 +137,15 @@ jobs:
           name: stephen-taipei-build
           path: ./deploy
 
+      - name: Clean temp directory
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.WEB_SERVER_HOST }}
+          username: ${{ secrets.WEB_SERVER_USER }}
+          key: ${{ secrets.WEB_SERVER_SSH_KEY }}
+          script: |
+            sudo rm -rf /tmp/stephen-taipei-deploy
+
       - name: Upload to temp directory
         uses: appleboy/scp-action@v0.1.4
         with:
