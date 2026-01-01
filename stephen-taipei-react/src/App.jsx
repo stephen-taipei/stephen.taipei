@@ -1,7 +1,7 @@
 import React, { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { LanguageProvider } from './i18n/LanguageContext';
-import { ThemeProvider } from './contexts/ThemeContext';
+import { ThemeProvider, useTheme } from './contexts/ThemeContext';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import About from './components/About';
@@ -67,22 +67,31 @@ const ToolFileRedirect = () => {
 };
 
 // Home Page Component
-const HomePage = () => (
-  <div className="min-h-screen bg-white font-sans text-gray-900 selection:bg-primary/20 selection:text-primary-dark overflow-x-hidden">
-    <Navbar />
-    <main>
-      <Hero />
-      <About />
-      <Skills />
-      <Experience />
-      <Portfolio />
-      <Tools />
-      <AwesomeApp100 />
-      <Contact />
-    </main>
-    <Footer />
-  </div>
-);
+const HomePage = () => {
+  const { isDark } = useTheme();
+
+  // Theme-aware classes
+  const bgMain = isDark ? 'bg-gray-950' : 'bg-white';
+  const textMain = isDark ? 'text-gray-100' : 'text-gray-900';
+  const selection = isDark ? 'selection:bg-blue-500/30 selection:text-blue-200' : 'selection:bg-primary/20 selection:text-primary-dark';
+
+  return (
+    <div className={`min-h-screen ${bgMain} font-sans ${textMain} ${selection} overflow-x-hidden`}>
+      <Navbar />
+      <main>
+        <Hero />
+        <About />
+        <Skills />
+        <Experience />
+        <Portfolio />
+        <Tools />
+        <AwesomeApp100 />
+        <Contact />
+      </main>
+      <Footer />
+    </div>
+  );
+};
 
 function App() {
   return (
