@@ -3,11 +3,20 @@ import { Link } from 'react-router-dom';
 import { ExternalLink, Wrench, Gamepad2, Puzzle, Palette, Cpu, Sparkles, Boxes, Zap, ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useLanguage } from '../i18n/LanguageContext';
+import { useTheme } from '../contexts/ThemeContext';
 import { getToolsByCategoryId, getTotalToolsCount } from '../data/toolsRegistry';
 
 const Tools = () => {
   const { t } = useLanguage();
+  const { isDark } = useTheme();
   const [hoveredIndex, setHoveredIndex] = useState(null);
+
+  // Theme-aware classes
+  const bgSection = isDark ? 'bg-gradient-to-b from-gray-900 to-gray-950' : 'bg-gradient-to-b from-white to-gray-50';
+  const textTitle = isDark ? 'text-gray-100' : 'text-gray-900';
+  const textDesc = isDark ? 'text-gray-400' : 'text-gray-600';
+  const bgCard = isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100';
+  const bgFeatureIcon = isDark ? 'bg-primary/20' : 'bg-primary/10';
 
   const toolCategories = [
     {
@@ -85,7 +94,7 @@ const Tools = () => {
   ];
 
   return (
-    <section id="tools" className="py-20 bg-gradient-to-b from-white to-gray-50">
+    <section id="tools" className={`py-20 ${bgSection}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <motion.div
@@ -94,13 +103,13 @@ const Tools = () => {
             transition={{ duration: 0.5 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            <h2 className={`text-3xl md:text-4xl font-bold ${textTitle} mb-4`}>
               {t.tools.title}
             </h2>
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+            <p className={`text-lg ${textDesc} max-w-3xl mx-auto`}>
               {t.tools.subtitle}
             </p>
-            <div className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-medium">
+            <div className={`mt-4 inline-flex items-center gap-2 px-4 py-2 ${bgFeatureIcon} text-primary rounded-full text-sm font-medium`}>
               <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
               {getTotalToolsCount()}+ {t.tools.toolsLabel}
             </div>
@@ -125,32 +134,32 @@ const Tools = () => {
                   to={category.path}
                   onMouseEnter={() => setHoveredIndex(index)}
                   onMouseLeave={() => setHoveredIndex(null)}
-                  className="group relative block bg-white rounded-2xl p-6 shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 overflow-hidden"
+                  className={`group relative block ${bgCard} rounded-2xl p-6 shadow-sm hover:shadow-xl transition-all duration-300 border overflow-hidden`}
                 >
                   {/* Gradient overlay on hover */}
                   <div className={`absolute inset-0 bg-gradient-to-br ${category.color} opacity-0 group-hover:opacity-5 transition-opacity duration-300`} />
 
                   {/* Icon */}
-                  <div className={`inline-flex items-center justify-center w-14 h-14 ${category.bgColor} rounded-xl mb-4 group-hover:scale-110 transition-transform duration-300`}>
+                  <div className={`inline-flex items-center justify-center w-14 h-14 ${isDark ? 'bg-opacity-20' : ''} ${category.bgColor} rounded-xl mb-4 group-hover:scale-110 transition-transform duration-300`}>
                     <Icon className={`w-7 h-7 ${category.textColor}`} />
                   </div>
 
                   {/* Title */}
-                  <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-primary transition-colors">
+                  <h3 className={`text-lg font-bold ${textTitle} mb-2 group-hover:text-primary transition-colors`}>
                     {toolData.title}
                   </h3>
 
                   {/* Description */}
-                  <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+                  <p className={`${textDesc} text-sm mb-4 line-clamp-2`}>
                     {toolData.description}
                   </p>
 
                   {/* Count badge */}
                   <div className="flex items-center justify-between">
-                    <span className={`inline-flex items-center gap-1.5 px-3 py-1 ${category.bgColor} ${category.textColor} text-sm font-semibold rounded-full`}>
+                    <span className={`inline-flex items-center gap-1.5 px-3 py-1 ${isDark ? 'bg-opacity-20' : ''} ${category.bgColor} ${category.textColor} text-sm font-semibold rounded-full`}>
                       {toolCount > 0 ? `${toolCount} ${t.tools.toolsLabel}` : '開發中'}
                     </span>
-                    <ArrowRight className="w-4 h-4 text-gray-400 group-hover:text-primary group-hover:translate-x-1 transition-all" />
+                    <ArrowRight className={`w-4 h-4 ${isDark ? 'text-gray-500' : 'text-gray-400'} group-hover:text-primary group-hover:translate-x-1 transition-all`} />
                   </div>
 
                   {/* Hover effect border */}
@@ -188,13 +197,13 @@ const Tools = () => {
         >
           {t.tools.features.map((feature, index) => (
             <div key={index} className="text-center">
-              <div className="inline-flex items-center justify-center w-12 h-12 bg-primary/10 text-primary rounded-full mb-4">
+              <div className={`inline-flex items-center justify-center w-12 h-12 ${bgFeatureIcon} text-primary rounded-full mb-4`}>
                 {index === 0 && <Sparkles className="w-6 h-6" />}
                 {index === 1 && <Zap className="w-6 h-6" />}
                 {index === 2 && <Boxes className="w-6 h-6" />}
               </div>
-              <h4 className="text-lg font-semibold text-gray-900 mb-2">{feature.title}</h4>
-              <p className="text-gray-600 text-sm">{feature.description}</p>
+              <h4 className={`text-lg font-semibold ${textTitle} mb-2`}>{feature.title}</h4>
+              <p className={`${textDesc} text-sm`}>{feature.description}</p>
             </div>
           ))}
         </motion.div>

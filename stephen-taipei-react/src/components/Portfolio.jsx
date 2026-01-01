@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { ExternalLink, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '../i18n/LanguageContext';
+import { useTheme } from '../contexts/ThemeContext';
 
 // Import project images
 import copilaMandalaThumbnail from '../assets/projects/copila-mandala.webp';
@@ -19,6 +20,17 @@ import dermatoglyphicsReportThumbnail from '../assets/projects/dermatoglyphics-r
 const Portfolio = () => {
   const [selectedProject, setSelectedProject] = useState(null);
   const { t } = useLanguage();
+  const { isDark } = useTheme();
+
+  // Theme-aware classes
+  const bgSection = isDark ? 'bg-gray-950' : 'bg-gray-50';
+  const textTitle = isDark ? 'text-gray-100' : 'text-gray-900';
+  const textDesc = isDark ? 'text-gray-400' : 'text-gray-600';
+  const bgCard = isDark ? 'bg-gray-900 border-gray-800' : 'bg-white border-gray-100';
+  const bgThumbnail = isDark ? 'bg-gray-800' : 'bg-gray-100';
+  const btnHover = isDark ? 'hover:bg-gray-700' : 'hover:bg-gray-100';
+  const bgAchievement = isDark ? 'bg-green-900/50 text-green-400' : 'bg-green-50 text-green-600';
+  const bgTech = isDark ? 'bg-gray-800 text-gray-400' : 'bg-gray-100 text-gray-600';
 
   const projectImages = [
     [copilaMandalaThumbnail, copilaMindmapThumbnail, copilaFlowchartThumbnail],
@@ -30,11 +42,11 @@ const Portfolio = () => {
   const projectColors = ['bg-cyan-600', 'bg-orange-600', 'bg-red-600', 'bg-teal-600'];
 
   return (
-    <section id="portfolio" className="py-20 bg-gray-50">
+    <section id="portfolio" className={`py-20 ${bgSection}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-3xl font-bold text-gray-900">{t.portfolio.title}</h2>
-          <p className="mt-4 text-gray-600">{t.portfolio.subtitle}</p>
+          <h2 className={`text-3xl font-bold ${textTitle}`}>{t.portfolio.title}</h2>
+          <p className={`mt-4 ${textDesc}`}>{t.portfolio.subtitle}</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -42,12 +54,12 @@ const Portfolio = () => {
             <div
               key={index}
               onClick={() => setSelectedProject({ ...project, images: projectImages[index], color: projectColors[index] })}
-              className="group relative bg-white rounded-2xl overflow-hidden hover:shadow-2xl transition-all duration-300 border border-gray-100 flex flex-col cursor-pointer"
+              className={`group relative ${bgCard} rounded-2xl overflow-hidden hover:shadow-2xl transition-all duration-300 border flex flex-col cursor-pointer`}
             >
               <div className={`h-2 ${projectColors[index]}`} />
 
               {/* Thumbnail Image */}
-              <div className="relative h-48 overflow-hidden bg-gray-100">
+              <div className={`relative h-48 overflow-hidden ${bgThumbnail}`}>
                 <img
                   src={projectImages[index][0]}
                   alt={project.title}
@@ -60,26 +72,26 @@ const Portfolio = () => {
 
               <div className="p-6 flex-1 flex flex-col">
                 <div className="flex justify-between items-start mb-3">
-                  <h3 className="text-xl font-bold text-gray-900 group-hover:text-primary transition-colors">
+                  <h3 className={`text-xl font-bold ${textTitle} group-hover:text-primary transition-colors`}>
                     {project.title}
                   </h3>
-                  <button className="p-2 hover:bg-gray-100 rounded-full transition-colors opacity-0 group-hover:opacity-100">
-                    <ExternalLink className="w-4 h-4 text-gray-500" />
+                  <button className={`p-2 ${btnHover} rounded-full transition-colors opacity-0 group-hover:opacity-100`}>
+                    <ExternalLink className={`w-4 h-4 ${isDark ? 'text-gray-400' : 'text-gray-500'}`} />
                   </button>
                 </div>
 
-                <p className="text-gray-600 mb-4">{project.desc}</p>
+                <p className={`${textDesc} mb-4`}>{project.desc}</p>
 
                 <div className="mt-auto">
                   <div className="mb-4">
-                    <p className="text-sm text-green-600 font-medium bg-green-50 px-3 py-1.5 rounded-lg inline-block">
+                    <p className={`text-sm font-medium ${bgAchievement} px-3 py-1.5 rounded-lg inline-block`}>
                       {project.achievement}
                     </p>
                   </div>
 
                   <div className="flex flex-wrap gap-2">
                     {project.tech.map((t, i) => (
-                      <span key={i} className="px-2 py-1 bg-gray-100 text-gray-600 text-xs font-medium rounded-full">
+                      <span key={i} className={`px-2 py-1 ${bgTech} text-xs font-medium rounded-full`}>
                         {t}
                       </span>
                     ))}
