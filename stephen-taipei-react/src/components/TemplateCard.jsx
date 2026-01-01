@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ExternalLink, Eye } from 'lucide-react';
@@ -84,13 +84,22 @@ const getScreenshotPath = (tool, categoryId) => {
   return null;
 };
 
-const TemplateCard = ({ tool, categoryId, index, language, viewMode = 'gallery' }) => {
+const TemplateCard = ({ tool, categoryId, index, language, viewMode = 'gallery', isDark = true }) => {
   const [imageError, setImageError] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const screenshotPath = getScreenshotPath(tool, categoryId);
   const gradient = generateGradient(tool.slug + tool.id, categoryId);
 
   const toolName = language === 'en' ? tool.name : (tool.nameTw || tool.name);
+
+  // Theme-aware classes
+  const bgCard = isDark ? 'bg-gray-800/50' : 'bg-white';
+  const bgCardHover = isDark ? 'hover:bg-gray-700/50' : 'hover:bg-gray-50';
+  const borderColor = isDark ? 'border-gray-700/50' : 'border-gray-200';
+  const borderHover = isDark ? 'hover:border-gray-600' : 'hover:border-gray-300';
+  const textPrimary = isDark ? 'text-gray-200' : 'text-gray-900';
+  const textSecondary = isDark ? 'text-gray-500' : 'text-gray-400';
+  const bgTitle = isDark ? 'bg-gray-900/50' : 'bg-gray-50';
 
   if (viewMode === 'list') {
     return (
@@ -101,7 +110,7 @@ const TemplateCard = ({ tool, categoryId, index, language, viewMode = 'gallery' 
       >
         <Link
           to={`/open-source/${categoryId}/${tool.slug}`}
-          className="group flex items-center gap-4 bg-gray-800/50 hover:bg-gray-700/50 rounded-lg p-3 transition-all duration-200 border border-gray-700/50 hover:border-gray-600"
+          className={`group flex items-center gap-4 ${bgCard} ${bgCardHover} rounded-lg p-3 transition-all duration-200 border ${borderColor} ${borderHover}`}
         >
           <div
             className="w-16 h-10 rounded-md flex-shrink-0 flex items-center justify-center text-white text-xs font-medium"
@@ -109,8 +118,8 @@ const TemplateCard = ({ tool, categoryId, index, language, viewMode = 'gallery' 
           >
             {tool.id}
           </div>
-          <span className="text-gray-200 font-medium truncate flex-1">{toolName}</span>
-          <ExternalLink className="w-4 h-4 text-gray-500 group-hover:text-gray-300 transition-colors flex-shrink-0" />
+          <span className={`${textPrimary} font-medium truncate flex-1`}>{toolName}</span>
+          <ExternalLink className={`w-4 h-4 ${textSecondary} group-hover:${isDark ? 'text-gray-300' : 'text-gray-600'} transition-colors flex-shrink-0`} />
         </Link>
       </motion.div>
     );
@@ -127,7 +136,7 @@ const TemplateCard = ({ tool, categoryId, index, language, viewMode = 'gallery' 
     >
       <Link
         to={`/open-source/${categoryId}/${tool.slug}`}
-        className="block bg-gray-800/50 rounded-xl overflow-hidden border border-gray-700/50 hover:border-gray-500/50 transition-all duration-300 hover:shadow-2xl hover:shadow-black/20"
+        className={`block ${bgCard} rounded-xl overflow-hidden border ${borderColor} ${borderHover} transition-all duration-300 hover:shadow-2xl ${isDark ? 'hover:shadow-black/20' : 'hover:shadow-gray-300/50'}`}
       >
         {/* Thumbnail Area */}
         <div className="relative aspect-[16/10] overflow-hidden">
@@ -146,7 +155,7 @@ const TemplateCard = ({ tool, categoryId, index, language, viewMode = 'gallery' 
               style={{ background: gradient }}
             >
               {/* Mock browser chrome */}
-              <div className="absolute top-0 left-0 right-0 h-6 bg-gray-900/30 flex items-center px-2 gap-1.5">
+              <div className={`absolute top-0 left-0 right-0 h-6 ${isDark ? 'bg-gray-900/30' : 'bg-black/20'} flex items-center px-2 gap-1.5`}>
                 <div className="w-2 h-2 rounded-full bg-red-400/60" />
                 <div className="w-2 h-2 rounded-full bg-yellow-400/60" />
                 <div className="w-2 h-2 rounded-full bg-green-400/60" />
@@ -164,8 +173,8 @@ const TemplateCard = ({ tool, categoryId, index, language, viewMode = 'gallery' 
           )}
 
           {/* Hover Overlay */}
-          <div className={`absolute inset-0 bg-black/60 flex items-center justify-center transition-opacity duration-200 ${isHovered ? 'opacity-100' : 'opacity-0'}`}>
-            <span className="px-4 py-2 bg-white text-gray-900 rounded-lg font-medium text-sm flex items-center gap-2 transform transition-transform duration-200 hover:scale-105">
+          <div className={`absolute inset-0 ${isDark ? 'bg-black/60' : 'bg-black/50'} flex items-center justify-center transition-opacity duration-200 ${isHovered ? 'opacity-100' : 'opacity-0'}`}>
+            <span className={`px-4 py-2 ${isDark ? 'bg-white text-gray-900' : 'bg-gray-900 text-white'} rounded-lg font-medium text-sm flex items-center gap-2 transform transition-transform duration-200 hover:scale-105`}>
               <Eye className="w-4 h-4" />
               View Template
             </span>
@@ -173,8 +182,8 @@ const TemplateCard = ({ tool, categoryId, index, language, viewMode = 'gallery' 
         </div>
 
         {/* Title Area */}
-        <div className="p-3 bg-gray-900/50">
-          <h4 className="text-gray-200 font-medium text-sm truncate group-hover:text-white transition-colors">
+        <div className={`p-3 ${bgTitle}`}>
+          <h4 className={`${textPrimary} font-medium text-sm truncate group-hover:${isDark ? 'text-white' : 'text-blue-600'} transition-colors`}>
             {toolName}
           </h4>
         </div>

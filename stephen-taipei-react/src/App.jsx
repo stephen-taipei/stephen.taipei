@@ -1,6 +1,7 @@
 import React, { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { LanguageProvider } from './i18n/LanguageContext';
+import { ThemeProvider } from './contexts/ThemeContext';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import About from './components/About';
@@ -86,25 +87,27 @@ const HomePage = () => (
 function App() {
   return (
     <LanguageProvider>
-      <Router>
-        <Suspense fallback={<PageLoader />}>
-          <Routes>
-            {/* Main Portfolio Site */}
-            <Route path="/" element={<HomePage />} />
+      <ThemeProvider>
+        <Router>
+          <Suspense fallback={<PageLoader />}>
+            <Routes>
+              {/* Main Portfolio Site */}
+              <Route path="/" element={<HomePage />} />
 
-            {/* Tools Demo Platform - Lazy loaded */}
-            <Route path="/open-source" element={<ToolsDemo />} />
-            <Route path="/open-source/:categoryId" element={<CategoryPage />} />
-            <Route path="/open-source/:categoryId/:toolSlug" element={<ToolViewer />} />
+              {/* Tools Demo Platform - Lazy loaded */}
+              <Route path="/open-source" element={<ToolsDemo />} />
+              <Route path="/open-source/:categoryId" element={<CategoryPage />} />
+              <Route path="/open-source/:categoryId/:toolSlug" element={<ToolViewer />} />
 
-            {/* Catch-all for direct tool file access */}
-            <Route path="/open-source/*" element={<ToolFileRedirect />} />
+              {/* Catch-all for direct tool file access */}
+              <Route path="/open-source/*" element={<ToolFileRedirect />} />
 
-            {/* 404 Not Found - Lazy loaded */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </Suspense>
-      </Router>
+              {/* 404 Not Found - Lazy loaded */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </Suspense>
+        </Router>
+      </ThemeProvider>
     </LanguageProvider>
   );
 }
