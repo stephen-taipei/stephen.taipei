@@ -82,8 +82,8 @@ const createShaderModule = (device, isDark) => {
         // Match Tailwind gray-950
         bgColor = vec3<f32>(0.012, 0.027, 0.071);
       } else {
-        // Light theme - soft background
-        bgColor = vec3<f32>(0.95, 0.96, 0.98);
+        // Light theme - gray-50
+        bgColor = vec3<f32>(0.98, 0.98, 0.98);
       }
 
       var color = bgColor;
@@ -101,56 +101,31 @@ const createShaderModule = (device, isDark) => {
         color3 = vec3<f32>(0.03, 0.18, 0.22);   // Deep Teal
         color4 = vec3<f32>(0.10, 0.08, 0.15);   // Dark Slate
       } else {
-        // Light theme - vibrant colors (original)
-        color1 = vec3<f32>(0.0, 0.5, 1.0);      // Electric Blue
-        color2 = vec3<f32>(0.7, 0.0, 1.0);      // Purple
-        color3 = vec3<f32>(0.0, 1.0, 0.8);      // Cyan
-        color4 = vec3<f32>(1.0, 0.2, 0.5);      // Pink
+        // Light theme - subtle blue tones only
+        color1 = vec3<f32>(0.85, 0.9, 1.0);     // Soft Blue
+        color2 = vec3<f32>(0.88, 0.92, 1.0);    // Light Blue
+        color3 = vec3<f32>(0.9, 0.94, 1.0);     // Pale Blue
+        color4 = vec3<f32>(0.92, 0.95, 1.0);    // Very Light Blue
       }
 
       // === ANIMATED GRADIENT BLOBS ===
-      var blob1Pos: vec2<f32>;
-      var blob2Pos: vec2<f32>;
-      var blob3Pos: vec2<f32>;
-      var blob4Pos: vec2<f32>;
-
-      if (isDark == 1) {
-        // Slower movement for dark mode
-        blob1Pos = vec2<f32>(
-          sin(time * 0.08) * 0.3 + 0.4,
-          cos(time * 0.06) * 0.25 + 0.2
-        );
-        blob2Pos = vec2<f32>(
-          cos(time * 0.07 + 2.0) * 0.35 - 0.3,
-          sin(time * 0.05 + 1.0) * 0.3 - 0.1
-        );
-        blob3Pos = vec2<f32>(
-          sin(time * 0.05 + 4.0) * 0.2,
-          cos(time * 0.04 + 3.0) * 0.2
-        );
-        blob4Pos = vec2<f32>(
-          cos(time * 0.06 + 5.0) * 0.25 + 0.2,
-          sin(time * 0.04 + 2.0) * 0.3 - 0.15
-        );
-      } else {
-        // Original faster movement for light mode
-        blob1Pos = vec2<f32>(
-          sin(time * 0.3) * 0.4 + cos(time * 0.2) * 0.2,
-          cos(time * 0.25) * 0.3 + sin(time * 0.15) * 0.2
-        );
-        blob2Pos = vec2<f32>(
-          cos(time * 0.35 + 2.0) * 0.5,
-          sin(time * 0.28 + 1.0) * 0.4
-        );
-        blob3Pos = vec2<f32>(
-          sin(time * 0.22 + 4.0) * 0.45 - 0.2,
-          cos(time * 0.32 + 3.0) * 0.35 + 0.1
-        );
-        blob4Pos = vec2<f32>(
-          cos(time * 0.27 + 5.0) * 0.35 + 0.3,
-          sin(time * 0.18 + 2.0) * 0.45 - 0.2
-        );
-      }
+      // Slow, gentle movement for both themes
+      let blob1Pos = vec2<f32>(
+        sin(time * 0.08) * 0.3 + 0.4,
+        cos(time * 0.06) * 0.25 + 0.2
+      );
+      let blob2Pos = vec2<f32>(
+        cos(time * 0.07 + 2.0) * 0.35 - 0.3,
+        sin(time * 0.05 + 1.0) * 0.3 - 0.1
+      );
+      let blob3Pos = vec2<f32>(
+        sin(time * 0.05 + 4.0) * 0.2,
+        cos(time * 0.04 + 3.0) * 0.2
+      );
+      let blob4Pos = vec2<f32>(
+        cos(time * 0.06 + 5.0) * 0.25 + 0.2,
+        sin(time * 0.04 + 2.0) * 0.3 - 0.15
+      );
 
       let blob1Dist = length(p - blob1Pos);
       let blob1 = smoothstep(1.2, 0.0, blob1Dist);
@@ -164,12 +139,12 @@ const createShaderModule = (device, isDark) => {
       let blob4Dist = length(p - blob4Pos);
       let blob4 = smoothstep(0.85, 0.0, blob4Dist);
 
-      // Mix blobs - subtle for dark, vibrant for light
+      // Mix blobs - subtle for both themes
       var blobIntensity: f32;
       if (isDark == 1) {
-        blobIntensity = 0.22; // Slightly increased for dark mode
+        blobIntensity = 0.22;
       } else {
-        blobIntensity = 0.5;  // Original vibrant for light mode
+        blobIntensity = 0.25; // Subtle blue shadows for light mode
       }
 
       color = mix(color, color1, blob1 * blobIntensity);
@@ -183,61 +158,28 @@ const createShaderModule = (device, isDark) => {
       if (isDark == 1) {
         noiseIntensity = 0.08;
       } else {
-        noiseIntensity = 0.2;
+        noiseIntensity = 0.06; // Very subtle for light mode
       }
-      color = mix(color, color4, noiseVal * noiseIntensity);
+      color = mix(color, color1, noiseVal * noiseIntensity);
 
-      // === WAVE PATTERN (light mode only) ===
-      if (isDark == 0) {
-        let wave1 = sin(p.x * 3.0 + time * 1.5 + p.y * 2.0) * 0.5 + 0.5;
-        let wave2 = sin(p.y * 4.0 - time * 1.2 + p.x * 1.5) * 0.5 + 0.5;
-        let waveMix = wave1 * wave2;
-        let waveColor = mix(color1, color3, sin(time * 0.5) * 0.5 + 0.5);
-        color = mix(color, waveColor, waveMix * 0.15);
-      }
-
-      // === FLOATING PARTICLES ===
-      var particleCount: i32;
+      // === FLOATING PARTICLES (dark mode only) ===
       if (isDark == 1) {
-        particleCount = 10;
-      } else {
-        particleCount = 15;
-      }
+        for (var i = 0; i < 10; i++) {
+          let fi = f32(i);
+          let seed = fi * 7.31;
 
-      for (var i = 0; i < 15; i++) {
-        if (i >= particleCount) { break; }
-        let fi = f32(i);
-        let seed = fi * 5.17;
-
-        var particlePos: vec2<f32>;
-        var glowStrength: f32;
-
-        if (isDark == 1) {
-          particlePos = vec2<f32>(
+          let particlePos = vec2<f32>(
             sin(time * 0.15 + seed * 1.7) * 0.8,
             cos(time * 0.12 + seed * 1.1) * 0.5
           );
-          glowStrength = 0.003;
-        } else {
-          particlePos = vec2<f32>(
-            sin(time * 0.4 + seed * 1.3) * 0.7,
-            cos(time * 0.35 + seed * 0.9) * 0.5
-          );
-          glowStrength = 0.015;
+
+          let dist = length(p - particlePos);
+          let glow = 0.003 / (dist * dist + 0.01);
+          let pulse = 0.7 + 0.3 * sin(time * 1.5 + seed);
+
+          let particleColor = vec3<f32>(0.15, 0.25, 0.4);
+          color += particleColor * glow * pulse;
         }
-
-        let dist = length(p - particlePos);
-        let glow = glowStrength / (dist * dist + 0.002);
-        let pulse = 0.6 + 0.4 * sin(time * 2.0 + seed);
-
-        var particleColor: vec3<f32>;
-        let colorIdx = i % 4;
-        if (colorIdx == 0) { particleColor = color1; }
-        else if (colorIdx == 1) { particleColor = color2; }
-        else if (colorIdx == 2) { particleColor = color3; }
-        else { particleColor = color4; }
-
-        color += particleColor * glow * pulse;
       }
 
       // === MOUSE INTERACTION ===
@@ -250,9 +192,10 @@ const createShaderModule = (device, isDark) => {
         let mouseColor = vec3<f32>(0.12, 0.18, 0.3);
         color = mix(color, mouseColor, mouseGlow * 0.25);
       } else {
-        let mouseGlow = 0.25 / (mouseDist + 0.15);
-        let mouseColor = mix(color1, color3, sin(time * 2.0) * 0.5 + 0.5);
-        color = mix(color, mouseColor, mouseGlow * 0.4);
+        // Very subtle mouse glow for light mode
+        let mouseGlow = 0.08 / (mouseDist + 0.3);
+        let mouseColor = vec3<f32>(0.85, 0.9, 1.0);
+        color = mix(color, mouseColor, mouseGlow * 0.15);
       }
 
       // === CORNER GRADIENTS ===
@@ -262,15 +205,15 @@ const createShaderModule = (device, isDark) => {
         color = mix(color, color1, max(cornerTL, 0.0) * 0.1);
         color = mix(color, color3, max(cornerBR, 0.0) * 0.08);
       } else {
-        let cornerTL = 1.0 - length(uv - vec2<f32>(0.0, 1.0)) * 0.7;
-        let cornerBR = 1.0 - length(uv - vec2<f32>(1.0, 0.0)) * 0.7;
-        color = mix(color, color2, max(cornerTL, 0.0) * 0.15);
-        color = mix(color, color3, max(cornerBR, 0.0) * 0.12);
+        let cornerTL = 1.0 - length(uv - vec2<f32>(0.0, 1.0)) * 0.8;
+        let cornerBR = 1.0 - length(uv - vec2<f32>(1.0, 0.0)) * 0.8;
+        color = mix(color, color1, max(cornerTL, 0.0) * 0.1);
+        color = mix(color, color2, max(cornerBR, 0.0) * 0.08);
       }
 
       // Soft vignette
-      let vignette = 1.0 - length(uv - 0.5) * 0.4;
-      color *= 0.9 + vignette * 0.1;
+      let vignette = 1.0 - length(uv - 0.5) * 0.3;
+      color *= 0.95 + vignette * 0.05;
 
       return vec4<f32>(clamp(color, vec3<f32>(0.0), vec3<f32>(1.0)), 1.0);
     }
@@ -445,32 +388,19 @@ const WebGPUBackground = ({ className = '' }) => {
     };
   }, []);
 
-  // CSS Fallback
+  // CSS Fallback - subtle for both themes
   if (!isSupported) {
     const blobColors = isDark
       ? ['bg-blue-900/20', 'bg-purple-900/18', 'bg-cyan-900/15']
-      : ['bg-blue-500/40', 'bg-purple-500/40', 'bg-cyan-400/35', 'bg-pink-500/30'];
+      : ['bg-blue-200/25', 'bg-blue-100/20', 'bg-blue-300/15'];
 
-    if (isDark) {
-      // Subtle fallback for dark mode
-      return (
-        <div className={`absolute inset-0 overflow-hidden pointer-events-none ${className}`}>
-          <div className={`absolute -top-40 -right-40 w-[800px] h-[800px] ${blobColors[0]} rounded-full filter blur-3xl animate-blob-slow`} />
-          <div className={`absolute -bottom-40 -left-40 w-[700px] h-[700px] ${blobColors[1]} rounded-full filter blur-3xl animate-blob-slow animation-delay-4000`} />
-          <div className={`absolute top-1/3 left-1/3 w-[600px] h-[600px] ${blobColors[2]} rounded-full filter blur-3xl animate-blob-slow animation-delay-8000`} />
-        </div>
-      );
-    } else {
-      // Vibrant fallback for light mode (original)
-      return (
-        <div className={`absolute inset-0 overflow-hidden pointer-events-none ${className}`}>
-          <div className={`absolute -top-40 -right-40 w-[700px] h-[700px] ${blobColors[0]} rounded-full mix-blend-multiply filter blur-3xl animate-blob`} />
-          <div className={`absolute -top-20 -left-20 w-[600px] h-[600px] ${blobColors[1]} rounded-full mix-blend-multiply filter blur-3xl animate-blob animation-delay-2000`} />
-          <div className={`absolute -bottom-40 left-1/4 w-[650px] h-[650px] ${blobColors[2]} rounded-full mix-blend-multiply filter blur-3xl animate-blob animation-delay-4000`} />
-          <div className={`absolute top-1/4 right-1/4 w-[500px] h-[500px] ${blobColors[3]} rounded-full mix-blend-multiply filter blur-3xl animate-blob animation-delay-3000`} />
-        </div>
-      );
-    }
+    return (
+      <div className={`absolute inset-0 overflow-hidden pointer-events-none ${className}`}>
+        <div className={`absolute -top-40 -right-40 w-[800px] h-[800px] ${blobColors[0]} rounded-full filter blur-3xl animate-blob-slow`} />
+        <div className={`absolute -bottom-40 -left-40 w-[700px] h-[700px] ${blobColors[1]} rounded-full filter blur-3xl animate-blob-slow animation-delay-4000`} />
+        <div className={`absolute top-1/3 left-1/3 w-[600px] h-[600px] ${blobColors[2]} rounded-full filter blur-3xl animate-blob-slow animation-delay-8000`} />
+      </div>
+    );
   }
 
   return (
