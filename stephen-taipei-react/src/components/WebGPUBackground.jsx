@@ -79,10 +79,9 @@ const createShaderModule = (device, isDark) => {
       // Background colors
       var bgColor: vec3<f32>;
       if (isDark == 1) {
-        // Match Tailwind gray-950
         bgColor = vec3<f32>(0.012, 0.027, 0.071);
       } else {
-        // Light theme - gray-50
+        // Light theme - pure white/gray-50
         bgColor = vec3<f32>(0.98, 0.98, 0.98);
       }
 
@@ -95,125 +94,159 @@ const createShaderModule = (device, isDark) => {
       var color4: vec3<f32>;
 
       if (isDark == 1) {
-        // Dark theme - muted colors that blend with background
-        color1 = vec3<f32>(0.06, 0.14, 0.28);   // Deep Navy
-        color2 = vec3<f32>(0.14, 0.06, 0.24);   // Deep Purple
-        color3 = vec3<f32>(0.03, 0.18, 0.22);   // Deep Teal
-        color4 = vec3<f32>(0.10, 0.08, 0.15);   // Dark Slate
+        color1 = vec3<f32>(0.06, 0.14, 0.28);
+        color2 = vec3<f32>(0.14, 0.06, 0.24);
+        color3 = vec3<f32>(0.03, 0.18, 0.22);
+        color4 = vec3<f32>(0.10, 0.08, 0.15);
       } else {
-        // Light theme - subtle blue tones only
-        color1 = vec3<f32>(0.85, 0.9, 1.0);     // Soft Blue
-        color2 = vec3<f32>(0.88, 0.92, 1.0);    // Light Blue
-        color3 = vec3<f32>(0.9, 0.94, 1.0);     // Pale Blue
-        color4 = vec3<f32>(0.92, 0.95, 1.0);    // Very Light Blue
+        // Light theme - soft pastel colors for nodes
+        color1 = vec3<f32>(0.3, 0.6, 0.9);      // Soft Blue
+        color2 = vec3<f32>(0.6, 0.4, 0.8);      // Soft Purple
+        color3 = vec3<f32>(0.2, 0.7, 0.7);      // Teal
+        color4 = vec3<f32>(0.9, 0.5, 0.6);      // Coral
       }
 
-      // === ANIMATED GRADIENT BLOBS ===
-      // Slow, gentle movement for both themes
-      let blob1Pos = vec2<f32>(
-        sin(time * 0.08) * 0.3 + 0.4,
-        cos(time * 0.06) * 0.25 + 0.2
-      );
-      let blob2Pos = vec2<f32>(
-        cos(time * 0.07 + 2.0) * 0.35 - 0.3,
-        sin(time * 0.05 + 1.0) * 0.3 - 0.1
-      );
-      let blob3Pos = vec2<f32>(
-        sin(time * 0.05 + 4.0) * 0.2,
-        cos(time * 0.04 + 3.0) * 0.2
-      );
-      let blob4Pos = vec2<f32>(
-        cos(time * 0.06 + 5.0) * 0.25 + 0.2,
-        sin(time * 0.04 + 2.0) * 0.3 - 0.15
-      );
-
-      let blob1Dist = length(p - blob1Pos);
-      let blob1 = smoothstep(1.2, 0.0, blob1Dist);
-
-      let blob2Dist = length(p - blob2Pos);
-      let blob2 = smoothstep(1.0, 0.0, blob2Dist);
-
-      let blob3Dist = length(p - blob3Pos);
-      let blob3 = smoothstep(0.9, 0.0, blob3Dist);
-
-      let blob4Dist = length(p - blob4Pos);
-      let blob4 = smoothstep(0.85, 0.0, blob4Dist);
-
-      // Mix blobs - subtle for both themes
-      var blobIntensity: f32;
       if (isDark == 1) {
-        blobIntensity = 0.22;
-      } else {
-        blobIntensity = 0.25; // Subtle blue shadows for light mode
-      }
+        // === DARK MODE (unchanged) ===
+        let blob1Pos = vec2<f32>(
+          sin(time * 0.08) * 0.3 + 0.4,
+          cos(time * 0.06) * 0.25 + 0.2
+        );
+        let blob2Pos = vec2<f32>(
+          cos(time * 0.07 + 2.0) * 0.35 - 0.3,
+          sin(time * 0.05 + 1.0) * 0.3 - 0.1
+        );
+        let blob3Pos = vec2<f32>(
+          sin(time * 0.05 + 4.0) * 0.2,
+          cos(time * 0.04 + 3.0) * 0.2
+        );
+        let blob4Pos = vec2<f32>(
+          cos(time * 0.06 + 5.0) * 0.25 + 0.2,
+          sin(time * 0.04 + 2.0) * 0.3 - 0.15
+        );
 
-      color = mix(color, color1, blob1 * blobIntensity);
-      color = mix(color, color2, blob2 * blobIntensity * 0.9);
-      color = mix(color, color3, blob3 * blobIntensity * 0.8);
-      color = mix(color, color4, blob4 * blobIntensity * 0.7);
+        let blob1 = smoothstep(1.2, 0.0, length(p - blob1Pos));
+        let blob2 = smoothstep(1.0, 0.0, length(p - blob2Pos));
+        let blob3 = smoothstep(0.9, 0.0, length(p - blob3Pos));
+        let blob4 = smoothstep(0.85, 0.0, length(p - blob4Pos));
 
-      // === FLOWING NOISE ===
-      let noiseVal = fbm(p * 1.5 + time * 0.08);
-      var noiseIntensity: f32;
-      if (isDark == 1) {
-        noiseIntensity = 0.08;
-      } else {
-        noiseIntensity = 0.06; // Very subtle for light mode
-      }
-      color = mix(color, color1, noiseVal * noiseIntensity);
+        let blobIntensity = 0.22;
+        color = mix(color, color1, blob1 * blobIntensity);
+        color = mix(color, color2, blob2 * blobIntensity * 0.9);
+        color = mix(color, color3, blob3 * blobIntensity * 0.8);
+        color = mix(color, color4, blob4 * blobIntensity * 0.7);
 
-      // === FLOATING PARTICLES (dark mode only) ===
-      if (isDark == 1) {
+        let noiseVal = fbm(p * 1.5 + time * 0.08);
+        color = mix(color, color1, noiseVal * 0.08);
+
         for (var i = 0; i < 10; i++) {
           let fi = f32(i);
           let seed = fi * 7.31;
-
           let particlePos = vec2<f32>(
             sin(time * 0.15 + seed * 1.7) * 0.8,
             cos(time * 0.12 + seed * 1.1) * 0.5
           );
-
           let dist = length(p - particlePos);
           let glow = 0.003 / (dist * dist + 0.01);
           let pulse = 0.7 + 0.3 * sin(time * 1.5 + seed);
-
-          let particleColor = vec3<f32>(0.15, 0.25, 0.4);
-          color += particleColor * glow * pulse;
+          color += vec3<f32>(0.15, 0.25, 0.4) * glow * pulse;
         }
-      }
 
-      // === MOUSE INTERACTION ===
-      let mouseUV = uniforms.mousePos / uniforms.resolution;
-      let mouseP = (mouseUV - 0.5) * vec2<f32>(aspect, 1.0);
-      let mouseDist = length(p - mouseP);
-
-      if (isDark == 1) {
+        let mouseUV = uniforms.mousePos / uniforms.resolution;
+        let mouseP = (mouseUV - 0.5) * vec2<f32>(aspect, 1.0);
+        let mouseDist = length(p - mouseP);
         let mouseGlow = 0.1 / (mouseDist + 0.25);
-        let mouseColor = vec3<f32>(0.12, 0.18, 0.3);
-        color = mix(color, mouseColor, mouseGlow * 0.25);
-      } else {
-        // Very subtle mouse glow for light mode
-        let mouseGlow = 0.08 / (mouseDist + 0.3);
-        let mouseColor = vec3<f32>(0.85, 0.9, 1.0);
-        color = mix(color, mouseColor, mouseGlow * 0.15);
-      }
+        color = mix(color, vec3<f32>(0.12, 0.18, 0.3), mouseGlow * 0.25);
 
-      // === CORNER GRADIENTS ===
-      if (isDark == 1) {
         let cornerTL = 1.0 - length(uv - vec2<f32>(0.0, 1.0)) * 0.8;
         let cornerBR = 1.0 - length(uv - vec2<f32>(1.0, 0.0)) * 0.8;
         color = mix(color, color1, max(cornerTL, 0.0) * 0.1);
         color = mix(color, color3, max(cornerBR, 0.0) * 0.08);
+
       } else {
-        let cornerTL = 1.0 - length(uv - vec2<f32>(0.0, 1.0)) * 0.8;
-        let cornerBR = 1.0 - length(uv - vec2<f32>(1.0, 0.0)) * 0.8;
-        color = mix(color, color1, max(cornerTL, 0.0) * 0.1);
-        color = mix(color, color2, max(cornerBR, 0.0) * 0.08);
+        // === LIGHT MODE: Floating Network Nodes ===
+        // Inspired by GT1319 tree visualization
+
+        // Store node positions for connection drawing
+        var nodes: array<vec2<f32>, 12>;
+
+        // Generate 12 floating nodes
+        for (var i = 0; i < 12; i++) {
+          let fi = f32(i);
+          let seed = fi * 2.73 + 0.5;
+          let speed = 0.08 + fi * 0.01;
+
+          nodes[i] = vec2<f32>(
+            sin(time * speed + seed * 3.14) * 0.7 + cos(time * speed * 0.7 + seed * 2.1) * 0.3,
+            cos(time * speed * 0.8 + seed * 2.5) * 0.45 + sin(time * speed * 0.5 + seed * 1.7) * 0.2
+          );
+        }
+
+        // Draw connections between nearby nodes
+        for (var i = 0; i < 12; i++) {
+          for (var j = i + 1; j < 12; j++) {
+            let nodeA = nodes[i];
+            let nodeB = nodes[j];
+            let nodeDist = length(nodeA - nodeB);
+
+            // Only connect nodes that are close enough
+            if (nodeDist < 0.6) {
+              // Line segment distance calculation
+              let pa = p - nodeA;
+              let ba = nodeB - nodeA;
+              let h = clamp(dot(pa, ba) / dot(ba, ba), 0.0, 1.0);
+              let lineDist = length(pa - ba * h);
+
+              // Draw line with fade based on distance between nodes
+              let lineAlpha = (1.0 - nodeDist / 0.6) * 0.15;
+              let line = smoothstep(0.003, 0.0, lineDist) * lineAlpha;
+
+              // Line color - soft blue/gray
+              color = mix(color, vec3<f32>(0.6, 0.7, 0.85), line);
+            }
+          }
+        }
+
+        // Draw nodes as clean dots with minimal glow
+        for (var i = 0; i < 12; i++) {
+          let fi = f32(i);
+          let nodePos = nodes[i];
+          let dist = length(p - nodePos);
+
+          // Node size
+          let nodeSize = 0.008 + sin(fi * 1.5) * 0.003;
+
+          // Very tight glow around node
+          let glow = smoothstep(nodeSize * 1.8, nodeSize * 0.8, dist);
+          let core = smoothstep(nodeSize, nodeSize * 0.2, dist);
+
+          // Subtle pulse effect
+          let pulse = 0.9 + 0.1 * sin(time * 2.0 + fi * 1.3);
+
+          // Select color based on node index
+          var nodeColor: vec3<f32>;
+          let colorIdx = i % 4;
+          if (colorIdx == 0) { nodeColor = color1; }
+          else if (colorIdx == 1) { nodeColor = color2; }
+          else if (colorIdx == 2) { nodeColor = color3; }
+          else { nodeColor = color4; }
+
+          // Apply minimal glow and solid core
+          color = mix(color, nodeColor * 0.8, glow * 0.25 * pulse);
+          color = mix(color, nodeColor, core * 0.9 * pulse);
+        }
+
+        // Mouse interaction - highlight nearby nodes
+        let mouseUV = uniforms.mousePos / uniforms.resolution;
+        let mouseP = (mouseUV - 0.5) * vec2<f32>(aspect, 1.0);
+        let mouseDist = length(p - mouseP);
+        let mouseGlow = smoothstep(0.15, 0.0, mouseDist);
+        color = mix(color, color1, mouseGlow * 0.2);
       }
 
-      // Soft vignette
-      let vignette = 1.0 - length(uv - 0.5) * 0.3;
-      color *= 0.95 + vignette * 0.05;
+      // Very subtle vignette
+      let vignette = 1.0 - length(uv - 0.5) * 0.15;
+      color *= 0.98 + vignette * 0.02;
 
       return vec4<f32>(clamp(color, vec3<f32>(0.0), vec3<f32>(1.0)), 1.0);
     }
@@ -388,19 +421,32 @@ const WebGPUBackground = ({ className = '' }) => {
     };
   }, []);
 
-  // CSS Fallback - subtle for both themes
+  // CSS Fallback
   if (!isSupported) {
-    const blobColors = isDark
-      ? ['bg-blue-900/20', 'bg-purple-900/18', 'bg-cyan-900/15']
-      : ['bg-blue-200/25', 'bg-blue-100/20', 'bg-blue-300/15'];
-
-    return (
-      <div className={`absolute inset-0 overflow-hidden pointer-events-none ${className}`}>
-        <div className={`absolute -top-40 -right-40 w-[800px] h-[800px] ${blobColors[0]} rounded-full filter blur-3xl animate-blob-slow`} />
-        <div className={`absolute -bottom-40 -left-40 w-[700px] h-[700px] ${blobColors[1]} rounded-full filter blur-3xl animate-blob-slow animation-delay-4000`} />
-        <div className={`absolute top-1/3 left-1/3 w-[600px] h-[600px] ${blobColors[2]} rounded-full filter blur-3xl animate-blob-slow animation-delay-8000`} />
-      </div>
-    );
+    if (isDark) {
+      return (
+        <div className={`absolute inset-0 overflow-hidden pointer-events-none ${className}`}>
+          <div className="absolute -top-40 -right-40 w-[800px] h-[800px] bg-blue-900/20 rounded-full filter blur-3xl animate-blob-slow" />
+          <div className="absolute -bottom-40 -left-40 w-[700px] h-[700px] bg-purple-900/18 rounded-full filter blur-3xl animate-blob-slow animation-delay-4000" />
+          <div className="absolute top-1/3 left-1/3 w-[600px] h-[600px] bg-cyan-900/15 rounded-full filter blur-3xl animate-blob-slow animation-delay-8000" />
+        </div>
+      );
+    } else {
+      // Light mode: floating dots fallback
+      return (
+        <div className={`absolute inset-0 overflow-hidden pointer-events-none ${className}`}>
+          {/* Floating dots */}
+          <div className="absolute top-[15%] right-[20%] w-3 h-3 bg-blue-400/60 rounded-full animate-float" />
+          <div className="absolute top-[25%] left-[15%] w-4 h-4 bg-purple-400/50 rounded-full animate-float animation-delay-1000" />
+          <div className="absolute top-[45%] right-[35%] w-3 h-3 bg-teal-400/55 rounded-full animate-float animation-delay-2000" />
+          <div className="absolute top-[60%] left-[25%] w-3.5 h-3.5 bg-coral-400/50 rounded-full animate-float animation-delay-3000" />
+          <div className="absolute top-[30%] left-[45%] w-2.5 h-2.5 bg-blue-500/45 rounded-full animate-float animation-delay-4000" />
+          <div className="absolute bottom-[30%] right-[15%] w-3 h-3 bg-purple-500/50 rounded-full animate-float animation-delay-2500" />
+          <div className="absolute bottom-[20%] left-[35%] w-4 h-4 bg-teal-500/45 rounded-full animate-float animation-delay-1500" />
+          <div className="absolute top-[70%] right-[45%] w-2.5 h-2.5 bg-blue-400/55 rounded-full animate-float animation-delay-3500" />
+        </div>
+      );
+    }
   }
 
   return (
