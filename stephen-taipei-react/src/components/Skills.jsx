@@ -2,10 +2,22 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Code, Database, Server, Cpu } from 'lucide-react';
 import { useLanguage } from '../i18n/LanguageContext';
+import { useTheme } from '../contexts/ThemeContext';
 
 const Skills = () => {
   const [activeTab, setActiveTab] = useState('Frontend');
   const { t, language } = useLanguage();
+  const { isDark } = useTheme();
+  const isChinese = language?.toLowerCase().startsWith('zh');
+
+  // Theme-aware classes
+  const bgSection = isDark ? 'bg-gray-950' : 'bg-gray-50';
+  const textTitle = isDark ? 'text-gray-100' : 'text-gray-900';
+  const textDesc = isDark ? 'text-gray-400' : 'text-gray-600';
+  const btnInactive = isDark ? 'bg-gray-800 text-gray-400 hover:bg-gray-700' : 'bg-white text-gray-600 hover:bg-gray-100';
+  const bgCard = isDark ? 'bg-gray-900 border-gray-800' : 'bg-white border-gray-100';
+  const textSkill = isDark ? 'text-gray-200' : 'text-gray-800';
+  const bgProgress = isDark ? 'bg-gray-800' : 'bg-gray-100';
 
   const categories = [
     { id: 'Frontend', icon: Code, label: t.skills.frontend },
@@ -26,8 +38,8 @@ const Skills = () => {
     Backend: [
       { name: 'Laravel Octane + Swoole', level: 95 },
       { name: 'WebSocket Server', level: 90 },
-      { name: language === 'zh' ? 'MySQL (讀寫分離)' : 'MySQL (Read/Write Separation)', level: 90 },
-      { name: language === 'zh' ? 'Redis (快取策略)' : 'Redis (Caching Strategy)', level: 90 },
+      { name: isChinese ? 'MySQL (讀寫分離)' : 'MySQL (Read/Write Separation)', level: 90 },
+      { name: isChinese ? 'Redis (快取策略)' : 'Redis (Caching Strategy)', level: 90 },
       { name: 'PHP (Smarty)', level: 85 },
     ],
     DevOps: [
@@ -41,18 +53,18 @@ const Skills = () => {
     AI: [
       { name: 'OpenAI API', level: 95 },
       { name: 'Cursor + Claude + Codex + Gemini', level: 95 },
-      { name: language === 'zh' ? 'AI 繪圖應用' : 'AI Image Generation', level: 85 },
+      { name: isChinese ? 'AI 繪圖應用' : 'AI Image Generation', level: 85 },
       { name: 'LINE / WeChat API', level: 85 },
-      { name: language === 'zh' ? '支付寶 / Google 串接' : 'Alipay / Google Integration', level: 85 },
+      { name: isChinese ? '支付寶 / Google 串接' : 'Alipay / Google Integration', level: 85 },
     ]
   };
 
   return (
-    <section id="skills" className="py-20 bg-gray-50">
+    <section id="skills" className={`py-20 ${bgSection}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-3xl font-bold text-gray-900">{t.skills.title}</h2>
-          <p className="mt-4 text-gray-600">{t.skills.subtitle}</p>
+          <h2 className={`text-3xl font-bold ${textTitle}`}>{t.skills.title}</h2>
+          <p className={`mt-4 ${textDesc}`}>{t.skills.subtitle}</p>
         </div>
 
         <div className="flex flex-wrap justify-center gap-4 mb-12">
@@ -63,7 +75,7 @@ const Skills = () => {
               className={`flex items-center gap-2 px-6 py-3 rounded-full text-sm font-medium transition-all duration-300 ${
                 activeTab === cat.id
                   ? 'bg-primary text-white shadow-lg shadow-primary/30'
-                  : 'bg-white text-gray-600 hover:bg-gray-100'
+                  : btnInactive
               }`}
             >
               <cat.icon className="w-4 h-4" />
@@ -72,7 +84,7 @@ const Skills = () => {
           ))}
         </div>
 
-        <div className="max-w-4xl mx-auto bg-white rounded-2xl p-8 shadow-sm border border-gray-100 min-h-[400px]">
+        <div className={`max-w-4xl mx-auto ${bgCard} rounded-2xl p-8 shadow-sm border min-h-[400px]`}>
           <motion.div
             key={activeTab}
             initial={{ opacity: 0, y: 10 }}
@@ -83,10 +95,10 @@ const Skills = () => {
             {skillsData[activeTab].map((skill, index) => (
               <div key={index} className="space-y-2">
                 <div className="flex justify-between items-end">
-                  <span className="font-semibold text-gray-800">{skill.name}</span>
+                  <span className={`font-semibold ${textSkill}`}>{skill.name}</span>
                   <span className="text-sm text-primary font-medium">{skill.level}%</span>
                 </div>
-                <div className="h-2 w-full bg-gray-100 rounded-full overflow-hidden">
+                <div className={`h-2 w-full ${bgProgress} rounded-full overflow-hidden`}>
                   <motion.div
                     initial={{ width: 0 }}
                     animate={{ width: `${skill.level}%` }}

@@ -5,16 +5,19 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build:tools": "bash scripts/build-ts-tools.sh",
+    "build": "npm run build:tools && vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
   "dependencies": {
+    "firebase": "^12.6.0",
     "framer-motion": "^11.3.0",
     "lucide-react": "^0.436.0",
     "puppeteer": "^24.34.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-router-dom": "^7.10.1",
     "sharp": "^0.34.5"
   },
   "devDependencies": {

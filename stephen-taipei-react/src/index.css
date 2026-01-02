@@ -3,7 +3,11 @@
 @tailwind utilities;
 
 @layer base {
-  body {
-    @apply text-gray-800 bg-white;
+  html, body {
+    @apply text-gray-800 bg-white overflow-x-hidden;
+  }
+
+  #root {
+    @apply overflow-x-hidden;
   }
 }
