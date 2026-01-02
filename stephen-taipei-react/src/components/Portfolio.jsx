@@ -54,7 +54,7 @@ const Portfolio = () => {
             <div
               key={index}
               onClick={() => setSelectedProject({ ...project, images: projectImages[index], color: projectColors[index] })}
-              className={`group relative ${bgCard} rounded-2xl overflow-hidden hover:shadow-2xl transition-all duration-300 border flex flex-col cursor-pointer`}
+              className={`group relative ${bgCard} rounded-2xl overflow-hidden hover:shadow-lg transition-all duration-300 border flex flex-col cursor-pointer`}
             >
               <div className={`h-2 ${projectColors[index]}`} />
 

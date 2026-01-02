@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { ArrowDown } from 'lucide-react';
 import { useLanguage } from '../i18n/LanguageContext';
 import { useTheme } from '../contexts/ThemeContext';
+import WebGPUBackground from './WebGPUBackground';
 
 const Hero = () => {
   const { t } = useLanguage();
@@ -10,26 +11,22 @@ const Hero = () => {
 
   // Theme-aware classes
   const bgSection = isDark
-    ? 'bg-gradient-to-br from-gray-950 to-gray-900'
-    : 'bg-gradient-to-br from-gray-50 to-white';
-  const blobColors = isDark
-    ? ['bg-blue-900/30', 'bg-purple-900/30', 'bg-cyan-900/30']
-    : ['bg-blue-50', 'bg-purple-50', 'bg-cyan-50'];
+    ? 'bg-gray-950'
+    : 'bg-gray-50';
   const textTitle = isDark ? 'text-gray-100' : 'text-gray-900';
   const textDesc = isDark ? 'text-gray-400' : 'text-gray-600';
   const btnSecondary = isDark
-    ? 'bg-gray-800 hover:bg-gray-700 text-gray-100 border-gray-700'
-    : 'bg-white hover:bg-gray-50 text-gray-900 border-gray-200';
+    ? 'bg-gray-800/80 hover:bg-gray-700/90 text-gray-100 border-gray-700 backdrop-blur-sm'
+    : 'bg-white/80 hover:bg-gray-50/90 text-gray-900 border-gray-200 backdrop-blur-sm';
+  const btnPrimary = isDark
+    ? 'bg-primary/90 hover:bg-primary-dark backdrop-blur-sm'
+    : 'bg-primary hover:bg-primary-dark';
   const arrowColor = isDark ? 'text-gray-600 hover:text-blue-400' : 'text-gray-400 hover:text-primary';
 
   return (
     <section id="hero" className={`relative min-h-screen flex items-center justify-center ${bgSection} overflow-hidden overflow-x-hidden`}>
-      {/* Abstract Background Shapes */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className={`absolute -top-24 -right-24 w-96 h-96 ${blobColors[0]} rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob`}></div>
-        <div className={`absolute top-0 -left-4 w-72 h-72 ${blobColors[1]} rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-2000`}></div>
-        <div className={`absolute -bottom-8 left-20 w-72 h-72 ${blobColors[2]} rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-4000`}></div>
-      </div>
+      {/* WebGPU Animated Background */}
+      <WebGPUBackground />
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center z-10">
         <motion.div
@@ -51,10 +48,10 @@ const Hero = () => {
           </p>
 
           <div className="flex justify-center gap-4">
-            <a href="#portfolio" className="px-8 py-3 bg-primary hover:bg-primary-dark text-white rounded-full font-medium transition-colors shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+            <a href="#portfolio" className={`px-8 py-3 ${btnPrimary} text-white rounded-full font-medium transition-colors shadow-lg hover:shadow-xl transform hover:-translate-y-0.5`}>
               {t.hero.viewWork}
             </a>
-            <a href="#contact" className={`px-8 py-3 ${btnSecondary} rounded-full font-medium transition-all shadow-sm hover:shadow-md`}>
+            <a href="#contact" className={`px-8 py-3 ${btnSecondary} rounded-full font-medium transition-all shadow-sm hover:shadow-md border`}>
               {t.hero.contactMe}
             </a>
           </div>
