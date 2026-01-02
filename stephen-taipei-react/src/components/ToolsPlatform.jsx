@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ExternalLink, Brain, Chrome, Gamepad2, Wrench, Palette, Cpu, Sparkles, Cog } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useLanguage } from '../i18n/LanguageContext';
+import screenshotsData from '../data/screenshots.json';
 
 const ToolsPlatform = () => {
   const { t } = useLanguage();
@@ -9,6 +10,7 @@ const ToolsPlatform = () => {
   const tools = [
     {
       id: 'ai-local-tools',
+      screenshotKey: 'ai-local-tools',
       icon: Brain,
       color: 'from-purple-500 to-indigo-600',
       bgColor: 'bg-purple-50',
@@ -18,6 +20,7 @@ const ToolsPlatform = () => {
     },
     {
       id: 'chrome-extensions',
+      screenshotKey: 'chrome-extensions',
       icon: Chrome,
       color: 'from-blue-500 to-cyan-500',
       bgColor: 'bg-blue-50',
@@ -27,6 +30,7 @@ const ToolsPlatform = () => {
     },
     {
       id: 'free-games',
+      screenshotKey: 'free-games',
       icon: Gamepad2,
       color: 'from-green-500 to-emerald-500',
       bgColor: 'bg-green-50',
@@ -36,6 +40,7 @@ const ToolsPlatform = () => {
     },
     {
       id: 'mini-tools',
+      screenshotKey: 'mini-tools',
       icon: Wrench,
       color: 'from-orange-500 to-amber-500',
       bgColor: 'bg-orange-50',
@@ -45,6 +50,7 @@ const ToolsPlatform = () => {
     },
     {
       id: 'tailwind-ui',
+      screenshotKey: 'tailwind-templates',
       icon: Palette,
       color: 'from-pink-500 to-rose-500',
       bgColor: 'bg-pink-50',
@@ -54,6 +60,7 @@ const ToolsPlatform = () => {
     },
     {
       id: 'wasm-tools',
+      screenshotKey: 'wasm-tools',
       icon: Cpu,
       color: 'from-red-500 to-orange-500',
       bgColor: 'bg-red-50',
@@ -63,6 +70,7 @@ const ToolsPlatform = () => {
     },
     {
       id: 'web-toys',
+      screenshotKey: 'web-toys',
       icon: Sparkles,
       color: 'from-violet-500 to-purple-500',
       bgColor: 'bg-violet-50',
@@ -72,6 +80,7 @@ const ToolsPlatform = () => {
     },
     {
       id: 'web-workers',
+      screenshotKey: 'web-workers-examples',
       icon: Cog,
       color: 'from-slate-500 to-gray-600',
       bgColor: 'bg-slate-50',
@@ -134,6 +143,8 @@ const ToolsPlatform = () => {
           {tools.map((tool) => {
             const Icon = tool.icon;
             const toolContent = t.tools.items[tool.id];
+            const screenshots = screenshotsData[tool.screenshotKey] || [];
+            const previewScreenshots = screenshots.slice(0, 6);
 
             return (
               <motion.a
@@ -145,28 +156,51 @@ const ToolsPlatform = () => {
                 whileHover={{ y: -8, transition: { duration: 0.2 } }}
                 className="group relative bg-white rounded-2xl p-6 shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 overflow-hidden"
               >
+                {/* Screenshots Grid Background */}
+                {previewScreenshots.length > 0 && (
+                  <div className="absolute inset-0 opacity-0 group-hover:opacity-20 transition-opacity duration-500">
+                    <div className="grid grid-cols-3 grid-rows-2 gap-1 h-full w-full p-2">
+                      {previewScreenshots.map((screenshot, idx) => (
+                        <div key={idx} className="relative overflow-hidden rounded-sm">
+                          <img
+                            src={screenshot}
+                            alt={`${toolContent.title} preview ${idx + 1}`}
+                            className="w-full h-full object-cover"
+                            loading="lazy"
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
                 {/* Gradient background on hover */}
                 <div className={`absolute inset-0 bg-gradient-to-br ${tool.color} opacity-0 group-hover:opacity-5 transition-opacity duration-300`} />
 
-                {/* Icon */}
-                <div className={`${tool.bgColor} w-14 h-14 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
-                  <Icon className={`w-7 h-7 ${tool.iconColor}`} />
-                </div>
+                {/* Content - relative positioning to stay above backgrounds */}
+                <div className="relative z-10">
+                  {/* Icon */}
+                  <div className={`${tool.bgColor} w-14 h-14 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
+                    <Icon className={`w-7 h-7 ${tool.iconColor}`} />
+                  </div>
 
-                {/* Content */}
-                <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-purple-600 group-hover:to-blue-600 transition-all">
-                  {toolContent.title}
-                </h3>
-                <p className="text-gray-600 text-sm mb-4 line-clamp-2">
-                  {toolContent.description}
-                </p>
+                  {/* Title */}
+                  <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-purple-600 group-hover:to-blue-600 transition-all">
+                    {toolContent.title}
+                  </h3>
 
-                {/* Stats */}
-                <div className="flex items-center justify-between">
-                  <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-gradient-to-r ${tool.color} text-white`}>
-                    {toolContent.count}
-                  </span>
-                  <ExternalLink className="w-4 h-4 text-gray-400 group-hover:text-purple-600 transition-colors" />
+                  {/* Description */}
+                  <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+                    {toolContent.description}
+                  </p>
+
+                  {/* Stats */}
+                  <div className="flex items-center justify-between">
+                    <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-gradient-to-r ${tool.color} text-white`}>
+                      {toolContent.count}
+                    </span>
+                    <ExternalLink className="w-4 h-4 text-gray-400 group-hover:text-purple-600 transition-colors" />
+                  </div>
                 </div>
               </motion.a>
             );
