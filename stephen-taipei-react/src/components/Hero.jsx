@@ -59,7 +59,14 @@ const Hero = () => {
       </div>
 
       <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
-        <a href="#about" className={`${arrowColor} transition-colors`}>
+        <a
+          href="#about"
+          onClick={(e) => {
+            e.preventDefault();
+            document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
+          }}
+          className={`${arrowColor} transition-colors cursor-pointer`}
+        >
           <ArrowDown className="w-8 h-8" />
         </a>
       </div>

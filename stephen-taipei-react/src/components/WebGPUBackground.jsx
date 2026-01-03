@@ -258,6 +258,25 @@ const createShaderModule = (device, isDark) => {
   });
 };
 
+// Detect if device is mobile or tablet
+const isMobileDevice = () => {
+  if (typeof window === 'undefined') return false;
+
+  // Check screen width (tablets typically < 1024px)
+  const isSmallScreen = window.innerWidth < 1024;
+
+  // Check for touch capability + small screen (more reliable than UA)
+  const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
+  // Check user agent for mobile/tablet keywords as fallback
+  const mobileUA = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|Tablet/i.test(
+    navigator.userAgent
+  );
+
+  // Consider it mobile if: small screen + touch, OR mobile user agent
+  return (isSmallScreen && isTouchDevice) || mobileUA;
+};
+
 const WebGPUBackground = ({ className = '' }) => {
   const canvasRef = useRef(null);
   const { isDark } = useTheme();
@@ -266,7 +285,13 @@ const WebGPUBackground = ({ className = '' }) => {
   const mousePosRef = useRef({ x: 0, y: 0 });
   const [isSupported, setIsSupported] = useState(true);
   const [isInitialized, setIsInitialized] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const themeRef = useRef(isDark);
+
+  // Check for mobile device on mount
+  useEffect(() => {
+    setIsMobile(isMobileDevice());
+  }, []);
 
   useEffect(() => {
     themeRef.current = isDark;
@@ -421,8 +446,8 @@ const WebGPUBackground = ({ className = '' }) => {
     };
   }, []);
 
-  // CSS Fallback
-  if (!isSupported) {
+  // CSS Fallback for unsupported browsers or mobile devices (performance optimization)
+  if (!isSupported || isMobile) {
     if (isDark) {
       return (
         <div className={`absolute inset-0 overflow-hidden pointer-events-none ${className}`}>
